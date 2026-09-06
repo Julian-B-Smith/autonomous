@@ -115,6 +115,14 @@ not for cross-track sequencing):
   comment, and `dist/` (index.html + bundle) contains the domain only, no
   `/lathe` path. Clean. The check worth keeping is "grep the build, not the
   source" — a comment never ships; a `base`/route string does.
+- **mindlathe-design** (`~/Documents/Claude/mindlathe-design/`, **private**) —
+  the Mindlathe design system in the form Claude Design consumes: 23
+  self-contained HTML specimen cards + canonical `tokens.css`. Spun up
+  2026-09-03 at kit 2.6.0 (vendored gates), rung 1, manifest PROVISIONAL.
+  Provider to mind-lathe (tokens, hash-pinned); Life OS likely later. Oracle
+  is invariants-only with self-proving detectors; headless render deferred on
+  a dependency decision. (Registered via brief mindlathe-design-002 — the
+  first thread filed carrying `seq:` and `cites:` under Decision 67.)
 - **juce-rag** (`~/Documents/Claude/juce-rag/`) — deterministic grounding
   layer over JUCE documentation, built for coding agents. Manifest
   structured (`ratified: null`). Full harness + CI. Its retrieval tools are
