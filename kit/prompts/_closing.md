@@ -17,6 +17,14 @@
    the human reviews; a commit message they have to go looking for is not.
 4. **Do not merge.** Merges are the human's, always. Report the PR URL.
 
+**Write the commit message to a file and commit with `-F`, never `-m "..."`.**
+A backtick inside a double-quoted `-m` string is a command substitution: the
+shell RUNS the text between the backticks and splices its output into your
+message. Twice in one week a message that named a file in backticks executed
+that name instead (autonomous, 2026-09-01 and 2026-09-03). `-F <file>` passes
+the text through untouched; there is no quoting discipline that makes `-m`
+safe once the message quotes code.
+
 Three cases where this does not apply, and what to do instead:
 
 - **No remote** (some repos are local-only): commit on `main` and say so
