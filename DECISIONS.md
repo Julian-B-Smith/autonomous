@@ -237,6 +237,23 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+69. **Horde: rename first, cleanup later — the Mind Lathe rename ships in
+    HYPERSAW's next `/retrofit`; the param-ID / tech-debt branch waits until
+    the account rename and K5 are done** (2026-09-05, human ruling via poll).
+    Facts the ruling rests on: 651 Ableton sets live under OneDrive; 28 of
+    them load Horde — bound by VST3 class ID (30 refs still named "HYPERSAW",
+    8 "horde", identical class ID) or by AU codes `LfTk`/`aumu`/`Hsaw` — and
+    carry saved parameter state. The name change touches none of that
+    (CONVENTIONS §Audio plugins invariant, L0017). A param-ID cleanup DOES
+    break those 28 sets' saved sounds unless a state migrator ships with it,
+    so it is a separate compatibility event and HYPERSAW's resident's call.
+    Rejected: (a) one combined window (brief HYPERSAW now to bundle rename +
+    cleanup + migrator) — the human chose two smaller events over one large
+    one while the rename is in flight; (b) a new class ID for the cleaned
+    build so old sets keep old Horde — parks the debt as a second plugin;
+    (c) not now. The 28-set inventory goes to HYPERSAW as a NOTICE (ball
+    none) so the resident has the list before the cleanup branch exists;
+    not a brief, because nothing is asked of them yet.
 68. **Kit releases are batched weekly; the never-retrofitted repos are a
     standing queue at the human's pace; next burst is the rename, then K5**
     (2026-09-03, human ruling via poll). **Cadence:** fleet-affecting kit
