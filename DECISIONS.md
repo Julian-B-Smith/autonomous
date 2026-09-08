@@ -237,6 +237,24 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+70. **The GitHub user account renames to `Julian-B-Smith`; `mind-lathe` is
+    reserved as an empty organization for the brand** (2026-09-07, human
+    ruling via poll; both names checked free the same day). Reason: people own
+    user accounts and brands own organizations, and GitHub forbids a user and
+    an organization sharing a name — renaming the user to `mind-lathe` would
+    have fused the person with the plugin brand and blocked a brand org
+    forever. The fleet is mostly personal experiments and client work, not
+    brand products; the brand repos (site, plugins) can transfer into the org
+    later or never, and transfers redirect like renames do. Rejected:
+    `mind-lathe` as the user name (blocks the org); `Julian-B-Smith` alone
+    (leaves the brand name unregistered). Consequences: the Rename Runbook
+    and `rename_owner.py --apply --new-owner` target `Julian-B-Smith`; the
+    `Lifted-Truck` parking rule is unchanged (empty forever); the org is
+    created with no repos on rename day. Same day, housekeeping under the old
+    name: all 56 active repos got descriptions from their READMEs, and three
+    shells (`grust`, `the-governor`, `mind.lathe`) were archived with tombstone
+    descriptions — `mind.lathe` because it would have collided by name with
+    the brand.
 69. **Horde: rename first, cleanup later — the Mind Lathe rename ships in
     HYPERSAW's next `/retrofit`; the param-ID / tech-debt branch waits until
     the account rename and K5 are done** (2026-09-05, human ruling via poll).
