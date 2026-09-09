@@ -236,6 +236,20 @@ def _vendored_current(repo):
         return False
 
 
+
+def verify_cmd(target="fast"):
+    """argv that runs a repo's own ./verify on every platform.
+
+    Windows CreateProcess cannot exec a `#!/usr/bin/env bash` script directly;
+    it raises OSError, and every probe here catches OSError as "the gate did
+    not fire". So on the Windows machine the gate-fires probe was inert and
+    reported nothing — the silent shape L0002 warns about, one level up: not a
+    dead pattern but a dead process. Route through bash there (Git Bash is a
+    stated requirement, INSTALL-GLOBAL §6b); POSIX runs the script as-is.
+    """
+    cmd = ["./verify", target]
+    return ["bash"] + cmd if os.name == "nt" else cmd
+
 def _gate_report(repo):
     """ONE ./verify run per repo, planting BOTH identity families in one file
     on separate lines, and reading which LINE the gate named. Halves the cost
@@ -275,7 +289,7 @@ def _gate_report(repo):
         # session's verify on this tree (mind-lathe, 2026-08-18). Older gates
         # ignore the variable and stay collision-prone — that is the retrofit.
         env = dict(os.environ, KIT_CURRENCY_NESTED="1", KIT_LEAK_PLANT=name)
-        r = subprocess.run(["./verify", "fast"], cwd=repo, capture_output=True,
+        r = subprocess.run(verify_cmd(), cwd=repo, capture_output=True,
                            text=True, timeout=120, env=env)
         out = r.stderr + r.stdout
         # Second run, SAME plant, WITHOUT the ownership marker: this is what a
@@ -286,7 +300,7 @@ def _gate_report(repo):
         # is the presence check 2.2.0 exists to reject.
         env2 = dict(os.environ, KIT_CURRENCY_NESTED="1")
         env2.pop("KIT_LEAK_PLANT", None)
-        r2 = subprocess.run(["./verify", "fast"], cwd=repo, capture_output=True,
+        r2 = subprocess.run(verify_cmd(), cwd=repo, capture_output=True,
                             text=True, timeout=120, env=env2)
         result = {"posix": f"{name}:1:" in out, "windows": f"{name}:2:" in out,
                   "plant_invisible": name not in (r2.stderr + r2.stdout)}
@@ -338,7 +352,7 @@ def _gate_fires(repo, plant_lines):
         with open(path, "w", encoding="utf-8") as fh:
             fh.write("\n".join(plant_lines) + "\n")
         env = dict(os.environ, KIT_CURRENCY_NESTED="1", KIT_LEAK_PLANT=name)
-        r = subprocess.run(["./verify", "fast"], cwd=repo, capture_output=True,
+        r = subprocess.run(verify_cmd(), cwd=repo, capture_output=True,
                            text=True, timeout=120, env=env)
         return name in (r.stderr + r.stdout)
     except (OSError, subprocess.TimeoutExpired):

@@ -28,6 +28,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.join(_HERE, "..")
 sys.path.insert(0, os.path.join(_HERE, "sweep"))
 import sweep  # noqa: E402
+import currency  # noqa: E402
 
 ANCHOR = "  local hits excludes=(':(exclude)*leak_scan.py' ':(exclude).leakcheck-allow')\n"
 
@@ -50,7 +51,7 @@ def _probe_ok(path, plant=".kit-currency-plant-batchcheck.md"):
         with open(p, "w", encoding="utf-8") as fh:
             fh.write("x " + "/" + "Users" + "/nobody/secret\n")   # assembled, never literal
         env = dict(os.environ); env.pop("KIT_LEAK_PLANT", None)
-        r = subprocess.run(["./verify", "fast"], cwd=path, env=env,
+        r = subprocess.run(currency.verify_cmd(), cwd=path, env=env,
                            capture_output=True, text=True, timeout=180)
         return plant not in (r.stderr + r.stdout)
     except (OSError, subprocess.TimeoutExpired):
