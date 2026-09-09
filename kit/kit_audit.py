@@ -36,6 +36,7 @@ _ROOT = os.path.join(_HERE, "..")
 sys.path.insert(0, _HERE)
 sys.path.insert(0, os.path.join(_HERE, "sweep"))
 import kit_sync  # noqa: E402
+import currency  # noqa: E402
 import sweep     # noqa: E402
 
 # The plant MUST match the `.kit-currency-plant-*` name that 2.3.0's gate
@@ -100,7 +101,7 @@ def probe(path, form=POSIX_FORM):
         with open(p, "w", encoding="utf-8") as fh:
             fh.write(form)
         env = dict(os.environ, KIT_LEAK_PLANT=_PLANT)
-        r = subprocess.run(["./verify", "fast"], cwd=path, capture_output=True,
+        r = subprocess.run(currency.verify_cmd(), cwd=path, capture_output=True,
                            text=True, timeout=180, env=env)
         return _PLANT in (r.stdout + r.stderr)
     except (OSError, subprocess.TimeoutExpired):
@@ -126,7 +127,7 @@ def audit(registry, sample=3):
         # isfile AND executable: one repo has a DIRECTORY named `verify`, which
         # os.access(X_OK) happily calls executable.
         vp = os.path.join(p["path"], "verify")
-        oracle = subprocess.run(["./verify", "fast"], cwd=p["path"],
+        oracle = subprocess.run(currency.verify_cmd(), cwd=p["path"],
                                 capture_output=True, text=True).returncode \
             if os.path.isfile(vp) and os.access(vp, os.X_OK) else None
         rows.append({"repo": p["name"], "sync": st, "wired": _wired(p["path"]), "oracle": oracle,

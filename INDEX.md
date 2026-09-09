@@ -8,6 +8,7 @@ consistency is this loop's atomic-write duty (contract §Validation stance).
 - L0003 — MCP SDK 2.0 moved `mcp.server.fastmcp`; try-2.x-fall-back-1.x — shim safe only on `@tool`/`.run()` — candidate
 - L0004 — consumer-authored contract tests catch the dialect the provider does not write — candidate
 - L0005 — a detector shares assumptions with what it measures; a must-read-zero control needs a paired corruption — canonical
+- L0018 — a detector keyed on the current machine's identity or path conventions is a different detector on every machine — candidate
 - L0017 — a control proves a detector can see, not that it looked everywhere; testimony outranks a clean scan — canonical
 - L0016 — an action list from an eventually-consistent index names finished work and hides pending work — canonical
 - L0015 — an eventually-consistent index is a cache; an action list must read the source — canonical

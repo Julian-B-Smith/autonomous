@@ -75,7 +75,7 @@ changes here, re-paste §2 on each installed machine. Block changelog:
 
 ## 6. Windows machines (read BEFORE the first clone)
 
-Everything above applies, with five differences. Four of them fail *silently*
+Everything above applies, with seven differences. Most of them fail *silently*
 if skipped — that is why this section exists.
 
 **a. Set line endings before cloning anything.** Git for Windows defaults to
@@ -95,9 +95,16 @@ is `#!/usr/bin/env bash` and shells out to `git grep`/`sed`. Git Bash (bundled
 with Git for Windows) runs them unmodified; WSL also works. PowerShell does
 not, and the failure looks like a broken repo rather than a wrong shell.
 
-**c. `python3` may not exist.** The verify scripts invoke `python3`; Windows
-installs commonly provide only `python` / the `py` launcher. Confirm
-`python3 --version` works in Git Bash before concluding a gate is broken.
+**c. `python3` may not exist — and the stub that does is worse than nothing.**
+The verify scripts and every kit hook invoke `python3`; Windows installs
+provide only `python` / the `py` launcher, and the `python3.exe` under
+`%LOCALAPPDATA%\Microsoft\WindowsApps` is a Microsoft Store *alias* that
+prints "Python was not found" and exits non-zero. So every Python gate reads
+RED with a message that looks like a broken repo (autonomous, 2026-09-09: sweep, governor, kit
+gate and currency tests all red on a clean tree). Fix: copy `python.exe` to
+`python3.exe` inside the real install dir (`…\Programs\Python\Python3xx\`),
+which sits ahead of `WindowsApps` on PATH. Confirm `python3 --version` in Git
+Bash before concluding a gate is broken.
 
 **d. Clone to the same relative layout.** The doctrine import is
 `@~/Documents/Claude/autonomous/doctrine/DOCTRINE.md`. Claude Code expands `~`
@@ -112,6 +119,19 @@ Windows machine fails CI exactly like a leak committed from the Mac — but
 `auval`, AU builds, and the Mac-only plugin steps in the global file's
 audio-plugin section do not exist there; on Windows those projects are VST3
 only.
+
+**f. Set `PYTHONUTF8=1` (user environment variable).** The Windows console
+encoding is cp1252, so `monitor.py` dies encoding the `→` in its own summary
+line and `subprocess` dies decoding UTF-8 output from `git grep`. `setx
+PYTHONUTF8 1`, and add it to `~/.claude/settings.json` `env` so hooks inherit
+it. Without it the sweep crashes after ~14s having written a partial STATUS.
+
+**g. Hooks and the session registry.** `~/.claude/settings.json` carries the
+kit's SessionStart hooks (`kit/hooks/session-brief.py` sync,
+`kit/hooks/fleet-sweep-async.sh` async) with absolute forward-slash paths, and
+`KIT_SESSION_MACHINE=win` in its `env` block so registry rows never carry the
+hostname. The registry fallback dir `~/.claude/session-registry/` must exist
+or `/wakeup` proceeds unregistered with a warning.
 
 ## Rules of the split
 

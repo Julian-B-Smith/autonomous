@@ -38,6 +38,20 @@ USER = (
     or os.path.basename(os.path.expanduser("~"))
 )
 
+
+def username_pattern(user):
+    """POSIX-ERE pattern for the bare local username, anchored on both sides.
+
+    Unanchored, the pattern is the username as a substring, and a detector
+    keyed on the CURRENT machine's identity is a different detector on every
+    machine: the Windows box's username is a substring of "transport" and
+    "support", so the same 54 trees that read clean on the Mac read 20 HIGH
+    there — every one a false positive, and a channel that cries wolf is a
+    channel nobody reads. `git grep -E` has no `` (L0002), so the boundary
+    is spelled out: start-or-non-word before, non-word-or-end after.
+    """
+    return r"(^|[^A-Za-z0-9_])" + re.escape(user) + r"([^A-Za-z0-9_]|$)"
+
 HIGH_PATTERNS = [
     # POSIX ERE only — `git grep -E` does NOT support \s / \d (a \s here
     # silently matched nothing, so absolute-path detection was dead: the
@@ -47,7 +61,7 @@ HIGH_PATTERNS = [
     # `C:\\Users\\` (how it lands in JSON/configs); a one-backslash pattern
     # misses the escaped form silently.
     (r"[A-Za-z]:\\+Users\\+[^\\]", "windows absolute home path"),
-    (re.escape(USER), "local username"),
+    (username_pattern(USER), "local username"),
 ]
 INFO_PATTERNS = [
     (r"~/Documents", "home-relative structural ref"),

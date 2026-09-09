@@ -241,6 +241,14 @@ def responses_awaiting(repo_name, roster_paths, today=None):
                     out.append({**th, "in_repo": os.path.basename(path), "ours": True})
     return out
 
+
+def _rel(f, root):
+    """Repo-relative path with forward slashes on every platform. Consumers
+    compare and print these (`integrations/peer/brief.md`); a backslash form
+    from a Windows run is a different string for the same file, and the
+    session brief, the Threads Board, and two tests all read it as one."""
+    return os.path.relpath(f, root).replace(os.sep, "/")
+
 def frontmatter_lies(path):
     """Threads whose opening file still claims the ball while an answer exists.
 
@@ -295,7 +303,7 @@ def frontmatter_lies(path):
             if _ROLE_ANSWERER.match(os.path.basename(f)):
                 continue                   # a hand-back, not stale state
             if any(_ROLE_ANSWERER.match(os.path.basename(g)) for g, _ in members):
-                out.append({"id": tid, "file": os.path.relpath(f, path),
+                out.append({"id": tid, "file": _rel(f, path),
                             "says": m["ball"], "status": m["status"]})
     return out
 
@@ -324,7 +332,7 @@ def cites_missing(path):
         with open(f, encoding="utf-8", errors="ignore") as fh:
             head = fh.read(4000)
         if not re.search(r"^cites:\s*\S", head, re.M):
-            bad.append({"file": os.path.relpath(f, path), "id": p["id"],
+            bad.append({"file": _rel(f, path), "id": p["id"],
                         "status": p["status"]})
     return bad
 

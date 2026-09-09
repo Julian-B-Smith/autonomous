@@ -148,6 +148,9 @@ class TestReport(unittest.TestCase):
         self.assertFalse(r["current"])
         self.assertIn("CLAUDE.md", [m for b in r["behind"] for m in b["missing"]])
 
+    @unittest.skipIf(os.name == "nt", "NTFS has no exec bit: os.access(X_OK) is true for "
+                     "every file, so the property under test does not exist here. "
+                     "The Mac and ubuntu CI run it.")
     def test_verify_must_be_executable_not_just_present(self):
         """The Write tool does not set the exec bit (retrofit gotcha,
         2026-07-12). A verify that exists but cannot run is not a verify."""
@@ -231,7 +234,7 @@ class TestForeignPlantIsInvisible(unittest.TestCase):
         env.pop("KIT_LEAK_PLANT", None)
         if own:
             env["KIT_LEAK_PLANT"] = own
-        return subprocess.run(["./verify", "fast"], cwd=self.root, env=env,
+        return subprocess.run(currency.verify_cmd(), cwd=self.root, env=env,
                               capture_output=True, text=True)
 
     def test_unowned_plant_does_not_red_a_concurrent_verify(self):
