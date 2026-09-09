@@ -13,7 +13,7 @@ human should understand every layer, protocol, and cycle from this file
 alone, without reading the implementation; deep links go to the canonical
 sources.
 
-*Last verified current: 2026-08-31.*
+*Last verified current: 2026-09-09.*
 
 ---
 
@@ -352,7 +352,7 @@ by **reversibility of the change**, not trust in the model.
 | [ONBOARDING.md](ONBOARDING.md) | Replication + arrival guide (human and agent) — start here on a new machine | current |
 | [DESIGN.md](DESIGN.md) | The full research-backed design | current |
 | [ROADMAP.md](ROADMAP.md) | Phase-gated direction: C0 done; kit v2 + ecosystem tracks in progress; governor watchdog-monitor next, HALT/conductor/critic deferred | current |
-| [DECISIONS.md](DECISIONS.md) | Append-only decision log (66 on record; NOT in numeric order — next is max+1) | current |
+| [DECISIONS.md](DECISIONS.md) | Append-only decision log (71 on record; NOT in numeric order — next is max+1) | current |
 | [doctrine/](doctrine/) | Doctrine (auto-loaded) + INTEGRATIONS + CONVENTIONS (JIT) + global-install guide | current |
 | [kit/](kit/) | The harness factory, **v2.6.0**: survey → manifest → vendored gates. `currency.py` (computed currency), `kit_sync.py` (vendoring), `kit_audit.py`, `commands/` (`/spinup` `/retrofit` `/wakeup` `/breakdown` `/reorient` `/closeout`), `session/` (state + registry + batch close), `vendor/kit-gates.sh`, `contracts/` (`library-entry.3`, `status.1`) | live |
 | [harness/](harness/) | Generic Agent Harness (layer 2) | imported, working |
@@ -362,7 +362,7 @@ by **reversibility of the change**, not trust in the model.
 | [registry.json](registry.json) | Canonical sweep/watch allowlist for ecosystem processes (Decision 14) | live |
 | [routines/](routines/) | Versioned prompts for recurring routines (landscape audit: local task + cloud variant) | live |
 | [research/](research/) | The evidence base, citations preserved — incl. the [VSM mapping](research/2026-08-14-viable-system-model-mapping.md) | current |
-| [LIBRARY.md](LIBRARY.md) / [INDEX.md](INDEX.md) | This repo's own hard-won lessons (15 on record), each with evidence and a falsifier | live |
+| [LIBRARY.md](LIBRARY.md) / [INDEX.md](INDEX.md) | This repo's own hard-won lessons (18 on record), each with evidence and a falsifier | live |
 | [briefs/](briefs/) | Design briefs received from the human, kept as the citable original | live |
 | [archive/kit-v1/](archive/kit-v1/) | Kit v1, frozen | archived |
 

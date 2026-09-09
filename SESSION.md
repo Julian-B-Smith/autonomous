@@ -1,53 +1,67 @@
 # SESSION.md — autonomous
 
-> Written by `/breakdown` on **2026-08-31**, surveyed. This is the account the
-> next session should trust over its own reconstruction from the diff.
+> Written by `/breakdown` on **2026-09-09** (Windows machine, Osiris),
+> abbreviated — the human answered the three prompts in prose before leaving
+> for a week. This is the account the next session should trust over its own
+> reconstruction from the diff.
 
 ## First move next session
 
-**Ratify or push back on the three INTEGRATIONS amendments.** They are drafted
-in `integrations/hypersaw/response-003.md` and `integrations/Tonality/
-response-001.md`, and `hypersaw-001` stays overdue with the ball legitimately
-ours until the human rules. Nothing else here is blocked.
+**The rename has happened by now (Decision 70). Run the check before
+anything else, on whichever machine you are on:**
 
-The three: `cites:` affirmed by the RESIDENT at intake (HYPERSAW's argument —
-take the duty off the party that cannot be gated); `seq:` per-thread and
-strictly increasing (their narrowing, better than the fleet-global version);
-and a closing reply writes a terminal `status:`, because `ball: none` is
-structurally unable to close a thread and must stay that way (the FOUNDATIONS
-masking case).
+```
+python3 kit/rename_owner.py --check
+python3 kit/rename_owner.py --apply --new-owner Julian-B-Smith   # remotes only, per machine
+```
+
+Then `git pull`, `./verify fast`, and `python3 governor/monitor.py --registry
+registry.json --out governor/STATUS.md`. The sweep must be run on BOTH
+machines against the same commit and produce the same finding set — that is
+L0018's falsifier, and the first time it can actually be checked.
+
+After that: the private hand-carry the human named — gitignored config that
+`git pull` cannot move (session registry location / `KIT_SESSION_REGISTRY`,
+`BOARD_URL` + `THREADS_URL`, `audit-loop.config`). ROADMAP K3 closes when the
+registry location is named.
 
 ## State at close
 
-- `main`, clean, **`./verify fast` green at HEAD** (run at close, not recalled).
-- Kit **2.6.0**. Fleet: 46 repos, **zero ungated** — every `./verify` vendors
-  the gate, sources it, and fires on both identity forms.
-- Decisions at **66**; LIBRARY at **16** (L0016 added this close).
-- README audited against the tree this close: every checkable claim matched
-  (66 / 16 / 2.6.0 / 46 / all six commands). *Last verified* moved to 08-31.
-- `traces/2026-08-31-kit-2.2-to-2.6-vendoring-and-session-boundaries.md` covers
-  the 69-commit arc; the previous trace was 83 commits stale.
+- `main` at the PR #10 merge, clean, **`./verify fast` green at HEAD** (run
+  at close on Windows: 32 governor tests incl. 4 new; kit currency 28 with 1
+  stated platform skip; ubuntu CI passed on the PR).
+- Kit **2.6.0**, no bump. Decisions at **71**; LIBRARY at **18** (L0018,
+  candidate). README counts and *Last verified* moved to 09-09; the "46
+  repos" figure NOT re-verified.
+- Fleet sweep from this machine: **2 HIGH** (life-os-app 4 lines,
+  life-os-data 11 lines — their residents' territory), 71 WARN, 53 INFO
+  across 54 repos. Was 20 HIGH before the username pattern was anchored.
+- `traces/2026-09-09-windows-machine-bring-up.md` covers the day.
 
 ## Open threads (append here, never replace — concurrency rule)
 
-1. **The three amendments** — at the human's S5 gate. The session's identified
-   forget-risk; also in REFLECTIONS.md.
-2. **The GitHub rename**, `Lifted-Truck` → `mind-lathe`. Runbook published;
-   `kit/rename_owner.py` scans and rewrites remotes. Human does Phase 0–1
-   (click + park the old name); then 44 remotes, `algedonic.py`'s default org,
-   plainsynth's cross-repo CI, and autonomous's own 14 live references. Two
-   Phase-0 checks my token could not make: published GitHub Packages, and the
-   4 gists.
-3. **~40 open PRs** from `/closeout`, unmerged. Merges are the human's.
-4. **Three manual breakdowns** the batch correctly refused: Tonality, HYPERSAW,
-   resume-workshop.
-5. **mind-lathe's session** open since 08-28 and still registered; its row
-   carries the pre-override hostname machine label.
+1. **The GitHub rename**, `Lifted-Truck` → `Julian-B-Smith`, with `mind-lathe`
+   reserved as an empty org (Decision 70). Happening during the week of
+   09-09. Runbook + `kit/rename_owner.py` exist; live references in this
+   repo (README §7, ROADMAP registry lines, INSTALL-GLOBAL §1,
+   `algedonic.py` default org) go stale the moment it lands.
+2. **Two machines, nothing gitignored shared.** This box's registry is fresh
+   and empty, so the Mac's rows (mind-lathe open since 08-28) are invisible
+   here; no board URLs here either. Per-machine until K3's location is named.
+3. **~40 open PRs from `/closeout`** (08-31) — carried, NOT re-counted this
+   session. Merges are the human's.
+4. **Three manual breakdowns** the batch refused: Tonality, HYPERSAW,
+   resume-workshop — carried from 08-31.
+5. **Two LEAK HIGHs** in life-os-app / life-os-data. Reported only; if they
+   are real, their residents fix them; if they are the bare-username class,
+   they need the same anchoring — check with the anchored pattern first.
+6. **`jq` not installed here** — `kit/hooks/pr-status.sh` unwired on Windows.
+7. **`CITES MISSING`** prints 79 report lines per verify; T4 (ROADMAP) is the
+   flip to blocking, gated on every open thread carrying `cites:`.
 
 ## Notes for the next session
 
-- `/breakdown` here now runs a README audit with teeth and a library roundup
-  (Step 3b); `/closeout` deliberately has neither — harvesting judgment is what
-  a mechanical close cannot do.
-- The Session Board republishes only when its substance changed; a rendered
-  clock made every boundary look like a change.
+- On Windows: Git Bash only; `python3` is a copied exe; `PYTHONUTF8=1` is
+  load-bearing. If a gate reads red with a broken-repo-shaped message,
+  suspect the platform first (INSTALL-GLOBAL §6).
+- A clean sweep on one machine is evidence about that machine (L0018).
