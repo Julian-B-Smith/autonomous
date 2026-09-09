@@ -237,6 +237,23 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+71. **The Windows machine is live as the fleet's second machine; a platform
+    skip is stated, never silent** (2026-09-09, human ratified by merging
+    PR #10). The first sweep from Windows found the governor and kit encoding
+    the machine that wrote them (bare-username leak pattern → 20 false HIGH;
+    backslash path keys; `./verify` exec'd directly, which Windows cannot do,
+    and every probe swallowed the OSError as "gate did not fire"). All fixed
+    host-independently; one test — the `./verify` exec-bit currency case — is
+    skipped on NTFS with the reason in the decorator, because the property
+    does not exist there and the Mac + ubuntu CI still run it. Rejected:
+    making the currency `exec` probe read git's index mode on Windows (would
+    need fixtures to set 100755 explicitly; a follow-up if ever needed).
+    Context the ruling carries: the human is away 2026-09-09 → ~09-16 and
+    renames the GitHub account (Decision 70) during that week; on return, the
+    first job is both machines reconciled — remotes rewritten, gitignored
+    private config (session registry, board URLs, audit-loop.config) carried
+    over by hand, and the fleet sweep run on BOTH machines against the same
+    commit (LIBRARY L0018's falsifier, run as a check).
 70. **The GitHub user account renames to `Julian-B-Smith`; `mind-lathe` is
     reserved as an empty organization for the brand** (2026-09-07, human
     ruling via poll; both names checked free the same day). Reason: people own
