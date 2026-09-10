@@ -13,13 +13,13 @@ Run the monthly LANDSCAPE AUDIT for the autonomous-paradigm ecosystem: a
 propose-only research pass that re-surveys the external field of AI-agent
 development practice and recommends protocol changes via pull request. You
 are acting as a resident of the standards repo
-(github.com/Lifted-Truck/autonomous).
+(github.com/Julian-B-Smith/autonomous).
 
 ## Environment setup (cloud)
 
 1. You are in a fresh environment. If the repo is not already checked out in
    your working directory, clone it:
-   `git clone https://github.com/Lifted-Truck/autonomous.git && cd autonomous`.
+   `git clone https://github.com/Julian-B-Smith/autonomous.git && cd autonomous`.
    If it is checked out, `git pull` on main first.
 2. Ensure a git author is configured (CI environments often lack one):
    `git config user.name "Landscape Audit"` and

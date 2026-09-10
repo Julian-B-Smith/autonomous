@@ -367,11 +367,11 @@ by **reversibility of the change**, not trust in the model.
 | [archive/kit-v1/](archive/kit-v1/) | Kit v1, frozen | archived |
 
 **Sibling repos** (own repos, sequenced in ROADMAP → Ecosystem tracks):
-[distillery](https://github.com/Lifted-Truck/distillery) (global memory:
+[distillery](https://github.com/Julian-B-Smith/distillery) (global memory:
 stream + analyst + distilled pool) ·
-[dispatch](https://github.com/Lifted-Truck/dispatch) (daily progress
+[dispatch](https://github.com/Julian-B-Smith/dispatch) (daily progress
 publishing) ·
-[ai-integration-methodology](https://github.com/Lifted-Truck/ai-integration-methodology)
+[ai-integration-methodology](https://github.com/Julian-B-Smith/ai-integration-methodology)
 (the human-epistemics sibling). This repo governs; they execute.
 
 ## 8. Maintenance

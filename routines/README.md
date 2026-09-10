@@ -18,7 +18,7 @@ retired in favor of the cloud routine — its prompt survives at
 `~/.claude/scheduled-tasks/monthly-landscape-audit/SKILL.md` (inert) and the
 test surfaced the request-blockage lesson now baked into the prompt's
 resilience section. If a local fallback is ever needed again, recreate the
-task with a thin prompt: "pull github.com/Lifted-Truck/autonomous and
+task with a thin prompt: "pull github.com/Julian-B-Smith/autonomous and
 execute routines/landscape-audit.cloud.prompt.md, skipping the cloud-setup
 section." Never run two variants in the same month.
 

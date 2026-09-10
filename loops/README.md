@@ -12,7 +12,7 @@ Two loops, one entry format, self-similar at every level.
   integrate/run prompts, and the headless runner (`audit-loop.sh`,
   propose-only staging by default). `audit-loop.config` is machine-local and
   git-ignored — copy `audit-loop.config.example` and edit. The former home,
-  github.com/Lifted-Truck/agent-knowledge-loop, is ARCHIVED and carries a
+  github.com/Julian-B-Smith/agent-knowledge-loop, is ARCHIVED and carries a
   tombstone pointing here.
 
 New-research deltas to fold into the loop design (selective-memory numbers,

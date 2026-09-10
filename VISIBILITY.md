@@ -49,7 +49,7 @@ might be worth patenting, public code forecloses the strongest options.
 
 - **Public showcase (Tonality, Audiology): PolyForm Noncommercial 1.0.0.**
   `LICENSE.md` grants the public non-commercial use; commercial rights are
-  reserved to the copyright holder (Julian Smith / Lifted-Truck) by default.
+  reserved to the copyright holder (Julian Smith / Julian-B-Smith) by default.
   Source-available, resume-friendly, commercial-protected. Canonical text:
   polyformproject.org/licenses/noncommercial/1.0.0.
 - **Private commercial candidates: intentionally UNLICENSED (all rights

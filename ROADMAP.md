@@ -66,14 +66,14 @@ knowledge-loop harvest — listed so the governor and audits know they exist,
 not for cross-track sequencing):
 
 - **HYPERSAW** (`~/Documents/Claude/synthetic-worlds/HYPERSAW/`, public:
-  github.com/Lifted-Truck/HYPERSAW) — coupled-oscillator synthesizer plugin
+  github.com/Julian-B-Smith/horde) — coupled-oscillator synthesizer plugin
   (CLAP/VST3). Spun up 2026-07-17 via /spinup; manifest ratified same day;
   rung 2; CI mirrors the Stop hook (`verify fast` only — audio Layer-E is
   macOS-local). First registered execution project. Future consumer of
   Tonality (brief due at its Phase 3); registered here at human direction
   during its ratification gate.
 - **FOUNDATIONS** (`~/Documents/Claude/synthetic-worlds/FOUNDATIONS/`, private:
-  github.com/Lifted-Truck/FOUNDATIONS) — C++ infrastructure library for
+  github.com/Julian-B-Smith/FOUNDATIONS) — C++ infrastructure library for
   synth/MIDI plugins (parameter registry, modulation, scoped presets, voice
   architecture, signal graph, event pipeline, musical-context blackboard). Owns
   no novelty; owns the contracts novelty plugs into. Spun up 2026-08-08 via
@@ -129,7 +129,7 @@ not for cross-track sequencing):
   the high-risk MCP shape (path + pattern args touching the filesystem) —
   first in line for the MCP-server sweep (LIBRARY L0003 check).
 - **ANTIPHON** (`~/Documents/Claude/synthetic-worlds/Antiphon/`, public:
-  github.com/Lifted-Truck/antiphon) — quantized harmonic companion for Ableton
+  github.com/Julian-B-Smith/antiphon) — quantized harmonic companion for Ableton
   Live (live regime only; the offline harmonizer is Wend's `harmonize` mode).
   Spun up 2026-07-13 via /spinup; rung 1 (single thread); CI mirrors the Stop
   hook (`verify fast`; Layer-E needs a live Ableton set and is not runnable on

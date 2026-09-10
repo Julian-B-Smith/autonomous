@@ -14,11 +14,11 @@ them are files, not conversations.
 
 | Repo | Role | Remote |
 |---|---|---|
-| **autonomous** (this repo) | Standards: doctrine, integrations policy, harness kit, governor spec, ecosystem roadmap | github.com/Lifted-Truck/autonomous |
+| **autonomous** (this repo) | Standards: doctrine, integrations policy, harness kit, governor spec, ecosystem roadmap | github.com/Julian-B-Smith/autonomous |
 | *(retired)* | The cross-project audit loop now lives in `autonomous/loops/audit-loop/` (Decision 58); its former repo is archived. |
-| **distillery** | Global memory: append-only stream + analyst + distilled pool | github.com/Lifted-Truck/distillery |
-| **dispatch** | Daily progress publishing: collector → FACTS → digest → gated publish | github.com/Lifted-Truck/dispatch |
-| **ai-integration-methodology** | The human-epistemics sibling: the collaboration methodology + consulting offering | github.com/Lifted-Truck/ai-integration-methodology |
+| **distillery** | Global memory: append-only stream + analyst + distilled pool | github.com/Julian-B-Smith/distillery |
+| **dispatch** | Daily progress publishing: collector → FACTS → digest → gated publish | github.com/Julian-B-Smith/dispatch |
+| **ai-integration-methodology** | The human-epistemics sibling: the collaboration methodology + consulting offering | github.com/Julian-B-Smith/ai-integration-methodology |
 
 Cross-repo sequencing: [ROADMAP.md → Ecosystem tracks](ROADMAP.md).
 The design and its evidence: [DESIGN.md](DESIGN.md), [research/](research/).
@@ -33,7 +33,7 @@ The full orientation to layers/protocols/cycles: [README.md](README.md).
 1. **Clone the standards repo to the canonical path** (the doctrine imports
    assume it):
    ```bash
-   git clone https://github.com/Lifted-Truck/autonomous.git ~/Documents/Claude/autonomous
+   git clone https://github.com/Julian-B-Smith/autonomous.git ~/Documents/Claude/autonomous
    ```
 2. **Wire the global CLAUDE.md** — follow
    [doctrine/INSTALL-GLOBAL.md](doctrine/INSTALL-GLOBAL.md) (paste one block,
@@ -45,8 +45,8 @@ The full orientation to layers/protocols/cycles: [README.md](README.md).
    ```
 4. **Clone the execution tracks:**
    ```bash
-   git clone https://github.com/Lifted-Truck/distillery.git ~/Documents/Claude/distillery
-   git clone https://github.com/Lifted-Truck/dispatch.git   ~/Documents/Claude/dispatch
+   git clone https://github.com/Julian-B-Smith/distillery.git ~/Documents/Claude/distillery
+   git clone https://github.com/Julian-B-Smith/dispatch.git   ~/Documents/Claude/dispatch
    ```
 5. **Optional — the weekly audit-loop cron.** Copy
    `autonomous/loops/audit-loop/audit-loop.config.example` →

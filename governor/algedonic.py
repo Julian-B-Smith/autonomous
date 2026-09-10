@@ -39,7 +39,7 @@ import subprocess
 import sys
 import tempfile
 
-ORG = os.environ.get("ALGEDONIC_ORG", "Lifted-Truck")
+ORG = os.environ.get("ALGEDONIC_ORG", "Julian-B-Smith")
 
 # Kept byte-identical in spirit to the leak_gate / leak_scan patterns: POSIX
 # ERE, both identity shapes, `\\+` for the escaped Windows form.
