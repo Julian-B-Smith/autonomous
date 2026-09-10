@@ -47,7 +47,7 @@ def username_pattern(user):
     machine: the Windows box's username is a substring of "transport" and
     "support", so the same 54 trees that read clean on the Mac read 20 HIGH
     there — every one a false positive, and a channel that cries wolf is a
-    channel nobody reads. `git grep -E` has no `` (L0002), so the boundary
+    channel nobody reads. `git grep -E` has no `\\b` (L0002), so the boundary
     is spelled out: start-or-non-word before, non-word-or-end after.
     """
     return r"(^|[^A-Za-z0-9_])" + re.escape(user) + r"([^A-Za-z0-9_]|$)"
