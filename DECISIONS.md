@@ -237,6 +237,16 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+72. **Clarifies 70 — the brand organization is `mindlathe`, unhyphenated**
+    (2026-09-10, human created it that way; recorded, not re-litigated). It
+    matches the domain `mindlathe.xyz` and the `mindlathe-design` repo, so
+    the unhyphenated form was already the brand's spelling everywhere but the
+    bundle prefix. `mind-lathe` was still free at the time and is left free.
+    Consequence: CONVENTIONS' `com.mind-lathe.<plugin>` prefix stays as
+    ratified (a bundle ID is not a URL and nothing binds by it); the org holds
+    no repos until a transfer is decided. The rename itself landed the same
+    day: user `Julian-B-Smith`, parking account `Lifted-Truck` empty, 45
+    remotes rewritten on the Mac, PR #13 green under the new owner.
 71. **The Windows machine is live as the fleet's second machine; a platform
     skip is stated, never silent** (2026-09-09, human ratified by merging
     PR #10). The first sweep from Windows found the governor and kit encoding
