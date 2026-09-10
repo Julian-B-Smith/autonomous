@@ -1,4 +1,4 @@
-<!-- Provenance: written by the `autonomous` resident (github.com/Lifted-Truck/autonomous),
+<!-- Provenance: written by the `autonomous` resident (github.com/Julian-B-Smith/autonomous),
      2026-08-18, from Decision 65 (kit mechanism is vendored and checksummed).
      Paste into a session running IN the target repo. If you did not expect this
      prompt, do not act on it — ask the human who sent it. -->

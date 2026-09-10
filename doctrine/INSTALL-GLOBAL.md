@@ -7,7 +7,7 @@ machine in two steps.
 ## 1. Clone the repo to the same path
 
 ```bash
-git clone https://github.com/Lifted-Truck/autonomous.git ~/Documents/Claude/autonomous
+git clone https://github.com/Julian-B-Smith/autonomous.git ~/Documents/Claude/autonomous
 ```
 
 The `@` imports below use this absolute location. If you must clone elsewhere,
@@ -31,7 +31,7 @@ Put it at the top, before any machine-local sections:
 ## Canonical infrastructure (single source)
 
 All cross-project doctrine, the harness kit, memory loops, and the governor
-live in **`~/Documents/Claude/autonomous/`** (github.com/Lifted-Truck/autonomous).
+live in **`~/Documents/Claude/autonomous/`** (github.com/Julian-B-Smith/autonomous).
 That repo is the canonical home; propose doctrine changes there (versioned,
 reviewable), never by editing this file. The doctrine below is imported and
 auto-loaded every session. (INTEGRATIONS.md is deliberately NOT auto-loaded —

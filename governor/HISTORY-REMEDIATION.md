@@ -50,10 +50,10 @@ rewrites the *string* inside blobs and leaves structure/messages intact.
 
 ```bash
 # 0. BACK UP FIRST — a full mirror you can restore from. Non-negotiable.
-git clone --mirror https://github.com/Lifted-Truck/<repo> ~/backups/<repo>-$(date +%F).git
+git clone --mirror https://github.com/Julian-B-Smith/<repo> ~/backups/<repo>-$(date +%F).git
 
 # 1. Fresh clone to operate on (filter-repo refuses a dirty/linked tree)
-git clone https://github.com/Lifted-Truck/<repo> /tmp/<repo>-rw && cd /tmp/<repo>-rw
+git clone https://github.com/Julian-B-Smith/<repo> /tmp/<repo>-rw && cd /tmp/<repo>-rw
 
 # 2. Define the replacements (literal string -> replacement).
 #    Build it from $(whoami) so this runbook never itself contains the
@@ -70,7 +70,7 @@ git log --all -p | grep -c "$(whoami)" || echo "clean"
 git log --oneline | head            # sanity: history structure intact
 
 # 5. Re-add the remote (filter-repo strips it deliberately) and force-push
-git remote add origin https://github.com/Lifted-Truck/<repo>
+git remote add origin https://github.com/Julian-B-Smith/<repo>
 git push --force --all && git push --force --tags
 
 # 6. On EVERY other machine: re-clone (do NOT merge a stale clone)
