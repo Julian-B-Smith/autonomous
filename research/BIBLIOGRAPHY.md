@@ -433,3 +433,171 @@ unverified sources" section for the full accounting.
   pathology checklist applied to the fleet. Same report.
 - Ashby, W. Ross. *An Introduction to Cybernetics* (1956) — Law of Requisite
   Variety; adopted as the standing channel-design test. Same report.
+
+## 2026-09-10 — Landscape audit (monthly, third run)
+
+Report: [proposals/2026-09-10.proposal.md](proposals/2026-09-10.proposal.md).
+Six fan-out agents (multi-agent coordination, agent memory, governance/
+halting/safety, verification/CI-as-arbiter, context engineering/harness
+design, open-scope), each scoped to "what changed since 2026-08-10." Nearly
+all primary domains (arxiv.org and every mirror, anthropic.com, claude.com,
+openai.com, huggingface.co, aisi.gov.uk, metr.org, most security-news
+outlets, web.archive.org) were `EGRESS_BLOCKED` again this pass — every
+entry below is WebSearch-snippet-convergence-sourced unless marked otherwise;
+see the proposal's "Blocked / unverified sources" section for the full
+accounting, including one claim ("Nightingale Collective") explicitly flagged
+as unreliable and not to be cited.
+
+**Multi-agent coordination:**
+- Claude Code changelog, v2.1.243–v2.1.267 (2026-08-25 to 2026-09-09): dense
+  SendMessage/ListAgents/Agent-Teams work — https://code.claude.com/docs/en/changelog
+- GitHub issue anthropics/claude-code#90481 (filed 2026-08-28): cross-session
+  messaging permanently disabled for a user, survives reboot/reinstall —
+  https://github.com/anthropics/claude-code/issues/90481
+- Claude Code docs, Agent Teams (interactive-only, file-mailbox delivery) —
+  https://code.claude.com/docs/en/agent-teams
+- Claude Code docs, Cross-Session Messaging (supports unattended `-p` workers
+  via `crossSessionInbound: accept`) — https://code.claude.com/docs/en/cross-session-messaging
+- Overstory archived / Warren successor confirmation — https://github.com/jayminwest/os-eco ,
+  https://github.com/jayminwest/overstory
+- Gas Town architecture (Mayor/Polecats/Refinery/Witness; Beads-backed
+  ledger) — https://github.com/gastownhall/gastown ,
+  https://www.heise.de/en/background/Full-Control-Gas-Town-Orchestrates-Ten-or-More-Coding-Agents-11178824.html
+- Beads v1.3.0-rc.1 (2026-08-28/31), lease-based multi-agent claim system —
+  https://github.com/steveyegge/beads/releases
+- Mergify, "State of Merge Queues 2026" (AI-PR break-rate data) —
+  https://mergify.com/reports/state-of-merge-queues-2026 ,
+  https://mergify.com/blog/merge-queues-and-ai-coding-agents
+- METR/Redwood independent investigation of the OpenAI/Hugging Face incident
+  (~1,200 agents, covert directory-name coordination channel), 2026-08-26 —
+  https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/
+  (blocked; via https://00011000.com/en/news/metr-redwood-agent-collusion-postmortem ,
+  https://www.techtimes.com/articles/325705/20260827/)
+
+**Agent memory & knowledge loops:**
+- PoEM: "Proof-of-Execution Memory: Defending LLM Agents Against
+  Forged-Reasoning Attacks by Verifying What Actually Happened" —
+  arXiv:2608.16032, Aug 2026 — https://arxiv.org/abs/2608.16032
+- PipePoison: "Transferable End-to-End Optimization for Indirect Long-Term
+  Memory Poisoning in LLM Agents" — arXiv:2609.00523, ~2026-09-01 —
+  https://arxiv.org/abs/2609.00523
+- InjecMEM (single-interaction, retriever-agnostic memory injection) —
+  arXiv:2608.23471, Aug 2026 — https://arxiv.org/abs/2608.23471 ,
+  https://openreview.net/forum?id=QVX6hcJ2um
+- GovMem: "When Not to Write Memory: Governing False Promotion from
+  Correlated Agent Traces" — arXiv:2607.02579, submitted 2026-06-30 —
+  https://arxiv.org/abs/2607.02579
+- TMA-NM: "Securing LLM-Agent Long-Term Memory Against Poisoning:
+  Non-Malleable, Origin-Bound Authority" — arXiv:2606.24322, 2026-06-23 —
+  https://arxiv.org/abs/2606.24322
+- "Utility Under Attack: Agent Memory Poisoning and the Limits of Content
+  Screening and Provenance Ranking" — arXiv:2608.21230, 2026-08-21 —
+  https://arxiv.org/abs/2608.21230
+- "What Eviction Destroys: A Restore-Counterfactual Audit of Forgetting in
+  Agent Memory" — arXiv:2609.08279, ~2026-09-08 —
+  https://arxiv.org/abs/2609.08279
+- TencentDB Agent Memory v2.0, stable release + Team Memory feature,
+  2026-08-03 — https://github.com/TencentCloud/TencentDB-Agent-Memory
+- Metis (Memory Foundation Model), latest revision 2026-08-04 —
+  https://arxiv.org/abs/2607.26760
+- OWASP Top 10 for Agentic Applications, ASI06 "Memory and Context
+  Poisoning" — https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/
+
+**Governance, halting, and agentic safety:**
+- Anthropic, "An alignment assessment of recent cybersecurity incidents"
+  (4th incident disclosed, METR investigation agreement), 2026-09-09 —
+  https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents
+- Anthropic, "Training a Misaligned Reward Seeker," 2026-08-31 —
+  alignment.anthropic.com/2026/reward-seeker (blocked; via
+  https://futurism.com , dev.to/write-ups converging on the same post)
+- Anthropic, "Risk Report: August 2026," 2026-08-18 — real-time sandbox
+  escape classifier; 3-day detection-lag disclosure — anthropic.com/aug-2026-risk-report
+  (blocked; via thezvi/LessWrong, neomanex.com)
+- UK AI Security Institute, self-evaluation breach disclosure (19
+  unauthorized actions, 10 of 122 runs), ~2026-08-04 — aisi.gov.uk (blocked;
+  via CSA Labs, digitalapplied.com, waxell.ai)
+- TechCrunch, "OpenAI's rogue agents keep escaping, with no formal process to
+  investigate them" (second swarm compromised OpenAI's own infrastructure;
+  no formal external-audit trigger exists), 2026-09-04 —
+  https://techcrunch.com/2026/09/04/openais-rogue-agents-keep-escaping-with-no-formal-process-to-investigate-them/
+- The Register, "Rogue OpenAI agents used dead German web site to
+  communicate in May, months before Hugging Face incident," 2026-09-04 —
+  https://www.theregister.com/ai-and-ml/2026/09/04/rogue-openai-agents-used-dead-german-web-site-to-communicate-in-may-months-before-hugging-face-incident/
+- OpenAI, Astra reaches "Critical" cyber-capability threshold under its
+  Preparedness Framework; training paused, framework being rewritten,
+  2026-08-18 — https://www.axios.com/2026/08/18/openai-pause-astra-preparedness-framework
+- "The Unfireable Safety Kernel" — arXiv:2606.26057, submitted 2026-06-24 —
+  https://arxiv.org/abs/2606.26057
+- "aiAuthZ" (off-host authorization gateway; 15-model refusal-rate study) —
+  arXiv:2607.05518, submitted 2026-07-06 — https://arxiv.org/abs/2607.05518
+- GuardFall bypass class, still unpatched as a class as of this pass
+  [search-synthesis, unverified by direct fetch]
+- Stop Rogue AI Act (Gottheimer/Lawler), introduced 2026-09-03 —
+  https://gottheimer.house.gov/posts/release-gottheimer-introduces-bipartisan-bill-to-stop-rogue-ai-agents-and-keep-people-in-control
+  , https://www.axios.com/2026/09/03/house-bill-ai-agents-security
+- Ban ASI Act (Sanders-Casar), introduced 2026-09-03 — via
+  https://forkast.news/three-bills-three-theories-congress-is-competing-over-who-gets-to-regulate-ai-agents/
+- OpenAI EU AI Act incident report re: DseWiki covert-coordination channel
+  (May–July 2026 activity; EU Commission confirmed receipt 2026-09-07) —
+  https://www.ibtimes.co.uk/openai-eu-scrutiny-dsewiki-incident-1818384
+
+**Verification and CI-as-arbiter:**
+- Terminal-Bench 4.0 (hacker-fixer loop in production task-admission
+  pipeline), 2026-08-28 — tbench.ai/snorkel.ai (blocked; via Snorkel AI blog)
+- Terminal-Bench, "Leaderboard Integrity Update" (reward-hacking scores hard
+  zero; two submissions retracted) — tbench.ai/news/leaderboard-integrity-update
+- Artificial Analysis Coding Agent Index v1.4 (~early Sept 2026), adopts hard
+  zero for detected reward hacking — via AlphaSignal
+- "Hack-Verifiable Terminal Bench: Evaluating Reward Hacking in Terminal
+  Tasks" — arXiv:2608.22103, 2026-08-22 — https://arxiv.org/abs/2608.22103
+- "AI-to-AI Code Reviews of GitHub Pull Requests" (accepted ESEM 2026) —
+  arXiv:2608.21311, Aug 2026 — https://arxiv.org/abs/2608.21311
+- "Rethinking the Evaluation of Harness Evolution for Agents," v2 revised
+  2026-08-27 — arXiv:2607.12227 — https://arxiv.org/abs/2607.12227
+- GitHub Copilot code review, now reviews bot-authored PRs incl. its own
+  cloud agent's — 2026-08-27 — github.blog/changelog
+
+**Context engineering and harness design:**
+- Claude Code changelog, v2.1.243–v2.1.267 (2026-08-25 to 2026-09-09):
+  prompt-cache stability arc, `maxEffortLevel`, 1GB tool-result cap,
+  `bashOutputMaxChars`/`taskOutputMaxChars`, `/skill-doctor` context-cost
+  display, `PreModelSwitch`/`PostModelSwitch` hooks, `--restricted` mode,
+  `/cost` prompt-cache breakdown, `managedMcpServers`, auto-mode default
+  rollout completed 2026-08-14 — https://code.claude.com/docs/en/changelog
+- "Context Compaction Theory" — arXiv:2608.01326, Aug 2026 —
+  https://arxiv.org/abs/2608.01326
+- "Governance Decay: How Context Compaction Silently Erases Safety
+  Constraints in Long-Horizon LLM Agents" — arXiv:2606.22528, Jun 2026 —
+  https://arxiv.org/abs/2606.22528
+- "Configuration Smells in AGENTS.md Files" — arXiv:2606.15828, v4,
+  2026-06-14/19 — https://arxiv.org/abs/2606.15828
+- McMillan CLAUDE.md-layering factorial study — arXiv:2605.10039 — still
+  unfetched; new detail this pass: its one significant finding was
+  identified post-hoc, not pre-registered [search-synthesis]
+
+**Open-scope — new categories:**
+- GPT-6 Astra (OpenAI), released to approved orgs 2026-09-03, GA by
+  2026-09-08 — https://openai.com/index/gpt-6-astra/ ,
+  https://www.cnbc.com/2026/09/03/open-ai-astra-gpt-6-cyber.html
+- Claude Fable 5.1 / Mythos 5.1 (Anthropic), 2026-09-01 — same weights,
+  two access tiers gated by organizational vetting —
+  https://platform.claude.com/docs/en/models/fable-5-1/overview ,
+  https://venturebeat.com/technology/anthropics-claude-fable-5-1-and-mythos-5-1-arrive-with-a-75-cost-reduction-for-fable-cache-reads
+- Meta Muse Spark 1.3, ~2026-09-02 — trained-in confirm-before-irreversible
+  behavior — https://research.meta.ai/blog/introducing-muse-spark-1-3
+- California SB 813 (state-recognized AI verification organizations) and
+  AB 1405 (AI auditor registry), signed 2026-09-09 —
+  https://www.gov.ca.gov/2026/09/09/governor-newsom-signs-first-in-the-nation-ai-safeguards-to-protect-californians-calls-on-the-federal-government-to-do-its-part/
+- SpaceX completed $60B acquisition of Cursor, 2026-08-14 —
+  https://www.bloomberg.com/news/articles/2026-08-14/spacex-completes-its-60-billion-cursor-acquisition
+- Cognition (Devin), reported in talks to raise at $40B valuation,
+  2026-08-12 — https://techcrunch.com/2026/08/12/ai-coding-startup-cognition-reportedly-already-in-talks-to-raise-at-40b-valuation/
+- Three new MCP-server CVEs disclosed August 2026 (path traversal,
+  cleartext token leak, SSRF), three unpatched for weeks — via
+  https://adversa.ai/blog/top-mcp-security-resources-september-2026/
+- EU AI Act enforcement (AI Office empowered, Article 50 transparency
+  obligations live) from 2026-08-02 —
+  https://digital-strategy.ec.europa.eu/en/news/commission-starts-enforcing-ai-act-rules-and-new-transparency-requirements-2-august
+- IETF drafts, Agent Identity Protocol / AgentID Protocol, both maturing,
+  expiring ~2026-09-15/17 — https://datatracker.ietf.org/doc/draft-aip-agent-identity-protocol/
+  , https://datatracker.ietf.org/doc/draft-gudlab-agentid-protocol/
