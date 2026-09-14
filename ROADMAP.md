@@ -383,7 +383,10 @@ before the mechanisms exist is a frame written about nothing.
 - **Live agent-to-agent messaging** — deliberately excluded; published
   experience shows it is the most fragile layer and unnecessary at 3–8 agents
   (research/2026-07-10-coordination-isolation.md). Revisit only if the task
-  ledger provably cannot express a needed interaction.
+  ledger provably cannot express a needed interaction. The excluded thing,
+  precisely: unattended cross-session messaging (`crossSessionInbound:
+  accept`); Agent Teams are interactive-only and moot here. The exclusion
+  rests on scale and human oversight, not on the substrate (Decision 73).
 - **Beads-vs-minimal-ledger decision** — deferred to P2 when the ledger is
   actually needed.
 - **Conductor substrate decision** (cron + headless `claude -p` vs

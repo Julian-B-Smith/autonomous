@@ -49,7 +49,8 @@ decides; seeded RNG, no wall-clock reads in cores, reproducible outputs.
 Tests gate phases; gates are never weakened to pass. Prefer two layers:
 Layer-0 (deterministic, CI-blocking, no model calls) and Layer-E (behavioral
 evals, measured but non-blocking). Never conflate guaranteed with measured —
-state which is which.
+state which is which. An automated reviewer is independent only if sourced
+separately from the author; one lineage reviewing its own PR is one opinion twice.
 
 ## Architecture defaults
 Pure, framework-free cores; UI/IO/time live in thin adapters. Swappable
