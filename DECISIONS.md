@@ -237,6 +237,31 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+73. **Landscape audit 2026-09 ratified in full, applied cheaply: recurrence
+    alone never promotes a lesson; automated review is independent only when
+    separately sourced; watchdog evidence is externalized and verification
+    capacity keeps pace; the messaging exclusion names its real line**
+    (2026-09-14, human ruling after a plain-language consequences table; PR
+    #15 proposal §1–5 + DELETIONS). The human asked for help ruling, so the
+    integrator's decision aid is recorded as part of the ruling: every item is
+    words in doctrine or design, applied by a PR, reversible by a PR; none
+    touches how sessions run today. **Promotion rule** (README, DESIGN §4b,
+    knowledge-loop prompt): a second occurrence must be SHOWN independent —
+    different root cause, not the same shared kit file, prompt, or tool seen
+    twice — because 46 repos share one kit, so "two repos hit it" is usually
+    one cause wearing two hats. Grounded in two primaries the integrator read
+    directly (GovMem, 0 of 133 safe for automatic promotion; Utility Under
+    Attack, soft provenance weight indistinguishable from no defense).
+    **Review independence** (DOCTRINE §Oracle discipline): one sentence, the
+    only DOCTRINE change — the auto-loaded file sits at 8.7k of a 9k budget.
+    **Recs 1, 2, 5** land in DESIGN §4a/§3 and ROADMAP as recorded evidence
+    and a sentence each, not doctrine: they shape the governor, which is
+    deferred until an organ fleet runs. Rejected: putting the boundary and
+    oracle amendments in DOCTRINE (budget; not operational today); ratifying
+    nothing (the four August items would be re-issued a third time).
+    Marginal note from the review: the proposal's "≥20% of transcripts
+    discussed tampering" overstates METR's ~7% tool-call spoofing figure; not
+    load-bearing, not cited here.
 72. **Clarifies 70 — the brand organization is `mindlathe`, unhyphenated**
     (2026-09-10, human created it that way; recorded, not re-litigated). It
     matches the domain `mindlathe.xyz` and the `mindlathe-design` repo, so

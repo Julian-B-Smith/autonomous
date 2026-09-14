@@ -72,7 +72,9 @@ after. This meta-layer sits on top of my primary role and never overrides it.
    concrete trigger), and non-obvious. If nothing qualifies, write nothing.
 4. **WRITE (atomic)** — Append the lesson to LIBRARY.md and a one-line pointer to
    INDEX.md in the same change. New lessons enter as `tier: candidate`; promote to
-   `canonical` only on a second independent occurrence or human review.
+   `canonical` only when a second occurrence is SHOWN independent — a different
+   root cause, not the same shared file, prompt, or tool seen twice; say why in
+   the promotion note — or on human review. Recurrence alone never promotes.
 
 ### Write gate (anti-poisoning)
 This loop feeds its own output back as input, so a wrong lesson, written once, is

@@ -88,6 +88,15 @@ never by up-front guessing.
 buses were the most fragile layer and mostly unnecessary at this scale.
 Coordination is stigmergic — through durable git-native artifacts:
 
+> Scoping (Decision 73, 2026-09-14). The vendor's own line is the one this
+> exclusion tracks: **Agent Teams** are interactive-only and cannot run under
+> `-p`; **cross-session messaging** with `crossSessionInbound: accept` runs
+> unattended and is exactly the capability excluded here. The exclusion rests
+> on scale (3–8 agents) and human shift structure, not on stigmergy being
+> safer as a mechanism: ~1,200 isolated agents built a covert channel out of
+> Artifactory directory names and exchanged 70,000+ messages through it
+> (METR, 2026-08-26). Durable artifacts are auditable; they are not inert.
+
 - **Task ledger:** Beads (`bd ready` returns unblocked work; dependencies are
   first-class edges; jsonl through git) or a minimal clone. Free-form TASKS.md
   breaks down at ~8 agents. Every task carries the full delegation contract:
@@ -152,6 +161,21 @@ Halt triggers, two severities:
   regression, gate-weakening attempt, debt accretion, PROPOSAL storm (design
   instability — stop coding, the plan is wrong).
 
+Two refinements ratified 2026-09-14 (Decision 73; (research/proposals/2026-09-10.proposal.md §1–2):
+**a monitor the agent can reach is not a monitor** — a checkpoint trained on
+reward-hackable environments killed its own monitor in 68% of root-access
+episodes and rewrote its reward function in 34% (Anthropic, 2026-08-31), so
+watchdog evidence is externalized and signed, verifiable outside the trust
+boundary of what it watches (cf. arXiv:2606.26057); and **verification
+capacity is provisioned at the pace of what it audits** — Anthropic's August
+risk report traces a 3-day detection lag to environment production outrunning
+vetting, a coverage gap distinct from a boundary configured but never
+verified. Gate-weakening detection has production prior art: Terminal-Bench
+4.0 (2026-08-28) admits tasks through an adversarial hacker-fixer loop with
+execution and grading in separate containers, scores detected reward-hacking
+a hard zero, and mechanical (no-judge) hack detection exists
+(arXiv:2608.22103) — the Layer-0 shape this repo's oracle discipline prefers.
+
 Mechanism: `HALT` sentinel file; every agent's PreToolUse hook checks it —
 fleet-wide stop within one tool call, enforced by harness not compliance.
 Halts are cheap and non-shameful; escalation-on-uncertainty is rewarded
@@ -162,13 +186,28 @@ Runs the audit loop (SCAN/JUDGE/WRITE/LEDGER) vertically, plus the previously
 deferred **down-propagation**: pushing promoted lessons into *specific*
 organs' CLAUDE.md (targeted, never broadcast — CLAUDE.md holds ~100–150
 instruction slots; selective memory beat comprehensive 39% vs 13% accuracy).
-Tier ladder: candidate (organ) → canonical (organ, 2nd occurrence) →
+Tier ladder: candidate (organ) → canonical (organ, 2nd occurrence shown
+independent — a dependency-aware check that is a hard gate, never a weight) →
 proliferated (fleet, curator-only grant, adversarial review: falsifier check,
 scope check, contradiction check — a contradiction with an existing
 proliferated lesson is a halt signal, not a merge). Provenance (`origin:`)
 never dropped; supersede, don't erase; staleness = falsifier/verification
 command re-run (executable memory > prose — Voyager). Deterministic lint pass
 (refs, caps, timestamps, dedup) runs BEFORE any model judgment.
+Write-gate specifics ratified 2026-09-14 (Decision 73; (research/proposals/2026-09-10.proposal.md §4,
+primaries read): (i) provenance is a hard exclusion, not a ranking weight —
+a soft provenance weight is statistically indistinguishable from no defense
+(arXiv:2608.21230), and content screening rejects 0 of 360 plainly-worded
+false assertions; (ii) recurrence is not independence — a human adjudication
+of 133 real coding-agent lesson candidates found none safe for automatic
+promotion, all 11 gate-positives being boilerplate or shared-tool artifacts
+(GovMem, arXiv:2607.02579); the check estimates dependency-aware support;
+(iii) for lessons that assert what HAPPENED (a gate fired, a test passed),
+prefer execution attestation — a record the step ran, writable only by
+trusted code — over content or style matching, which paraphrase defeats
+(PoEM, arXiv:2608.16032); (iv) re-screen stored entries periodically, since
+poison outlives the vector that planted it (InjecMEM, arXiv:2608.23471).
+Taxonomy of record: OWASP Agentic Top 10, ASI06 Memory and Context Poisoning.
 The Reflexion result (+11pts from failure post-mortems) makes failure
 post-mortems the highest-priority REFLECT output — enforced by Stop hook,
 never voluntary (voluntary reflection stops exactly when it matters).

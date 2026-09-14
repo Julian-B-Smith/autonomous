@@ -238,7 +238,10 @@ seeds exactly one real lesson. The per-session cycle is ORIENT (read INDEX,
 pull only matching LIBRARY entries) → ACT → REFLECT ("what could a future
 session not cheaply re-derive?") → WRITE (atomic LIBRARY+INDEX append).
 Every lesson carries **evidence and a falsifier**; new lessons enter as
-`candidate` and earn `canonical` on a second independent occurrence.
+`candidate` and earn `canonical` on a second occurrence the promoter has
+shown to be independent — a different root cause, not the same shared kit
+file, prompt, or tool seen twice. Recurrence alone never promotes
+(Decision 73).
 **The write gate:** prefer not writing over writing unverified — the loop
 feeds its own output back as input, so one wrong lesson is reinforced
 forever. In autonomous operation, REFLECT is hook-enforced, never voluntary.
