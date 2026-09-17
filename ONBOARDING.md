@@ -65,7 +65,9 @@ The full orientation to layers/protocols/cycles: [README.md](README.md).
   decide at named gates: project manifests (phase-0 gates), integration
   briefs' responses, memory promotions (audit-run proposals), doctrine
   changes (landscape-audit proposals), and anything published or
-  irreversible. Saying *no* is cheap and expected.
+  irreversible. Saying *no* is cheap and expected. **Every such gate reaches
+  you as a poll** (the agent's AskUserQuestion), with a recommended option —
+  a prose question is the agent forgetting the rule (Decision 74).
 - **Where things are decided:** each repo's ROADMAP.md is its single source
   of direction; DECISIONS.md is the append-only record. If you decide
   something in conversation, it isn't decided until it's in those files.
@@ -114,7 +116,11 @@ LIBRARY lessons). Then run `./verify report` to see the oracle's last state.
    MERGING is never yours** (Decision 66). Finishing a piece of work means
    opening a PR, not leaving a commit on `main` for the human to find and
    push by hand — that is invisible work with no review surface. Canonical
-   wording: `kit/prompts/_closing.md`.
+   wording: `kit/prompts/_closing.md`. **Ask through a poll**, never a
+   trailing question in prose: AskUserQuestion with the options and your
+   recommendation (`kit/prompts/_human-gates.md`). If the harness denies
+   your own-branch push, the repo predates kit 2.6.1 — name it and poll the
+   fix; do not route around it or quietly hand the human the commands.
 7. **Review beats are visual-first** ([doctrine](doctrine/DOCTRINE.md)):
    at any gate — phase close, ratification request, PR — lead with a visual
    presentation sufficient to evaluate the work without reading code; the
@@ -151,8 +157,10 @@ new project" to land here. The procedure itself, mirroring what built
 `distillery`/`dispatch` (use them as reference implementations):
 
 1. Conduct the spin-up survey with the human ([kit/README.md](kit/README.md),
-   9 questions); write answers to `project.manifest.json`, marked
-   provisional until ratified.
+   9 questions, **each a poll**); write answers to `project.manifest.json`,
+   marked provisional until ratified — and ratification is itself one poll
+   (Ratify / Ratify with changes / Not yet), never a report
+   ([kit/prompts/_human-gates.md](kit/prompts/_human-gates.md)).
 2. Copy the harness: `autonomous/harness/.claude` → `.claude/`,
    `autonomous/harness/verify` → `./verify` (chmod +x) — the THIN template: it
    carries no gate code. Then vendor the kit-owned gates, which is what

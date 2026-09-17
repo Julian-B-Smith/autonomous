@@ -237,6 +237,25 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+74. **Every human gate is a poll, and a denied own-branch push is named as
+    the template defect it is — never routed around, never silently relayed**
+    (2026-09-17, human mandate: "manifest ratification … I would like to
+    always come through as a survey"; and the push-deny "is pretty common in
+    new repos"). Standing rule, fleet-wide, kit 2.6.2: the spin-up survey is
+    nine AskUserQuestion polls, manifest ratification is one (Ratify / Ratify
+    with changes / Not yet — `provisional` until it returns Ratify, "reported
+    for ratification" ratifies nothing), the retrofit plan pause is one, and
+    any "stop and ask" gate is one, each with a recommended option first.
+    Reason: a paragraph ending in a question mark is easy to miss, has no
+    fixed answer set, and leaves no record of what was offered; the human has
+    had to restate this preference in three sessions. On the push: repos
+    scaffolded before 2.6.1 deny `git push*` (kit 2.6.1 fixed the template;
+    this fixes the behaviour of every session that meets the old one) —
+    retrofit Step 4b′ checks for it before the close, and the close contract
+    names it and polls the fix. Canonical wording `kit/prompts/_human-gates.md`.
+    Rejected: a required retrofit action rewriting every repo's
+    `.claude/settings.json` (a repo's permissions are its resident's; the
+    kit offers, the resident adopts, DECISIONS records).
 73. **Landscape audit 2026-09 ratified in full, applied cheaply: recurrence
     alone never promotes a lesson; automated review is independent only when
     separately sourced; watchdog evidence is externalized and verification

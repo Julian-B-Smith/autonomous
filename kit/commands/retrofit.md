@@ -41,10 +41,13 @@ gap table. Five behaviors are non-negotiable and unchanged:
 
 1. **Infer before asking.** Gap-survey the repo read-only first; propose
    survey answers derived from the code and ask only what code cannot show
-   (the architecture rung is still asked, never defaulted).
+   (the architecture rung is still asked, never defaulted). What you do ask,
+   you ask as a poll — inferred answer as the recommended option, evidence
+   in its description (`kit/prompts/_human-gates.md`).
 2. **Plan, then pause for approval before writing anything.** An existing
    repo is working state; list every create-vs-modify up front, keyed to
-   the CHANGELOG entry that requires it.
+   the CHANGELOG entry that requires it. The pause is a poll (Proceed /
+   Proceed except… / Stop), not a paragraph ending in a question mark.
 3. **Append, never rewrite.** Marker-delimited insertions only; existing
    content wins conflicts pending a human ruling; re-running must be a
    no-op — and now that is CHECKED, not hoped: run `currency.py` again at
@@ -78,6 +81,19 @@ Then prove all three, because they come apart: `./verify fast` is green, the
 verify actually SOURCES `.kit/kit-gates.sh` (a checksum-perfect copy nothing
 sources leaves the repo ungated — three repos read `current` while completely
 unprotected), and the gate FIRES on a planted identity path.
+
+## Step 4b′ — permissions: does `.claude/settings.json` still deny your own push?
+
+Repos scaffolded before kit 2.6.1 (2026-09-17) carry `"Bash(git push*)"` in
+`permissions.deny`, which contradicts Decision 66 and makes Step 6's PR
+impossible without a human relay. Check now, before you need it:
+
+    grep -n '"Bash(git push\*)"' .claude/settings.json
+
+A hit is the old template. Poll the human (`_human-gates.md` §2): adopt the
+2.6.1 `permissions` block from `autonomous/harness/.claude/settings.json`
+(merge, keeping any project-specific entries), relay-once, or leave it. Do
+not discover this at the push and stall the close.
 
 ## Step 4c — TIDY THE TREE YOU FOUND. Do not report it; resolve it.
 
@@ -192,8 +208,9 @@ the notice (`status: verified`) or file back what differs. **Do not wait on
 that** — you are done when your own close check reads `nothing to do`.
 
 Finish by reporting: the currency output before and after (this is the
-visual for the review beat — the `[ ]`→`[x]` delta), the manifest for
-ratification, green `./verify fast` output, and any briefs filed. Reference
+visual for the review beat — the `[ ]`→`[x]` delta), the manifest
+ratification POLL and its result (never "for ratification" in prose —
+`_human-gates.md` §1), green `./verify fast` output, and any briefs filed. Reference
 for the target end-state: `~/Documents/Claude/autonomous/` itself (declares
 the current kit version and passes its own checker),
 `~/Documents/Claude/distillery/`.

@@ -13,6 +13,9 @@
 2. Commit there when your checks are green.
 3. Push the BRANCH and open a PR:
    `git push -u origin HEAD && gh pr create --fill`
+   If the harness DENIES the push, the repo predates kit 2.6.1: say so in
+   one line and poll the human to adopt the 2.6.1 permissions block — never
+   silently hand them the commands (`kit/prompts/_human-gates.md` §2).
    Put the evidence in the PR body — what you proved, and how. The PR is where
    the human reviews; a commit message they have to go looking for is not.
 4. **Do not merge.** Merges are the human's, always. Report the PR URL.

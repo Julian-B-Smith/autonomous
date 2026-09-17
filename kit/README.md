@@ -34,7 +34,9 @@ Draft question list (refine during the v2 build):
 
 Each answer maps to a deterministic action (install module X, wire hook Y,
 seed file Z) — the survey is the human-facing face of the manifest, and the
-manifest is the machine-facing face of the survey.
+manifest is the machine-facing face of the survey. **Delivery:** each
+question is one AskUserQuestion poll, and ratification of the resulting
+manifest is one more (`kit/prompts/_human-gates.md`, Decision 74).
 
 **ROADMAP rule — Prior Art bookends (Decision 30).** Every scaffolded ROADMAP
 carries two standard phases: **Phase 0 — Prior-art landscape (agent swarm)**
