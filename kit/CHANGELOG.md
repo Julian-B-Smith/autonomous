@@ -288,6 +288,31 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.6.2 — 2026-09-17 — human gates are polls; a denied push is named, not relayed
+
+Two things the human kept having to say by hand (Decision 74). First, gates
+arrived as paragraphs ending in a question mark — survey questions,
+"manifest for ratification", plan pauses — easy to miss, no fixed answers,
+no record of what was offered. Second, repos born under the pre-2.6.1
+template hit the `git push*` deny at close and every one of them quietly
+asked the human to run two commands instead of naming the defect.
+
+- `kit/prompts/_human-gates.md` — new shared wording: every human gate is an
+  AskUserQuestion poll with a recommended option (the survey is nine polls;
+  ratification is one: Ratify / Ratify with changes / Not yet; the retrofit
+  plan pause is one); a denied own-branch push is named as the pre-2.6.1
+  template and the fix is polled, never routed around, never silently
+  relayed.
+- `spinup.md`, `retrofit.md` (new Step 4b′: check `.claude/settings.json`
+  for the old deny BEFORE the close), `_closing.md`, ONBOARDING (human
+  §ratifier, residency rule 6, spin-up step 1), `kit/README.md` (survey
+  delivery) — all point at it.
+- **Retrofit action:** none required — TOOL-ONLY. Step 4b′ OFFERS the 2.6.1
+  permissions block by poll; adoption is the resident's, recorded in that
+  repo's DECISIONS. Commands are re-installed to `~/.claude/commands/` as
+  usual (the session hook flags a stale copy).
+- **Verify gate:** none.
+
 ## 2.6.1 — 2026-09-17 — the harness template stops denying what the close contract requires
 
 Found by Sluice (notice `sluice-notice-push-deny`, their D-014), three PRs
