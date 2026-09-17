@@ -115,6 +115,18 @@ not for cross-track sequencing):
   comment, and `dist/` (index.html + bundle) contains the domain only, no
   `/lathe` path. Clean. The check worth keeping is "grep the build, not the
   source" — a comment never ships; a `base`/route string does.
+- **Sluice** (`~/Documents/Claude/synthetic-worlds/Sluice/`, private:
+  github.com/Julian-B-Smith/Sluice) — morphable FX network: shifters, delays,
+  allpasses, combs and filters composed in a per-sample feedback graph and
+  morphed as a whole; C++ `netcore` library + CLAP effect + browser lab twin.
+  Spun up 2026-09-15 via /spinup as NETWORK, named Sluice by the human the
+  same day; manifest PROVISIONAL pending the review gate; kit 2.6.0 (gates
+  vendored, leak / private-name / lab-determinism gates proven on plants);
+  rung 2; CI mirrors the Stop hook (`verify fast` only — C++/host work is
+  macOS-local). Consumes FOUNDATIONS (brief `network-001` filed there
+  2026-09-15) and autonomous; consumed by HYPERSAW/horde as a flat parameter
+  surface including routing coefficients (spec v0.2 §14). Registered per brief
+  `sluice-001`; `registry.json` already sees it by the immediate-children rule.
 - **mindlathe-design** (`~/Documents/Claude/mindlathe-design/`, **private**) —
   the Mindlathe design system in the form Claude Design consumes: 23
   self-contained HTML specimen cards + canonical `tokens.css`. Spun up
