@@ -5,10 +5,20 @@
       "Bash(git status)",
       "Bash(git diff *)",
       "Bash(git log *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git switch *)",
+      "Bash(git push -u origin *)",
+      "Bash(gh pr create *)"
     ],
     "deny": [
-      "Bash(git push*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push --delete*)",
+      "Bash(git push * :*)",
+      "Bash(git push -u origin main*)",
+      "Bash(git push origin main*)",
+      "Bash(git push origin HEAD:main*)",
       "Bash(git reset --hard*)",
       "Bash(rm -rf*)",
       "Read(./.env*)",
@@ -20,7 +30,10 @@
       {
         "matcher": "Bash",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/pretool-deny.sh" }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/pretool-deny.sh"
+          }
         ]
       }
     ],
@@ -28,7 +41,10 @@
       {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/posttool-dirty.sh" }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/posttool-dirty.sh"
+          }
         ]
       }
     ],
@@ -36,7 +52,10 @@
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.sh" }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.sh"
+          }
         ]
       }
     ],
@@ -44,7 +63,10 @@
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.sh" }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.sh"
+          }
         ]
       }
     ]

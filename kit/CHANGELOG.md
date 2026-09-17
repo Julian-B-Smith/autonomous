@@ -288,6 +288,29 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.6.1 — 2026-09-17 — the harness template stops denying what the close contract requires
+
+Found by Sluice (notice `sluice-notice-push-deny`, their D-014), three PRs
+into its life: `harness/.claude/settings.json` denied `Bash(git push*)` while
+ONBOARDING rule 6 and Decision 66 make pushing the agent's OWN branch and
+`gh pr create` the agent's acts. Deny beats allow in Claude Code, so every
+kit-scaffolded repo was born needing the human to relay two commands per PR
+— a delayed review surface, which is the opposite of what the close contract
+exists to give. The template contradicted a ratified decision for 25 days.
+
+- `harness/.claude/settings.json` — allow `git commit *`, `git switch *`,
+  `git push -u origin *`, `gh pr create *`; deny `--force`, `-f`,
+  `--delete`, `* :*` (remote-ref deletion), and any push to `main` in its
+  three spellings. Sluice's narrowing, adopted verbatim. The pre-tool hook's
+  blocklist is untouched as the second line of defence; merging stays the
+  human's (no `gh pr merge` in the allow list).
+- **Retrofit action:** none required — TOOL-ONLY. `.claude/settings.json` is
+  copied at spin-up (ONBOARDING step 2), never vendored or checked, so an
+  existing repo keeps its own until its resident chooses to adopt the
+  narrowing; the human can also just approve pushes as they come. New repos
+  are born consistent with rule 6.
+- **Verify gate:** none.
+
 ## 2.6.0 — 2026-08-18 — currency is COMPUTED from the tree, not declared
 
 The last of the day's presence-vs-effective family, and the one that caused
