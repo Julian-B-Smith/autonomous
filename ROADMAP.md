@@ -127,6 +127,17 @@ not for cross-track sequencing):
   2026-09-15) and autonomous; consumed by HYPERSAW/horde as a flat parameter
   surface including routing coefficients (spec v0.2 §14). Registered per brief
   `sluice-001`; `registry.json` already sees it by the immediate-children rule.
+- **opportunity-scanner** (`~/Documents/Claude/opportunity-scanner/`,
+  no remote yet — local-only) — marketplace-surface scanner: a Markdown+YAML
+  registry/signals/trials corpus as the durable product, with disposable
+  Python adapters, a niche scanner, and emergence/exit watchers over it. Spun
+  up 2026-09-17 via /spinup on kit 2.6.0; manifest PROVISIONAL pending
+  ratification; rung 1 (single thread, sequential human-gated build order;
+  rung 2 is a recorded Phase-2 decision if hollowness assessment fans out).
+  CI mirrors the Stop hook (`verify fast` on ubuntu; `full` = adapter health,
+  network, human-run). Consumes autonomous only; no consumers — a registry
+  line, not a track. Registered per brief `opportunity-scanner-001`;
+  `registry.json` already sees it by the immediate-children rule.
 - **mindlathe-design** (`~/Documents/Claude/mindlathe-design/`, **private**) —
   the Mindlathe design system in the form Claude Design consumes: 23
   self-contained HTML specimen cards + canonical `tokens.css`. Spun up
