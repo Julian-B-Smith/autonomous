@@ -3,6 +3,7 @@ bookkeeping. Both properties have burned this fleet already."""
 import datetime
 import json
 import os
+import time
 import shutil
 import subprocess
 import sys
@@ -62,6 +63,29 @@ class State(unittest.TestCase):
         self.assertEqual(len(r["entries"]), 2)
         self.assertEqual(len(r["stale"]), 1)
         self.assertIn("ancient", r["stale"][0]["text"])
+
+    def test_no_auditor_means_no_audit_line_not_a_none(self):
+        """Absence of an auditor is not staleness: the line is omitted."""
+        self.assertNotIn("last audit", state.render(state.gather(self.repo)))
+
+    def test_auditor_with_no_report_renders_none_and_stale(self):
+        os.makedirs(os.path.join(self.repo, ".claude", "agents"))
+        open(os.path.join(self.repo, ".claude", "agents", "auditor.md"), "w").write("# auditor\n")
+        s = state.gather(self.repo)
+        self.assertTrue(s["audit"]["stale"])
+        self.assertIn("last audit: none", state.render(s))
+
+    def test_a_stale_report_says_so_and_a_fresh_one_does_not(self):
+        os.makedirs(os.path.join(self.repo, "docs", "audits"))
+        open(os.path.join(self.repo, "project.manifest.json"), "w").write(
+            json.dumps({"auditor": {"agent": "auditor", "cadence_days": 7}}))
+        p = os.path.join(self.repo, "docs", "audits", "2026-09-01-repo-audit.md")
+        open(p, "w").write("# audit\n")
+        os.utime(p, (time.time() - 10 * 86400, time.time() - 10 * 86400))
+        out = state.render(state.gather(self.repo))
+        self.assertIn("10 days ago", out); self.assertIn("STALE", out)
+        os.utime(p, None)
+        self.assertNotIn("STALE", state.render(state.gather(self.repo)))
 
     def test_render_says_so_when_no_session_has_ever_closed(self):
         out = state.render(state.gather(self.repo))

@@ -3,11 +3,13 @@ id: hypersaw-notice-dirty-hook-path-filter
 from: HYPERSAW
 to: autonomous
 thread: harness-kit
-status: filed
-ball: autonomous
+status: adopted
+ball: none
+seq: 1
 filed: 2026-09-19
 cites: HYPERSAW B158, PR #667
 respond-by: none
+adopted: 2026-09-19 (kit 2.6.3)
 ---
 
 > **Origin.** HYPERSAW lead organ, 2026-09-19, at the human's approval of the

@@ -21,6 +21,7 @@ declared-vs-effective distinction that cost the fleet a week.
   state.py [repo] [--json]
 """
 import argparse, datetime, json, os, re, subprocess, sys
+import time
 
 _MAX_TAIL = 6
 
@@ -140,6 +141,38 @@ def _traces(repo, n=3):
     return files[:n]
 
 
+def _audit(repo):
+    """Routine-audit staleness (hypersaw-003, kit 2.6.3). A repo declares an
+    auditor either as `.claude/agents/auditor.md` or as a manifest field
+    `auditor: {agent, cadence_days}`; reports live in `docs/audits/`. Age is
+    by the newest report's mtime — a date in the filename would be nicer to
+    read but is a convention no gate enforces, and mtime is what git checkout
+    sets on every clone. None when the repo has no auditor: the line is then
+    omitted, not "none", because absence of an auditor is not staleness."""
+    manifest = os.path.join(repo, "project.manifest.json")
+    cadence = 7
+    declared = os.path.exists(os.path.join(repo, ".claude", "agents", "auditor.md"))
+    try:
+        with open(manifest, encoding="utf-8") as f:
+            a = json.load(f).get("auditor")
+        if a:
+            declared = True
+            cadence = int(a.get("cadence_days", cadence))
+    except (OSError, ValueError, AttributeError):
+        pass
+    if not declared:
+        return None
+    d = os.path.join(repo, "docs", "audits")
+    reports = sorted((os.path.getmtime(os.path.join(d, n)), n) for n in os.listdir(d)
+                     if n.endswith(".md")) if os.path.isdir(d) else []
+    if not reports:
+        return {"cadence_days": cadence, "last": None, "age_days": None, "stale": True}
+    mtime, name = reports[-1]
+    age = int((time.time() - mtime) // 86400)
+    return {"cadence_days": cadence, "last": f"docs/audits/{name}", "age_days": age,
+            "stale": age >= cadence}
+
+
 def gather(repo):
     return {
         "repo": os.path.basename(os.path.abspath(repo)),
@@ -154,6 +187,7 @@ def gather(repo):
         "reflections": _reflections(repo),
         "verify": _verify_state(repo),
         "traces": _traces(repo),
+        "audit": _audit(repo),
     }
 
 
@@ -182,6 +216,13 @@ def render(s):
         L.append(f"reflections: {len(r['entries'])} open"
                  + (f", {len(r['stale'])} unaddressed 14+ days (graduate or drop)"
                     if r["stale"] else ""))
+    a = s.get("audit")
+    if a:
+        if a["last"] is None:
+            L.append(f"last audit: none — auditor declared, no report in docs/audits/ (cadence {a['cadence_days']}d)")
+        else:
+            L.append(f"last audit: {a['age_days']} days ago ({a['last']})"
+                     + (f" — STALE at cadence {a['cadence_days']}d: /wakeup dispatches the auditor" if a["stale"] else ""))
     if s["decisions_tail"]:
         L.append("decisions (newest): " + " | ".join(d[:60] for d in s["decisions_tail"]))
     if s["traces"]:
