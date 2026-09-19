@@ -127,6 +127,20 @@ not for cross-track sequencing):
   2026-09-15) and autonomous; consumed by HYPERSAW/horde as a flat parameter
   surface including routing coefficients (spec v0.2 §14). Registered per brief
   `sluice-001`; `registry.json` already sees it by the immediate-children rule.
+- **MAW** (`~/Documents/Claude/synthetic-worlds/Maw/`, private:
+  github.com/Julian-B-Smith/Maw) — multi-stage waveshaper / saturation /
+  distortion module (three morphable stages, fourteen curves, five
+  topologies, inertia / ecology / flux) that HYPERSAW's horde device hosts as
+  FX-C. Library/engine: C++ core behind a FOUNDATIONS-conformant module ABI
+  (M1) plus a headless test harness; the JS prototype in `lab/` is the R&D
+  twin and, once a Phase P audit ratifies it, the parity reference. No plugin
+  of its own. Spun up 2026-09-19 via /spinup on kit 2.6.2 — survey by poll,
+  manifest RATIFIED by poll the same day (the first repo born under Decision
+  74); gates vendored (leak, private-name, determinism-smoke, battery-ledger
+  proven); rung 2; CI mirrors the Stop hook (`verify fast` only). Consumes
+  autonomous and, from M1, FOUNDATIONS; consumed by HYPERSAW/horde as FX-C
+  (notice `maw-notice-spinup` in their tree). Registered per brief `maw-001`;
+  `registry.json` already sees it by the immediate-children rule.
 - **opportunity-scanner** (`~/Documents/Claude/opportunity-scanner/`,
   no remote yet — local-only) — marketplace-surface scanner: a Markdown+YAML
   registry/signals/trials corpus as the durable product, with disposable
