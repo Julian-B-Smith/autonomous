@@ -34,6 +34,22 @@ unaddressed for 14+ days are flagged by the state routine — those are
 graduate-or-drop, not stay, because a reflection log that only grows is a
 place thoughts go to die.
 
+## Step 4b — routine audit, if this repo has one and its last report is stale
+
+If the repo declares an auditor (`.claude/agents/auditor.md`, or
+`"auditor": {"agent": "auditor", "cadence_days": 7}` in `project.manifest.json`)
+and the state summary reads `last audit: … STALE` or `last audit: none`,
+dispatch that agent **in the background** now and say so in the summary. It
+is read-only over the tree, writes only its report under `docs/audits/` on
+its own branch as its own PR, never edits code, never weakens a gate; the
+lead turns findings into ROADMAP rows at the next boundary. A repo with no
+auditor skips this step silently. Cadence is by STALENESS, not calendar: a
+repo worked daily audits weekly, a repo touched monthly audits on touch —
+one rule, no schedule to maintain (hypersaw-003; horde's first run found 13
+regression checks built, green, and never wired into `./verify`, debt no
+oracle sees because nothing was weakened). `/wakeup`'s permitted writes are
+unchanged.
+
 ## Step 5 — survey ONLY if genuinely ambiguous
 
 Multiple ready threads, a stale or contradicted plan, a red verify, or an

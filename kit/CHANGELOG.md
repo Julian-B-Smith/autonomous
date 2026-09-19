@@ -288,6 +288,34 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.6.3 — 2026-09-19 — the dirty hook ignores writes outside the repo; /wakeup runs a stale routine audit
+
+Both from HYPERSAW's harness-kit thread (notice `dirty-hook-path-filter`,
+brief `hypersaw-003`), adopted as filed.
+
+- `harness/.claude/hooks/posttool-dirty.sh` — marks `.harness/dirty` only
+  when the written path is inside `$CLAUDE_PROJECT_DIR` (relative paths
+  assumed inside; unreadable path marks dirty). A PR body or scratch script
+  written after the final verify no longer trips the stop gate — six
+  HYPERSAW implementer streams paid that round trip in three days (B158).
+  HYPERSAW's fix, verbatim; both branches re-tested here by feeding the
+  hook JSON on stdin.
+- `/wakeup` Step 4b — if the repo declares an auditor
+  (`.claude/agents/auditor.md` or manifest `auditor.{agent,cadence_days}`)
+  and `docs/audits/` holds no report newer than the cadence (default 7
+  days), dispatch it in the background at session open. Cadence by
+  staleness, not calendar. The auditor charter itself is NOT in the kit:
+  one repo's sweep is one data point (Decision 73's independence rule).
+- `kit/session/state.py` — `last audit: N days ago (path)` / `last audit:
+  none` when an auditor is declared; omitted when none is (absence of an
+  auditor is not staleness). Three tests.
+- **Retrofit action:** none required — TOOL-ONLY. The hook is copied at
+  spin-up, not vendored: an existing repo copies the new file when it wants
+  the fix (`cp autonomous/harness/.claude/hooks/posttool-dirty.sh .claude/hooks/`),
+  one line in its DECISIONS. The wakeup step is inert until a repo declares
+  an auditor.
+- **Verify gate:** none.
+
 ## 2.6.2 — 2026-09-17 — human gates are polls; a denied push is named, not relayed
 
 Two things the human kept having to say by hand (Decision 74). First, gates

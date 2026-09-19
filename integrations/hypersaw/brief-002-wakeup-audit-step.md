@@ -3,11 +3,14 @@ id: hypersaw-003
 from: HYPERSAW
 to: autonomous
 thread: harness-kit
-status: filed
-ball: autonomous
+status: closed
+ball: none
+seq: 2
 filed: 2026-09-19
 cites: HYPERSAW B159, ADR-179; horde PR #669 (the auditor agent), PR #670 (its first report)
 respond-by: 2026-10-03
+answered_by: response-004-harness-kit.md
+closed: 2026-09-19
 ---
 
 # Brief: a routine-audit step in `/wakeup` — "run the repo's auditor when its last report is stale"

@@ -237,6 +237,20 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+75. **/wakeup runs a repo's routine auditor when its last report is stale;
+    the dirty-marker hook ignores writes outside the repo** (2026-09-19,
+    HYPERSAW's harness-kit thread — notice B158, brief hypersaw-003 — adopted
+    as filed; kit 2.6.3, tool-only). The audit finding that earned the step:
+    13 regression checks built, green, and never wired into `./verify`, two
+    guarding shipped defects — debt no oracle sees because nothing was
+    weakened, only never strengthened. Cadence hangs off the session-open
+    routine, by STALENESS (default 7 days, manifest-overridable), not off a
+    calendar nobody reads: the human's own framing, "worth telling autonomous
+    since it isn't a terrible idea for every repo." The auditor charter does
+    not enter the kit: one repo's sweep is one data point (Decision 73).
+    Rejected: a scheduler (a cron nobody sees is lessons-observed-never-
+    learned at the harness level); putting the audit line in the manifest
+    (status prose, Decision 28 — it is rendered from `docs/audits/`).
 74. **Every human gate is a poll, and a denied own-branch push is named as
     the template defect it is — never routed around, never silently relayed**
     (2026-09-17, human mandate: "manifest ratification … I would like to
