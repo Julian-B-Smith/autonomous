@@ -49,6 +49,33 @@ class TestThreadResolution(unittest.TestCase):
             status="closed", responded="2026-07-28")
         self.assertEqual(self.scan(), [])
 
+    def test_a_status_that_explains_itself_still_closes_the_thread(self):
+        """HYPERSAW notice terminal-status-exact-match, 2026-09-20: a file that
+        closes a thread and says why (`closed — all three answers taken`) left
+        the thread open forever, because the whole line was compared to the
+        terminal set. 11 files across FOUNDATIONS, Orrery and Tonality carried
+        that shape on the day it was fixed. Only the first word is the state."""
+        _fm(self.box, "brief.md", id="x-2", ball="provider",
+            status="filed", respond_by="2026-07-01", filed="2026-07-01")
+        _fm(self.box, "response.md", id="x-2", ball="consumer",
+            status="closed — all three answers taken", responded="2026-07-28")
+        self.assertEqual(self.scan(), [])
+
+    def test_prose_containing_a_terminal_word_does_not_close_it(self):
+        """The first-word rule is deliberate: `open — not closed until you
+        confirm` must stay open. A substring or startswith test would close it."""
+        _fm(self.box, "brief.md", id="x-3", ball="me",
+            status="open — not closed until you confirm",
+            respond_by="2026-07-01", filed="2026-07-01")
+        self.assertEqual([t["id"] for t in self.scan()], ["x-3"])
+
+    def test_punctuation_glued_to_the_state_word_is_still_the_state(self):
+        _fm(self.box, "brief.md", id="x-4", ball="provider",
+            status="filed", respond_by="2026-07-01", filed="2026-07-01")
+        _fm(self.box, "response.md", id="x-4", ball="none",
+            status="shipped—see PR #12", responded="2026-07-28")
+        self.assertEqual(self.scan(), [])
+
     def test_overdue_only_when_ball_is_ours(self):
         """A respond-by binds whoever HOLDS the ball. Once we answer and it
         moves, that date is satisfied — not breached. Without this guard every
@@ -310,6 +337,12 @@ class CitesMissing(unittest.TestCase):
 
     def test_cites_none_satisfies_the_gate_by_design(self):
         self._w("brief-003.md", "id: peer-003\nstatus: responded\nball: consumer\ncites: none")
+        self.assertEqual(ball_scan.cites_missing(self.tmp), [])
+
+    def test_filed_with_prose_is_still_untriaged(self):
+        """Same first-word rule on the intake side: `filed — awaiting triage`
+        is filed, so no cites: duty has fallen due yet."""
+        self._w("brief-005.md", "id: peer-005\nstatus: filed — awaiting triage\nball: provider")
         self.assertEqual(ball_scan.cites_missing(self.tmp), [])
 
     def test_answers_are_not_intake(self):
