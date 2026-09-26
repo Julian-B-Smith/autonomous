@@ -98,7 +98,7 @@ tr.stale td {{ background:var(--warn-bg); }}
 </style>
 <div class="wrap">
 <h1>Session Board</h1>
-<p class="sub">as of <b>{now.strftime('%Y-%m-%d %H:%M UTC')}</b> · republished by <code>/wakeup</code>, <code>/breakdown</code> and <code>/closeout</code> — the only moments this can change, so what you see is current until you open or close something.</p>
+<p class="sub">as of <b>{now.strftime('%Y-%m-%d %H:%M UTC')}</b> · republished by <code>/wakeup</code>, <code>/breakdown</code> and <code>/closeout</code> in the standards repo, and by the boards routine on a cadence when a session has opened, closed, or gone stale. Ages are as of the stamp.</p>
 <div class="stats">
   <div class="stat"><div class="n">{n}</div><div class="l">open sessions</div></div>
   <div class="stat"><div class="n{' warn' if stale_n else ''}">{stale_n}</div><div class="l">likely unclean</div></div>
@@ -115,35 +115,43 @@ def _significant(page):
     CHANGED and the board republishes on every boundary a session hits. Three
     identical republishes in four minutes (2026-08-31, mind-lathe) is the
     symptom: noise that trains the reader to ignore the notification.
+
+    Row ages ("Open for 39.2h") are stripped for the same reason once the
+    boards routine runs on a cadence (K5): an age printed to a tenth of an
+    hour changes every six minutes, so an hourly tick would republish a page
+    with nothing new on it. What counts as change is a session opening,
+    closing, or crossing the stale line — the `stale` row class stays in.
     """
-    return re.sub(r"as of <b>[^<]+</b>", "", page)
+    page = re.sub(r"as of <b>[^<]+</b>", "", page)
+    return re.sub(r'<td class="num">[^<]*</td>', "", page)
 
 
-def changed(page, root=None):
+def changed(page, root=None, marker=".board-render"):
     """(bool, digest). Compares against the last render recorded beside the
     registry — no state file, no board; absent marker means 'changed', which
-    is the safe direction for a bookkeeping page."""
+    is the safe direction for a bookkeeping page. `marker` names the file, so
+    each board keeps its own (the Threads Board uses `.threads-render`)."""
     import registry as _reg
     root = root or _reg.root()
     digest = hashlib.sha256(_significant(page).encode()).hexdigest()
     if not root:
         return True, digest
-    marker = os.path.join(root, ".board-render")
+    path = os.path.join(root, marker)
     try:
-        with open(marker, encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             was = fh.read().strip()
     except OSError:
         was = None
     return digest != was, digest
 
 
-def record(digest, root=None):
+def record(digest, root=None, marker=".board-render"):
     import registry as _reg
     root = root or _reg.root()
     if not root:
         return
     try:
-        with open(os.path.join(root, ".board-render"), "w", encoding="utf-8") as fh:
+        with open(os.path.join(root, marker), "w", encoding="utf-8") as fh:
             fh.write(digest)
     except OSError:
         pass
