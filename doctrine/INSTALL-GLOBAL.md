@@ -128,7 +128,10 @@ it. Without it the sweep crashes after ~14s having written a partial STATUS.
 
 **g. Hooks and the session registry.** `~/.claude/settings.json` carries the
 kit's SessionStart hooks (`kit/hooks/session-brief.py` sync,
-`kit/hooks/fleet-sweep-async.sh` async) with absolute forward-slash paths, and
+`kit/hooks/fleet-sweep-async.sh` async, `kit/hooks/session-open.py` sync) and
+its SessionEnd hook (`kit/hooks/session-close.py`) with absolute forward-slash
+paths — the last two open and close each session's registry record with no
+command to remember (O0, Decision 77) — and
 `KIT_SESSION_MACHINE=win` in its `env` block so registry rows never carry the
 hostname. The registry fallback dir `~/.claude/session-registry/` must exist
 or `/wakeup` proceeds unregistered with a warning.

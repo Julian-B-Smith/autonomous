@@ -402,6 +402,23 @@ before the mechanisms exist is a frame written about nothing.
   needs Full Disk Access. *Gate:* one week of routines producing artifacts
   the human actually read — measured by the human, not asserted.
 
+- **Phase O — Session oversight (Decision 77; design:
+  `briefs/2026-09-26-session-oversight.proposal.md`).** Report-only at launch.
+  - **O0 — hands-off boundaries.** *BUILT 2026-09-26, kit 2.6.4:* SessionStart/
+    SessionEnd hooks open and close each record with facts and tree state;
+    stale rows swept at install. *Gate:* one week in which every normally
+    exited session closed its own record; the only stale rows are crashes.
+  - **O1 — engine + snapshot.** `governor/oversight.py`, the eleven checks,
+    `fleet-status.1` contract, snapshot at `~/.claude/fleet/status.json`.
+    *Gate:* every check fires on its plant and is silent on a clean fleet.
+  - **O2 — in-session delivery** via the prompt hook, each finding once.
+    *Gate:* a week in which the human judges every delivered finding useful.
+  - **O3 — dashboards:** a standalone local app here AND a LifeOS fleet page
+    (brief to life-os-app / life-os-web), both reading the snapshot. *Gate:*
+    a week of use; then the artifact boards and `fleet-boards` retire.
+  - **O4 — escalation:** threshold notifications; HALT sentinel armed only
+    by the human, per repo. Deferred until O2's noise is measured.
+
 **Also opened by this directive, NOT in Phase K:**
 - **The file-restructuring sweep is back on the table** — the human's own
   reasoning: a clean layout "translates optimally to the other computer."

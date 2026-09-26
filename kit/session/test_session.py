@@ -103,6 +103,62 @@ class Registry(unittest.TestCase):
         shutil.rmtree(self.reg, ignore_errors=True)
         os.environ.pop("KIT_SESSION_REGISTRY", None)
 
+    def _hook(self, name, payload, cwd=None):
+        """Run a session hook exactly as Claude Code does: JSON on stdin."""
+        hook = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "hooks", name)
+        return subprocess.run([sys.executable, hook], input=payload, text=True,
+                              capture_output=True, cwd=cwd or self.repo,
+                              env=dict(os.environ, KIT_SESSION_REGISTRY=self.reg), timeout=30)
+
+    def test_start_hook_opens_a_record_with_the_facts_it_was_built_against(self):
+        out = self._hook("session-open.py", json.dumps(
+            {"session_id": "abc-1", "cwd": self.repo, "source": "startup"}))
+        self.assertEqual(out.returncode, 0)
+        self.assertIn("session record: abc-1", out.stdout)
+        row = registry.list_open()[0]
+        for k in ("path", "head_at_open", "branch_at_open", "doctrine_sha",
+                  "kit_version", "commands_sha"):
+            self.assertIn(k, row)
+        self.assertFalse(row["path"].startswith("/Users/"))   # ~-relative, never identity
+
+    def test_a_resumed_session_refreshes_its_record_not_a_second_one(self):
+        self._hook("session-open.py", json.dumps({"session_id": "abc-2", "cwd": self.repo}))
+        first = registry.list_open()[0]["opened_at"]
+        self._hook("session-open.py", json.dumps(
+            {"session_id": "abc-2", "cwd": self.repo, "source": "resume"}))
+        rows = registry.list_open()
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["opened_at"], first)
+        self.assertIn("refreshed_at", rows[0])
+
+    def test_end_hook_records_a_dirty_tree_as_dirty(self):
+        self._hook("session-open.py", json.dumps({"session_id": "abc-3", "cwd": self.repo}))
+        with open(os.path.join(self.repo, "wip.txt"), "w") as fh:
+            fh.write("unfinished\n")
+        out = self._hook("session-close.py", json.dumps(
+            {"session_id": "abc-3", "cwd": self.repo, "reason": "prompt_input_exit"}))
+        self.assertEqual((out.returncode, out.stdout), (0, ""))
+        self.assertEqual(registry.list_open(), [])
+        with open(os.path.join(self.reg, "closed", "abc-3.json")) as fh:
+            closed = json.load(fh)
+        self.assertIn("dirty: 1 file", closed["close_state"]["summary"])
+        self.assertEqual(closed["close_state"]["end_reason"], "prompt_input_exit")
+
+    def test_hooks_fail_open_and_silent_on_garbage(self):
+        for name in ("session-open.py", "session-close.py"):
+            out = self._hook(name, "not json at all")
+            self.assertEqual((out.returncode, out.stdout), (0, ""), name)
+        self.assertEqual(registry.list_open(), [])
+
+    def test_sweep_closes_only_rows_past_the_line_and_says_why(self):
+        registry.open_session(self.repo, "old", at="2026-09-01T00:00:00Z")
+        registry.open_session(self.repo, "new")
+        swept = registry.sweep_stale(12, "swept at O0 install")
+        self.assertEqual(swept, ["old"])
+        self.assertEqual([r["session_id"] for r in registry.list_open()], ["new"])
+        with open(os.path.join(self.reg, "closed", "old.json")) as fh:
+            self.assertIn("unclean", json.load(fh)["close_state"]["summary"])
+
     def test_open_list_close_roundtrip(self):
         self.assertTrue(registry.open_session(self.repo, "s1")["ok"])
         self.assertEqual(len(registry.list_open()), 1)

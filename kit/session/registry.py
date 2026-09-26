@@ -8,9 +8,13 @@ Per briefs/2026-08-17-session-boundary.md §4. Deliberately tiny:
     is impossible by construction.
   - Keyed by `session_id`, NOT by repo: two concurrent sessions in one repo
     (a fleet job and the human) are legible rather than a collision.
-  - CONTAINS NO CONTENT — repo, session_id, machine, opened_at, and nothing
-    else. It is the one sanctioned cross-repo write precisely because it
-    carries nothing worth reading. dispatch and distillery read closed-session
+  - CONTAINS NO CONTENT — repo, session_id, machine, opened_at, plus (since
+    O0, Decision 77) the FACTS a session was built against: its `~`-relative
+    path, HEAD and branch at open, and hashes of the doctrine, kit and
+    installed commands it loaded. Hashes and positions, never text, prompts,
+    or identity: the oversight engine needs to know WHETHER a session drifted
+    from the system, not what it was doing. It is the one sanctioned
+    cross-repo write precisely because it carries nothing worth reading. dispatch and distillery read closed-session
     artifacts (SESSION.md, traces) and never this, so they cannot race a
     running build.
   - NEVER BLOCKS A SESSION (brief §5). No registry configured, unreachable,
@@ -24,8 +28,15 @@ the one place it is named, so swapping to a hosted store later touches one
 file (brief §4).
 
   registry.py open <repo> --session-id ID
-  registry.py close --session-id ID
+  registry.py close --session-id ID [--state TEXT]
+  registry.py sweep --older-than-hours 12 --reason TEXT
   registry.py list
+
+Since O0 the SessionStart / SessionEnd hooks (`kit/hooks/session-open.py`,
+`session-close.py`) call open and close; the commands no longer do. Closing
+MOVES the record to `closed/` with how the tree was left, rather than deleting
+it: "left dirty" is a finding the next session and the dashboard need, and a
+deleted row cannot report it.
 """
 import argparse, datetime, json, os, platform, socket, sys
 
@@ -65,25 +76,44 @@ def _machine():
     return platform.node().split(".")[0] or "unknown"
 
 
-def open_session(repo, session_id, at=None):
+def _now():
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def open_session(repo, session_id, at=None, facts=None):
+    """Open, or REFRESH, this session's record. A resumed or compacted session
+    fires SessionStart again with the same id: it keeps its original
+    `opened_at` (it is the same session) but its facts are re-read, because a
+    resumed session re-loads the doctrine and may be running newer rules."""
     r = root()
     row = {"repo": os.path.basename(os.path.abspath(repo)),
            "session_id": session_id,
            "machine": _machine(),
-           "opened_at": at or datetime.datetime.now(datetime.timezone.utc)
-           .strftime("%Y-%m-%dT%H:%M:%SZ")}
+           "opened_at": at or _now()}
     if not r:
         return {"ok": False, "reason": "no registry configured", "row": row}
+    p = os.path.join(r, f"{session_id}.json")
+    try:
+        with open(p, encoding="utf-8") as fh:
+            prev = json.load(fh)
+        row["opened_at"] = prev.get("opened_at", row["opened_at"])
+        row["refreshed_at"] = _now()
+    except (OSError, ValueError):
+        pass
+    row.update(facts or {})
     try:
         os.makedirs(r, exist_ok=True)
-        with open(os.path.join(r, f"{session_id}.json"), "w", encoding="utf-8") as fh:
+        with open(p, "w", encoding="utf-8") as fh:
             json.dump(row, fh, indent=2)
         return {"ok": True, "row": row, "path": r}
     except OSError as e:
         return {"ok": False, "reason": f"registry unwritable: {e}", "row": row}
 
 
-def close_session(session_id):
+def close_session(session_id, state=None):
+    """Move the record to `closed/` with `closed_at` and `close_state`. A
+    manual close with no state says so rather than claiming the tree was
+    clean — an unrecorded state is not a clean one."""
     r = root()
     if not r:
         return {"ok": False, "reason": "no registry configured"}
@@ -91,10 +121,45 @@ def close_session(session_id):
     if not os.path.isfile(p):
         return {"ok": True, "reason": "no row (already closed, or never opened)"}
     try:
+        with open(p, encoding="utf-8") as fh:
+            row = json.load(fh)
+    except (OSError, ValueError):
+        row = {"session_id": session_id}
+    row["closed_at"] = _now()
+    row["close_state"] = state or {"summary": "closed by command; tree state not recorded"}
+    try:
+        os.makedirs(os.path.join(r, "closed"), exist_ok=True)
+        with open(os.path.join(r, "closed", f"{session_id}.json"), "w", encoding="utf-8") as fh:
+            json.dump(row, fh, indent=2)
         os.remove(p)
-        return {"ok": True}
+        return {"ok": True, "row": row}
     except OSError as e:
-        return {"ok": False, "reason": f"could not remove row: {e}"}
+        return {"ok": False, "reason": f"could not close row: {e}"}
+
+
+def sweep_stale(older_than_hours, reason, now=None):
+    """Close every open record older than the line, stating why. For rows no
+    end hook will ever close: crashes, force-quits, and every row opened
+    before the hooks existed. Returns the swept session ids."""
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    swept = []
+    for row in list_open():
+        try:
+            t = datetime.datetime.strptime(row.get("opened_at", ""), "%Y-%m-%dT%H:%M:%SZ") \
+                .replace(tzinfo=datetime.timezone.utc)
+        except ValueError:
+            continue
+        ref = row.get("refreshed_at")
+        if ref:
+            try:
+                t = max(t, datetime.datetime.strptime(ref, "%Y-%m-%dT%H:%M:%SZ")
+                        .replace(tzinfo=datetime.timezone.utc))
+            except ValueError:
+                pass
+        if (now - t).total_seconds() / 3600 > older_than_hours:
+            if close_session(row["session_id"], {"summary": f"unclean — {reason}"})["ok"]:
+                swept.append(row["session_id"])
+    return swept
 
 
 def list_open():
@@ -128,6 +193,9 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     o = sub.add_parser("open"); o.add_argument("repo"); o.add_argument("--session-id", required=True)
     c = sub.add_parser("close"); c.add_argument("--session-id", required=True)
+    c.add_argument("--state", default=None)
+    w = sub.add_parser("sweep"); w.add_argument("--older-than-hours", type=float, required=True)
+    w.add_argument("--reason", required=True)
     sub.add_parser("list")
     a = ap.parse_args()
     if a.cmd == "open":
@@ -135,7 +203,12 @@ def main():
         print(json.dumps(r, indent=2))
         return 0                                  # never blocks, even on failure
     if a.cmd == "close":
-        print(json.dumps(close_session(a.session_id), indent=2))
+        st = {"summary": a.state} if a.state else None
+        print(json.dumps(close_session(a.session_id, st), indent=2))
+        return 0
+    if a.cmd == "sweep":
+        swept = sweep_stale(a.older_than_hours, a.reason)
+        print(f"swept {len(swept)} stale record(s)" + ("".join(f"\n  {s}" for s in swept)))
         return 0
     rows = list_open()
     if not rows:

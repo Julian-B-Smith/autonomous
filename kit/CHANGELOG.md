@@ -288,6 +288,31 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.6.4 — 2026-09-26 — session boundaries run themselves (O0)
+
+The first phase of the ratified session-oversight design (Decision 77,
+`briefs/2026-09-26-session-oversight.proposal.md`). Opening and closing a
+session's registry record no longer depends on anyone running `/wakeup` or
+`/breakdown`: eight records sat open for up to 24 days because it did.
+
+- `kit/hooks/session-open.py` (SessionStart) — opens or refreshes the record,
+  keyed by Claude Code's own session id, with the facts the oversight engine
+  will compare against: `~`-relative path, HEAD and branch at open, and hashes
+  of the doctrine, kit version and installed commands. Prints one line, the
+  record id, so the commands can tell their own row from a stale one.
+- `kit/hooks/session-close.py` (SessionEnd) — closes it with how the tree was
+  left (dirty files, unpushed commits, a branch without upstream). Records;
+  never commits, never pushes.
+- `kit/session/registry.py` — closing MOVES the record to `closed/` instead of
+  deleting it; `sweep` closes rows past the stale line as unclean.
+- `/wakeup` and `/breakdown` no longer open or close the record; `/closeout`
+  sweeps crashed sessions. Both hooks fail open and silent (tested on garbage
+  input).
+- **Retrofit action:** none — TOOL-ONLY. The hooks are user-level
+  (`~/.claude/settings.json`, INSTALL-GLOBAL §6g), installed once per machine,
+  not per repo.
+- **Verify gate:** none new; five tests in `kit/session/test_session.py`.
+
 ## 2.6.3 — 2026-09-19 — the dirty hook ignores writes outside the repo; /wakeup runs a stale routine audit
 
 Both from HYPERSAW's harness-kit thread (notice `dirty-hook-path-filter`,
