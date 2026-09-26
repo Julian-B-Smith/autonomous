@@ -170,6 +170,73 @@ class Boards(unittest.TestCase):
             shutil.rmtree(foreign, ignore_errors=True)
         self.assertTrue(render_registry.is_publisher())   # run from kit/session in autonomous
 
+    def test_threads_board_ignores_its_own_clock(self):
+        """The stamp now carries HH:MM, so a byte-compare would say CHANGED on
+        every routine tick and republish forever — the cry-wolf the Session
+        Board already fixed once (2026-08-31). Only content counts."""
+        import render_registry, render_threads
+        root = tempfile.mkdtemp()
+        try:
+            page = render_threads.render()
+            new, d = render_registry.changed(page, root=root, marker=render_threads.MARKER)
+            self.assertTrue(new)                           # no marker yet: changed
+            render_registry.record(d, root=root, marker=render_threads.MARKER)
+            later = page.replace("as of <b>", "as of <b>1999-01-01 00:00 UTC", 1)
+            self.assertFalse(render_registry.changed(later, root=root, marker=render_threads.MARKER)[0])
+            self.assertTrue(render_registry.changed(page + "<p>new thread</p>", root=root,
+                                                    marker=render_threads.MARKER)[0])
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+
+    def test_session_ages_alone_are_not_a_change(self):
+        """An hourly routine must not republish a page whose only difference is
+        that every open session is a little older."""
+        import render_registry
+        a = '<tr class=""><td class="num">39.2h</td></tr>'
+        b = '<tr class=""><td class="num">40.1h</td></tr>'
+        stale = '<tr class="stale"><td class="num">40.1h</td></tr>'
+        self.assertEqual(render_registry._significant(a), render_registry._significant(b))
+        self.assertNotEqual(render_registry._significant(a), render_registry._significant(stale))
+
+    def test_the_two_boards_keep_separate_markers(self):
+        """One shared marker would let a Threads change mark the Session Board
+        as published, and the next Session change would compare against the
+        wrong page."""
+        import render_registry, render_threads
+        root = tempfile.mkdtemp()
+        try:
+            render_registry.record("aaa", root=root)
+            render_registry.record("bbb", root=root, marker=render_threads.MARKER)
+            self.assertEqual(sorted(os.listdir(root)), [".board-render", ".threads-render"])
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+
+    def test_an_unconfirmed_publish_is_offered_again_not_forgotten(self):
+        """Recording at render time let a failed publish read as published
+        forever (found on the first live run, 2026-09-26). Until the caller
+        confirms, the board stays CHANGED; after confirm, UNCHANGED."""
+        import boards
+        root, out = tempfile.mkdtemp(), tempfile.mkdtemp()
+        try:
+            first = boards.run(out, "test", root=root)
+            self.assertEqual({v for _, v, _, _ in first}, {"CHANGED"})
+            self.assertTrue(all(p and os.path.exists(p) for _, _, p, _ in first))
+            again = boards.run(out, "test", root=root)           # nobody confirmed
+            self.assertEqual({v for _, v, _, _ in again}, {"CHANGED"})
+            for name, _, _, _ in again:
+                self.assertTrue(boards.confirm(out, name, root=root))
+            self.assertFalse(boards.confirm(out, "session-board", root=root))  # nothing pending
+            for f in os.listdir(out):
+                os.remove(os.path.join(out, f))
+            settled = boards.run(out, "test", root=root)
+            self.assertEqual({v for _, v, _, _ in settled}, {"UNCHANGED"})
+            self.assertEqual(os.listdir(out), [])          # nothing to publish, nothing written
+            with open(os.path.join(root, "boards.log")) as fh:
+                self.assertEqual(len(fh.read().splitlines()), 5)   # 3 runs + 2 confirms
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+            shutil.rmtree(out, ignore_errors=True)
+
     def test_threads_board_renders_every_section(self):
         import render_threads
         page = render_threads.render()
