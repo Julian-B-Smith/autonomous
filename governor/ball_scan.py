@@ -43,6 +43,22 @@ def _field(fm, name):
     return m.group(1).strip() if m else None
 
 
+def _state(status):
+    """The STATE a status line declares: its first word, lowercased, with any
+    glued punctuation dropped. A status may explain itself — `closed — all
+    three answers taken`, `shipped—see PR #12` — and only the leading word is
+    the state; the rest is prose for the reader.
+
+    First word, deliberately — not `startswith` and not a substring test: a
+    status like `open — not closed until you confirm` contains a terminal word
+    and must stay open. Exact whole-line matching, the previous rule, left 11
+    closed files across three repos reading open for weeks (HYPERSAW notice
+    terminal-status-exact-match, 2026-09-20), and the session brief printed
+    them at every open — the cry-wolf failure this module exists to avoid."""
+    m = re.match(r"[a-z][a-z_-]*", (status or "").strip().lower())
+    return m.group(0) if m else ""
+
+
 def _parse(path):
     """Frontmatter of one exchange file, or None if it isn't one."""
     try:
@@ -62,6 +78,7 @@ def _parse(path):
         "id": _field(fm, "id"),
         "ball": (_field(fm, "ball") or "").lower(),
         "status": (_field(fm, "status") or "").lower(),
+        "state": _state(_field(fm, "status")),   # the first word; see _state
         "respond_by": _field(fm, "respond-by"),
         # Sort key: the newest date the file claims. Files with no date at all
         # sort oldest, so a dated answer always outranks an undated opener.
@@ -137,7 +154,7 @@ def scan_repo(path, repo_name, today=None):
         # `status: closed` — the ratification carried the same `responded:` date
         # as the response it closed, so the tiebreak picked the wrong file.
         # Exchange dates are hand-written and will collide; closure is a fact.
-        if any(m["status"] in TERMINAL for m in members):
+        if any(m["state"] in TERMINAL for m in members):
             continue
         # Only files that ASSERT a ball determine who holds it. `ball: none`
         # marks a file that deliberately moves nothing — an informational note,
@@ -281,7 +298,7 @@ def frontmatter_lies(path):
             if am and os.path.isfile(os.path.join(os.path.dirname(f), am.group(1))):
                 answered = True
             # A sibling that RESPONDS is equally proof the thread moved.
-            if m["status"] in ("responded", "ratified", "closed"):
+            if m["state"] in ("responded", "ratified", "closed"):
                 answered = True
         if not answered:
             continue
@@ -327,7 +344,7 @@ def cites_missing(path):
         base = os.path.basename(f)
         if _ROLE_ANSWERER.match(base):
             continue                                # answers are not intake
-        if (p["status"] or "filed") == "filed":
+        if (p["state"] or "filed") == "filed":
             continue                                # not triaged yet — no duty yet
         with open(f, encoding="utf-8", errors="ignore") as fh:
             head = fh.read(4000)
