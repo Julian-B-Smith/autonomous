@@ -237,6 +237,29 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+78. **The Structural Caution packet is folded into Phase O as one plan; three
+    of its conflicts with rulings on record are open for discussion, not
+    decided** (2026-09-26, human ruling by poll on the unified plan; the
+    other three questions answered "let's discuss"). Packet:
+    `briefs/2026-09-26-structural-caution.md`; triage:
+    `….response.md`. Phase O now runs O0 (done) → O0.5 gates on the gates
+    (SessionStart hook self-test, ConfigChange guard, `GATE-CHANGE:` token
+    rule, per-repo JSONL event log) → O1 engine + budgets + thresholds file →
+    O2 delivery + interrupts → O3 setpoint audit (weekly, fresh context,
+    three-list diff) + monthly regulator review → O4 both dashboards, empty
+    when healthy → O5 HALT. What the packet adds that Decision 77 lacked: a
+    check on the system's own reference drifting (setpoint audit), a gate on
+    the gates, and the rule that a mechanism must not be skippable by
+    forgetting, must not need judgment to evaluate, and must be silent when
+    healthy. **Open, pending discussion:** (a) blocking at launch vs Decision
+    77's report-only; (b) the two bookkeeping denies (first write until a
+    wake-up marker; any write while other sessions are open) vs the
+    2026-08-17 rule that a session never blocks on bookkeeping; (c) unsigned
+    decisions denying `git push` vs Decision 66. O0.5's guards wait on (a);
+    nothing blocking is built until it is ruled. Verified the same day
+    against the raw hooks reference: every blocking claim in the packet holds,
+    with two refinements — `TaskCompleted` fires only for task-list work, and
+    Stop hooks are capped at 8 consecutive continuations by default.
 77. **Session oversight, VSM-shaped, is ratified: start and end hooks keep
     each session's record, a deterministic engine checks every live session
     against the whole system, each session is told only its own drift, and
