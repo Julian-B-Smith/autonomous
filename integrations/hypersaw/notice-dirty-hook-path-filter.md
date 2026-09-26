@@ -3,7 +3,7 @@ id: hypersaw-notice-dirty-hook-path-filter
 from: HYPERSAW
 to: autonomous
 thread: harness-kit
-status: adopted
+status: shipped — adopted verbatim in kit 2.6.3
 ball: none
 seq: 1
 filed: 2026-09-19

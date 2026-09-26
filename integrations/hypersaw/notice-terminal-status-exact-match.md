@@ -3,9 +3,12 @@ id: hypersaw-notice-terminal-status-exact-match
 from: HYPERSAW
 to: autonomous
 thread: harness-kit
-status: filed
-ball: autonomous
+status: shipped — first-word state rule in governor/ball_scan.py, four fixtures
+ball: none
+seq: 4
 filed: 2026-09-20
+answered_by: response-005-terminal-status.md
+closed: 2026-09-26
 cites: governor/ball_scan.py:140 and :64; kit/hooks/session-brief.py:109
 respond-by: none
 ---
