@@ -384,10 +384,15 @@ before the mechanisms exist is a frame written about nothing.
   no-oracle-no-swarm rule: a repo without `./verify` cannot be gated on the
   thing being installed. *Gate:* the currency report + a batch plan the
   human ratifies.
-- **K5 — Routines: daily/weekly fleet coordination.** *Next after the rename
-  (Decision 68).* Concrete first target: the Threads Board and Session Board
-  republished on a cadence and on merge-touched-`integrations/`, not only at
-  the resident's boundaries. The pieces exist
+- **K5 — Routines: daily/weekly fleet coordination.** *First target BUILT
+  2026-09-26 (Decision 76):* the Threads Board and Session Board are
+  re-rendered by `kit/session/boards.py` every 3 hours 9:00–21:00 local as the
+  `fleet-boards` scheduled task (`routines/boards.prompt.md`), and published
+  only when something other than the clock changed — so a merge that touches
+  any `integrations/` reaches the Threads Board within one tick. The three
+  session commands publish through the same script. Gate clock started
+  2026-09-26: one week of runs, evidence in the registry's `boards.log`, READ
+  measured by the human. Remaining K5 items below are not started. The pieces exist
   (monitor, ball_scan, s4_scan, algedonic, session brief); K5 is the
   *cadence* and the *rendering*. Daily: the sweep + T0 human-TODO (Decision
   50) rendered into the session brief and, via dispatch, the digest.

@@ -237,6 +237,31 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+76. **K5's first routine: the boards republish on a cadence from a local
+    scheduled task, deterministic code decides what changed, and a board
+    counts as published only after the publish is confirmed** (2026-09-26,
+    human chose the cadence by poll: every 3 hours, 9:00–21:00 local).
+    Mechanism: `kit/session/boards.py` renders both boards, compares each to
+    its own marker with the page's clock (and, for the Session Board, row
+    ages) stripped, writes pages only for boards that changed, and logs every
+    run to the registry's `boards.log`; the scheduled Claude session only
+    performs the publish the script names — the AI/deterministic boundary
+    applied to bookkeeping. **Confirm-after-publish** was forced by the first
+    live run: recording the digest at render time left a failed or forgotten
+    publish reading as published forever, which is silent staleness; now a
+    forgotten confirm costs one redundant republish, the safe direction.
+    **Where it runs:** the Claude app's scheduled tasks on this Mac. Rejected:
+    GitHub Actions (cannot publish an artifact), a cloud routine (cannot see
+    this machine's registry or sibling working trees, which are what the
+    boards show), launchd (lost `~/Documents` access, Decision 42). "On merge
+    touching `integrations/`" is delivered as "within one tick of any mailbox
+    change": there is no inbound path to this machine, and the page says so.
+    The three session commands now publish through the same script, so there
+    is one publishing path. Known limits, stated: runs only while the app is
+    open; the task's model is the app default, since the scheduling tool
+    cannot pin one — a scout-class job under the routing tenet, so the human
+    may set it lower in the app. Gate: one week of runs the human actually
+    read, measured by the human, not asserted by the log.
 75. **/wakeup runs a repo's routine auditor when its last report is stale;
     the dirty-marker hook ignores writes outside the repo** (2026-09-19,
     HYPERSAW's harness-kit thread — notice B158, brief hypersaw-003 — adopted

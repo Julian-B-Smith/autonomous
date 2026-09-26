@@ -77,17 +77,20 @@ the publisher's next boundary. The renderer enforces this: from any other repo
 it prints `NOT-PUBLISHER` and writes nothing, so there is nothing to remember.
 
 ```
-python3 ~/Documents/Claude/autonomous/kit/session/render_registry.py --check-changed > /tmp/session-board.html
-python3 ~/Documents/Claude/autonomous/kit/session/render_threads.py > /tmp/threads-board.html
+python3 ~/Documents/Claude/autonomous/kit/session/boards.py --out "$TMPDIR/fleet-boards" --why closeout
 ```
 
-- Session Board: `CHANGED` → publish `/tmp/session-board.html` with the Artifact
-  tool, `url` from `~/.claude/session-registry/BOARD_URL`, 🕐. `UNCHANGED` or
-  `NOT-PUBLISHER` → publish nothing.
-- Threads Board: publish `/tmp/threads-board.html`, `url` from
-  `~/.claude/session-registry/THREADS_URL`, 📬. It is a SWEEP of every repo's
-  `integrations/` (overdue, owed, answered-but-unread), so it is re-rendered
-  every time — its "as of" stamp is the honest freshness.
-- If a publish is refused because the page moved underneath you, re-read and
-  publish once; do not force. No `*_URL` file → skip silently; boards are
-  optional bookkeeping and a session never blocks on them.
+It prints one line per board: name, verdict, page path, artifact URL. For each
+`CHANGED` line with a URL, read the live artifact, then publish the page path
+with the Artifact tool passing that URL as `url` (Session Board 🕐, Threads
+Board 📬 — omit `favicon` on a republish), and only after it succeeded run the
+same command with `--confirm <board-name>` in place of `--why`. `UNCHANGED`,
+`NOT-PUBLISHER`, or a
+URL of `-` → publish nothing. The script ignores each page's own clock, so an
+unchanged board is never republished just because time passed. If a publish is
+refused because the page moved underneath you, re-read and publish once; do not
+force. Boards are optional bookkeeping and a session never blocks on them.
+
+Between sessions the same script runs on a cadence as the `fleet-boards`
+scheduled task (`routines/boards.prompt.md`, K5), so a thread filed by another
+repo reaches the Threads Board within one tick even when no session here opens.

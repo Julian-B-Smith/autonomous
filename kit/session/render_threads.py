@@ -10,13 +10,17 @@ first: overdue, then obligations open, then everything else.
 How it stays current — honestly. The Session Board is event-driven because its
 source changes only at three commands. Threads change whenever ANY session
 files or answers a brief, and those sessions run no command that could
-republish. So this is a SWEEP: re-rendered and republished by the standards
-repo's session at its own boundaries. The "as of" stamp is the truth about
-freshness; a thread filed after it is not on the page yet.
+republish. So this is a SWEEP: re-rendered by the boards routine on a cadence
+(`kit/session/boards.py`, K5) and by the standards repo's session at its own
+boundaries, and republished only when something other than the clock changed.
+There is no webhook into this machine, so "a merge touched a mailbox" becomes
+"within one cadence tick of any mailbox change" — stated on the page, because
+the "as of" stamp is the truth about freshness.
 
   render_threads.py > threads.html
+  render_threads.py --check-changed > threads.html   # empty stdout if unchanged
 """
-import datetime, html, json, os, sys
+import datetime, hashlib, html, json, os, re, sys
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.join(_HERE, "..", "..")
@@ -48,6 +52,7 @@ def gather():
 
 def render():
     rows, awaiting, today = gather()
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     overdue = [r for r in rows if r.get("days_overdue")]
     owed = [r for r in rows if r.get("ours") and not r.get("days_overdue")]
     rest = [r for r in rows if not r.get("ours")]
@@ -121,7 +126,7 @@ li {{ margin:3px 0; font-size:13.5px; }}
 </style>
 <div class="wrap">
 <h1>Threads Board</h1>
-<p class="sub">as of <b>{today.isoformat()}</b> · every <code>integrations/</code> exchange across the fleet, read by <code>ball_scan</code>. A <b>sweep</b>, not a live feed: republished by the standards repo's session at its own boundaries, so a brief filed after the stamp is not here yet.</p>
+<p class="sub">as of <b>{stamp}</b> · every <code>integrations/</code> exchange across the fleet, read by <code>ball_scan</code>. A <b>sweep</b>, not a live feed: re-rendered by the boards routine on a cadence and at the standards repo's session boundaries, republished only when something other than this stamp changed — so a brief filed after the stamp appears within one routine tick.</p>
 <div class="stats">
   <div class="stat"><div class="n{' bad' if overdue else ''}">{len(overdue)}</div><div class="l">overdue</div></div>
   <div class="stat"><div class="n{' warn' if owed else ''}">{len(owed)}</div><div class="l">obligations open</div></div>
@@ -140,5 +145,25 @@ li {{ margin:3px 0; font-size:13.5px; }}
 </div>"""
 
 
+MARKER = ".threads-render"
+
+
 if __name__ == "__main__":
-    sys.stdout.write(render())
+    # Same contract as render_registry: from any repo but the standards repo,
+    # say so and write nothing; otherwise print CHANGED/UNCHANGED on stderr and
+    # the page on stdout only when it changed. Days-overdue moves at midnight,
+    # so an idle fleet still republishes about once a day — correctly.
+    sys.path.insert(0, _HERE)
+    import render_registry  # noqa: E402
+    if "--check-changed" in sys.argv and not render_registry.is_publisher():
+        print("NOT-PUBLISHER", file=sys.stderr)
+        sys.exit(0)
+    page = render()
+    if "--check-changed" in sys.argv:
+        is_new, digest = render_registry.changed(page, marker=MARKER)
+        if is_new:
+            render_registry.record(digest, marker=MARKER)
+        print("CHANGED" if is_new else "UNCHANGED", file=sys.stderr)
+        sys.stdout.write(page if is_new else "")
+        sys.exit(0)
+    sys.stdout.write(page)

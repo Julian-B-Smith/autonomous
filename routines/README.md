@@ -3,6 +3,22 @@
 Prompt files for recurring routines, versioned here so they're reviewable,
 diffable, and portable across machines/substrates.
 
+## fleet-boards (local, on a cadence) — K5
+
+**Live variant: LOCAL** — the `fleet-boards` scheduled task in the Claude
+desktop app on the primary machine, whose stored prompt is one line:
+"In ~/Documents/Claude/autonomous, execute routines/boards.prompt.md."
+[boards.prompt.md](boards.prompt.md) is the single definition. It runs
+`kit/session/boards.py`, which renders the Session Board and Threads Board,
+decides deterministically which changed (ignoring each page's own clock), and
+logs every run to the session registry's `boards.log`; the scheduled session
+only publishes what the script names. Local because the boards show this
+machine's registry and sibling working trees, which no cloud routine or
+Actions runner can see; and the Claude app has the folder access launchd
+lacked, so nothing needs Full Disk Access (Decision 42). Runs only while the
+app is open; a missed tick runs at next launch. Gate (ROADMAP K5): one week of
+runs producing boards the human actually read, measured by the human.
+
 ## landscape-audit (monthly, propose-only)
 
 **Live variant: CLOUD** —
