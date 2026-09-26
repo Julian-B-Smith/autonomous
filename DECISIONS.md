@@ -237,6 +237,32 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+77. **Session oversight, VSM-shaped, is ratified: start and end hooks keep
+    each session's record, a deterministic engine checks every live session
+    against the whole system, each session is told only its own drift, and
+    two dashboards read one snapshot** (2026-09-26, human ruling by poll on
+    `briefs/2026-09-26-session-oversight.proposal.md`: design as proposed;
+    authority REPORT-ONLY at launch; dashboards BOTH a standalone app in this
+    repo and a fleet page in LifeOS — the human's amendment to a
+    one-or-the-other option; global hooks installed by the integrator after
+    the O0 merge). The three chat asks it answers: a dashboard outside the
+    Claude app, boundaries that need no manual command, and automated
+    oversight over active sessions. VSM mapping: sessions are S1; collision
+    and sync signals delivered through the prompt hook are S2 (stigmergic —
+    every signal is a file a hook reads, so Decision 73's line on live
+    messaging holds); `governor/oversight.py` is S3\*, reading trees,
+    records and event logs, never an agent's account of itself; threshold
+    findings are algedonic; the human at the dashboard is S3. No model in the
+    checking path. Phases O0 (hands-off boundaries) → O1 (engine + snapshot,
+    one planted fixture per check) → O2 (in-session delivery, deduped) → O3
+    (both dashboards; artifact boards and `fleet-boards` retire) → O4
+    (escalation; HALT armed only by the human), each gated on a week the
+    human judges. Rejected: an agent as overseer (a monitor the agent can
+    reach is not a monitor, Decision 73); halting on alarms at launch (a false
+    positive stopping real work before noise is measured); a launchd-served
+    dashboard reading `~/Documents` directly (TCC, Decision 42) — the
+    snapshot lives under `~/.claude/` for that reason. O0 shipped the same
+    day as kit 2.6.4.
 76. **K5's first routine: the boards republish on a cadence from a local
     scheduled task, deterministic code decides what changed, and a board
     counts as published only after the publish is confirmed** (2026-09-26,

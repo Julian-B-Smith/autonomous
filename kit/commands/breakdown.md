@@ -87,12 +87,17 @@ git push -u origin HEAD && gh pr create --fill
 Evidence in the PR body. **Do not merge** — merges are the human's. No remote?
 Commit on `main` and say so. Full contract: `kit/prompts/_closing.md`.
 
-## Step 6 — deregister, and report what is still open
+## Step 6 — report what is still open (do NOT deregister)
 
 ```
-python3 ~/Documents/Claude/autonomous/kit/session/registry.py close --session-id <id>
 python3 ~/Documents/Claude/autonomous/kit/session/registry.py list
 ```
+
+Since O0 (Decision 77) the SessionEnd hook closes this session's record when
+the session actually exits, with how the tree was left. Closing it here would
+mark the session ended while you are still in it. Only if no `session record:`
+line appeared at session start (the hooks are not installed on this machine)
+close it by hand: `registry.py close --session-id <id> --state "closed by /breakdown"`.
 
 If other rows remain, close with one line: **"Still open: X, Y."** That line is
 the point of the registry — at the end of a night it is how the human sees

@@ -66,9 +66,10 @@ def changelog_entries(kit_dir):
 # as satisfied by every repo, so a tool-only bump never reports the fleet
 # behind by something it cannot act on. Repos still get the declaration bumped
 # on their next retrofit, which is the right time.
-TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3"}  # 2.3.0/2.4.0 are NOT
+TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4"}  # 2.3.0/2.4.0 are NOT
 
 REQUIREMENTS = {
+    "2.6.4": [],   # tool-only — session hooks open/close the registry record (O0, Decision 77)
     "2.6.3": [],   # tool-only — dirty hook path filter; /wakeup routine-audit step (HYPERSAW)
     "2.6.2": [],   # tool-only — human gates are polls; denied push is named (Decision 74)
     "2.6.1": [],   # tool-only — harness settings template stops denying the agent's own push (Sluice)

@@ -64,8 +64,10 @@ get answered and a genuine `SESSION.md` gets written.
   merges, that repo may want `git switch main && git reset --hard origin/main`.
   That reset is destructive and is the human's, never this command's.
 - A red oracle is never hidden and never closed past.
-- Deregistering: if the session registry holds rows for closed repos, remove
-  them with `registry.py close --session-id <id>` and report what remains open.
+- Deregistering: the SessionEnd hook closes each session's own record on exit
+  (O0). Rows for sessions that crashed or predate the hooks are closed with
+  `registry.py sweep --older-than-hours 12 --reason "closeout"`, which marks
+  them unclean rather than pretending they closed well. Report what remains open.
 
 ## Last — republish the boards (the standards repo's session ONLY)
 

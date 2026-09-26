@@ -13,8 +13,9 @@ python3 ~/Documents/Claude/autonomous/kit/session/registry.py list
 
 ## Step 2 — check for an unclean shutdown BEFORE opening
 
-If the registry holds a row for THIS repo that is not this session, the last
-session never closed. **Never silently overwrite it** — a row nobody closed
+This session's own record id is the `session record: <id>` line the
+SessionStart hook put in context (O0, Decision 77). If the registry holds a row
+for THIS repo with any other id, the last session never closed. **Never silently overwrite it** — a row nobody closed
 means a session nobody finished, and that is information, not noise. Offer, in
 this order: re-render the state (`/reorient`), then an abbreviated `/breakdown`
 that writes SESSION.md and closes the stale row, and only then open.
@@ -57,19 +58,22 @@ unresolved reflection blocking the obvious move. Otherwise **state the assumed
 starting point and proceed**. A survey that fires every time gets skipped every
 time, and then it is not a gate, it is a habit.
 
-## Step 6 — register the session
+## Step 6 — confirm the session is registered (the hook did it)
+
+The SessionStart hook opened this session's record before your first prompt;
+nothing to run. Only if no `session record:` line appeared at start (hooks not
+installed on this machine) register by hand:
 
 ```
 python3 ~/Documents/Claude/autonomous/kit/session/registry.py open . --session-id <id>
 ```
 
-Use a stable id for this session. If the registry is unconfigured or
-unreachable, **proceed with a warning** — a session never blocks on
-bookkeeping.
+If the registry is unconfigured or unreachable, **proceed with a warning** — a
+session never blocks on bookkeeping.
 
 ## Permitted writes
 
-Registry row; REFLECTIONS.md prune edits; graduation targets the human
+Registry row (only when the hook did not); REFLECTIONS.md prune edits; graduation targets the human
 confirmed. Nothing else. In particular `/wakeup` does not commit project work.
 
 ## Last — republish the boards (the standards repo's session ONLY)
