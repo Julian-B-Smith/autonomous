@@ -8,13 +8,24 @@
 ## Audio plugins (VST / AU / CLAP)
 
 - **Brand — every plugin ships under the company/manufacturer name
-  "Mind Lathe".** JUCE `COMPANY_NAME "Mind Lathe"`, the AU/VST3 manufacturer
-  display field, and the bundle-identifier prefix `com.mind-lathe.<Plugin>`.
-  ("Lifted Truck" was a placeholder, never a brand — ruled 2026-09-04 with the
-  GitHub account rename; each plugin repo adopts the new name in its next
-  session.) Applies to all VST/AU/CLAP builds, forward-going.
+  "Mindlathe", one word.** JUCE `COMPANY_NAME "Mindlathe"`; for CLAP-first
+  builds the descriptor's vendor string and clap-wrapper's
+  `AUV2_MANUFACTURER_NAME`. That is what a host's browser shows. NEW plugins
+  take the bundle-identifier prefix `com.mind-lathe.<Plugin>`; EXISTING plugins
+  keep the bundle IDs they shipped with (renaming one buys nothing a user sees
+  and churns the macOS component cache). ("Lifted Truck" was a placeholder,
+  never a brand — ruled 2026-09-04; spelled "Mindlathe" by the human's
+  2026-09-27 ruling, matching the org and Sluice's D-089. Applied across the
+  installed fleet the same day, Decision 79.) Applies to all VST/AU/CLAP
+  builds.
 - **Identity that never changes on a rename: the VST3 class ID and the AU
-  four-char codes.** Hosts bind saved sessions to those, not to names — 28
+  four-char codes.** Where each comes from: JUCE derives the VST3 class ID from
+  `PLUGIN_MANUFACTURER_CODE` + `PLUGIN_CODE` only, never the company name;
+  clap-wrapper derives it from the CLAP plugin **id string**
+  (`com.lifted-truck.hypersaw` and the like), so in a CLAP-first repo that id
+  string is identity even though it reads like a name — freeze it. A JUCE
+  plugin with no explicit `BUNDLE_ID` gets one derived from `COMPANY_NAME`;
+  pin it before changing the name. Hosts bind saved sessions to those, not to names — 28
   Ableton sets kept loading across Horde's earlier HYPERSAW→horde rename
   precisely because the class ID stayed fixed. A rename may touch every
   human-readable string and must touch neither of these; changing them, or

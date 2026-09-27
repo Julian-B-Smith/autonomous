@@ -237,6 +237,32 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+79. **The Ableton browser vendor is "Mindlathe" across the installed fleet;
+    the integrator made the change in seven idle plugin repos as a ONE-TIME,
+    human-granted exception to writes-stay-home** (2026-09-27, human request
+    "switch the developer name in the Ableton browser from Lifted Truck to
+    Mindlathe"; route chosen by poll: exception for idle repos, relay prompt
+    for the two with residents mid-work — HYPERSAW, 16 uncommitted files on
+    main; Sluice, a live session, which had already shipped "Mindlathe" under
+    its own D-089). How the exception was kept honest: every edit on a fresh
+    branch in a separate worktree from `origin/main`, never touching a
+    resident's working tree or branch; one display field per plugin
+    (`COMPANY_NAME`), plus `BUNDLE_ID` pinned where JUCE had derived it from
+    the company name (AURICLE, Orrery); each built Release from its worktree
+    reusing the resident's own dependency sources; installed only after the
+    old bundles were backed up; VST3 class IDs and AU codes compared
+    byte-for-byte against a pre-change snapshot; one PR per repo for its
+    resident's record and the human's merge. Result, same day: 7 repos, 12
+    installed bundles (AURICLE, CATENA, EDGEWISE, Morphos, Orrery, TRIBOS,
+    curvsynth), every VST3 class ID and AU code identical before and after,
+    all five AUs passing `auval`, the replaced bundles kept at
+    `~/.claude/plugin-backups/2026-09-27-before-mindlathe/`. HYPERSAW got a
+    brief in its mailbox (`integrations/autonomous/brief-002-vendor-mindlathe.md`,
+    four display fields, the frozen CLAP ids named). Spelling: "Mindlathe", one word,
+    superseding CONVENTIONS' "Mind Lathe" — the human's spelling, the org's,
+    and Sluice's. Not a precedent: a session may not cite this to edit another
+    repo on its own judgment; the next cross-repo change goes through the
+    mailbox unless the human grants another exception by name.
 78. **The Structural Caution packet is folded into Phase O as one plan; three
     of its conflicts with rulings on record are open for discussion, not
     decided** (2026-09-26, human ruling by poll on the unified plan; the
