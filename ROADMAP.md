@@ -402,22 +402,39 @@ before the mechanisms exist is a frame written about nothing.
   needs Full Disk Access. *Gate:* one week of routines producing artifacts
   the human actually read — measured by the human, not asserted.
 
-- **Phase O — Session oversight (Decision 77; design:
-  `briefs/2026-09-26-session-oversight.proposal.md`).** Report-only at launch.
-  - **O0 — hands-off boundaries.** *BUILT 2026-09-26, kit 2.6.4:* SessionStart/
-    SessionEnd hooks open and close each record with facts and tree state;
-    stale rows swept at install. *Gate:* one week in which every normally
-    exited session closed its own record; the only stale rows are crashes.
-  - **O1 — engine + snapshot.** `governor/oversight.py`, the eleven checks,
-    `fleet-status.1` contract, snapshot at `~/.claude/fleet/status.json`.
-    *Gate:* every check fires on its plant and is silent on a clean fleet.
-  - **O2 — in-session delivery** via the prompt hook, each finding once.
-    *Gate:* a week in which the human judges every delivered finding useful.
-  - **O3 — dashboards:** a standalone local app here AND a LifeOS fleet page
-    (brief to life-os-app / life-os-web), both reading the snapshot. *Gate:*
-    a week of use; then the artifact boards and `fleet-boards` retire.
-  - **O4 — escalation:** threshold notifications; HALT sentinel armed only
-    by the human, per repo. Deferred until O2's noise is measured.
+- **Phase O — Session oversight (Decisions 77, 78; designs:
+  `briefs/2026-09-26-session-oversight.proposal.md`,
+  `briefs/2026-09-26-structural-caution.md` + `.response.md`).** One plan.
+  Authority is report-only until Decision 78's open question (a) is ruled.
+  - **O0 — hands-off boundaries.** *BUILT 2026-09-26, kit 2.6.4; hooks
+    installed and stale rows swept the same day.* *Gate:* a week in which
+    every normally exited session closed its own record.
+  - **O0.5 — gates on the gates.** SessionStart self-test (expected hooks
+    present and executable, else `hook-missing`); ConfigChange guard on
+    user/project settings; `GATE-CHANGE:` token rule for edits to `./verify`,
+    hooks, thresholds; per-repo append-only JSONL event log. *Waits on
+    Decision 78 (a) for whether its guards log or deny.* *Gate:* each fires on
+    a plant; a deliberately removed hook produces `hook-missing`.
+  - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's
+    eleven sync checks plus the packet's budget table, as interrupt/accrue
+    findings; versioned thresholds file per project + global default;
+    snapshot at `~/.claude/fleet/status.json`. *Gate:* every check and budget
+    fires on its plant and is silent on a clean fleet.
+  - **O2 — delivery and interrupts.** One-time in-session lines; notifications
+    on interrupts (channel open); gates flip to deny per the ruling on (a).
+    *Gate:* a week in which the human judges every delivered line useful.
+  - **O3 — setpoint audit + regulator review.** Weekly fresh-context audit
+    emitting a three-list diff (setpoint moved unsigned; work outside the
+    setpoint; setpoint items with no work past their gate), silent when
+    empty; monthly review of thresholds, hooks and permission rules only.
+    *Gate:* one non-empty diff answered in DECISIONS; the first review signs
+    its changes.
+  - **O4 — dashboards.** Standalone app here and the LifeOS fleet page (brief
+    to life-os-app / life-os-web, inverted build), both read-only, both empty
+    when healthy. *Gate:* with the fleet healthy, both render empty; then the
+    artifact boards and `fleet-boards` retire.
+  - **O5 — HALT**, armed only by the human per repo. Deferred until O2's
+    noise is measured.
 
 **Also opened by this directive, NOT in Phase K:**
 - **The file-restructuring sweep is back on the table** — the human's own
