@@ -35,7 +35,13 @@ _FM = re.compile(r"\A---\s*\n(.*?)\n---", re.S)
 # Files that MOVE a ball rather than open a question. Naming is the
 # fleet's real convention and is stable; ordering by date/mtime is not
 # (day-resolution dates, and editing a file changes its mtime).
-_ROLE_ANSWERER = re.compile(r"^(response|ratif|notice|ack)", re.I)
+# Filenames whose role is to MOVE a thread (answer it, or hand the ball back).
+# `correction` joined 2026-09-27: FOUNDATIONS filed `correction-foundations-001-
+# ball.md` to hand a mislabelled ball back to us, and frontmatter_lies read it as
+# a stale opener — a false red on the resident's own gate. A correction is a
+# hand-back by definition. (The deeper fix — thread edges via `in-reply-to` —
+# is FOUNDATIONS' brief foundations-002, owed separately.)
+_ROLE_ANSWERER = re.compile(r"^(response|ratif|notice|ack|correction)", re.I)
 
 
 def _field(fm, name):

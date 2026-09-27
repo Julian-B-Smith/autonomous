@@ -296,6 +296,17 @@ class TestFrontmatterLies(unittest.TestCase):
         self.assertIn("integrations/peer/brief.md", got)
         self.assertNotIn("integrations/peer/ratification.md", got)
 
+    def test_a_correction_that_hands_the_ball_back_is_not_stale(self):
+        """FOUNDATIONS, 2026-09-27: a correction file moving a mislabelled ball
+        back to the provider was flagged as a stale opener and turned the
+        provider's own gate red."""
+        _fm(self.box, "brief.md", id="t-9", ball="consumer", status="filed", filed="2026-08-01")
+        _fm(self.box, "response.md", id="t-9", ball="consumer", status="responded",
+            responded="2026-08-10")
+        _fm(self.box, "correction-t-9-ball.md", id="t-9", ball="provider",
+            status="open — your ruling accepted it", filed="2026-09-27")
+        self.assertEqual(ball_scan.frontmatter_lies(self.tmp), [])
+
     def test_unanswered_thread_is_clean(self):
         _fm(self.box, "brief.md", id="z-3", ball="provider", status="filed",
             filed="2026-08-01")
