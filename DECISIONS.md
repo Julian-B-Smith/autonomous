@@ -258,7 +258,13 @@ history; supersede with a new numbered entry.
     all five AUs passing `auval`, the replaced bundles kept at
     `~/.claude/plugin-backups/2026-09-27-before-mindlathe/`. HYPERSAW got a
     brief in its mailbox (`integrations/autonomous/brief-002-vendor-mindlathe.md`,
-    four display fields, the frozen CLAP ids named). Spelling: "Mindlathe", one word,
+    four display fields, the frozen CLAP ids named), and its lead session
+    shipped it the same afternoon (horde PR #794; AU triples unchanged, `auval`
+    passing, class ID shown to derive only from the untouched CLAP id; noted
+    that parked SWARM-FX's bundle ID moved because a five-week-stale install
+    was rebuilt against the current clap-wrapper, not because of the vendor
+    edit). With Sluice's own D-089, every installed plugin now reads
+    "Mindlathe"; what remains is the human's Ableton rescan. Spelling: "Mindlathe", one word,
     superseding CONVENTIONS' "Mind Lathe" — the human's spelling, the org's,
     and Sluice's. Not a precedent: a session may not cite this to edit another
     repo on its own judgment; the next cross-repo change goes through the
