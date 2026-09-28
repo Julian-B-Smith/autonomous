@@ -237,6 +237,27 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+81. **CI is required only where there is a remote; a general per-repo
+    exemption from kit requirements is deferred; ungated CHANGELOG actions are
+    now listed, not left invisible** (2026-09-28, integrator, from
+    resume-workshop's retrofit-2.6.4 notice; kit 2.6.5, tool-only).
+    Resume-workshop is local-only by its own ratified D-005 (client PII), so
+    "CI workflow" could never be met, and the notice asked for a declared
+    exemption mechanism. The narrower fact: a workflow mirrors what gets
+    pushed, and a repo with no remote pushes nothing — `monitor.py` has always
+    scoped NO-CI that way, `currency.py` did not. So the requirement kind is
+    now `ci-if-remote`: n/a only when git POSITIVELY reports a repo with zero
+    remotes (a folder git cannot read keeps the requirement), rendered and
+    listed as n/a even when CURRENT. Two repos affected (resume-workshop,
+    showcase). Deferred, not rejected: a declared per-repo exemption, because
+    anything a repo can write to switch a requirement off is a gate that can be
+    switched off — that is the human's policy call, and one case is not yet a
+    pattern (Decision 73's independence rule). The same notice found that
+    2.1.0's `## Mailbox` charter section, having no requirement row, is
+    invisible: twelve repos lack it and read CURRENT, so no retrofit would ever
+    point at it. `monitor.py` now lists it at INFO (never a gate — 2.1.0's own
+    reason stands), and `/retrofit` states that ungated entries carry actions
+    the checker cannot show.
 80. **The brand is one name in every new form: "Mindlathe" displayed,
     `mindlathe` lower-case, `com.mindlathe.<plugin>` for new bundle IDs and
     CLAP ids** (2026-09-27, human: "I've decided I prefer the single name").

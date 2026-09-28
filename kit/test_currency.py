@@ -115,6 +115,30 @@ class TestReport(unittest.TestCase):
         base = next(b for b in r["behind"] if b["version"] == "2.0.0")
         self.assertEqual(len(base["missing"]), len(currency.REQUIREMENTS["2.0.0"]))
 
+    def test_no_remote_makes_CI_not_applicable_but_visible(self):
+        """resume-workshop, 2026-09-28: local-only by ratified decision (client
+        PII), it read BEHIND forever on a workflow that could never run.
+        n/a is not a silent pass: it is listed, and rendered even when CURRENT."""
+        _full_baseline(self.tmp)
+        os.remove(os.path.join(self.tmp, ".github", "workflows", "ci.yml"))
+        r = currency.report(self.tmp, _KIT)
+        self.assertTrue(r["current"])
+        self.assertEqual(r["not_applicable"], ["CI workflow"])
+        self.assertIn("n/a here: CI workflow", currency.render(r))
+
+    def test_a_remote_without_CI_still_reads_behind(self):
+        _full_baseline(self.tmp)
+        os.remove(os.path.join(self.tmp, ".github", "workflows", "ci.yml"))
+        subprocess.run(["git", "-C", self.tmp, "remote", "add", "origin",
+                        "https://example.invalid/x.git"], check=True)
+        r = currency.report(self.tmp, _KIT)
+        self.assertFalse(r["current"])
+        self.assertIn("CI workflow", next(b for b in r["behind"] if b["version"] == "2.0.0")["missing"])
+
+    def test_a_folder_git_cannot_read_keeps_the_CI_requirement(self):
+        """Uncertainty is not exemption: absence never reads as compliance."""
+        self.assertIs(currency._present(self.tmp, ".github/workflows", "ci-if-remote"), False)
+
     def test_undeclared_but_complete_repo_is_CURRENT(self):
         """Antiphon's shape: full harness, no kit_version. THIS TEST WAS
         INVERTED on 2026-08-18 and the inversion is the point of 2.6.0.

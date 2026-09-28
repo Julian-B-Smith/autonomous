@@ -66,9 +66,10 @@ def changelog_entries(kit_dir):
 # as satisfied by every repo, so a tool-only bump never reports the fleet
 # behind by something it cannot act on. Repos still get the declaration bumped
 # on their next retrofit, which is the right time.
-TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4"}  # 2.3.0/2.4.0 are NOT
+TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4", "2.6.5"}  # 2.3.0/2.4.0 are NOT
 
 REQUIREMENTS = {
+    "2.6.5": [],   # tool-only — CI required only where there is a remote (resume-workshop)
     "2.6.4": [],   # tool-only — session hooks open/close the registry record (O0, Decision 77)
     "2.6.3": [],   # tool-only — dirty hook path filter; /wakeup routine-audit step (HYPERSAW)
     "2.6.2": [],   # tool-only — human gates are polls; denied push is named (Decision 74)
@@ -123,7 +124,7 @@ REQUIREMENTS = {
         ("traces/", "traces", "dir"),
         ("./verify", "verify", "exec"),
         ("verify wires leak_gate", "verify", "contains:leak_gate"),
-        ("CI workflow", ".github/workflows", "dir-nonempty"),
+        ("CI workflow", ".github/workflows", "ci-if-remote"),
         (".gitattributes (LF)", ".gitattributes", "contains:eol=lf"),
     ],
 }
@@ -391,6 +392,21 @@ def _present(repo, target, kind):
         return os.path.isfile(p)
     if kind == "dir":
         return os.path.isdir(p)
+    if kind == "ci-if-remote":
+        # CI mirrors the Stop hook for what gets PUSHED; a repo with no remote
+        # pushes nothing, so the requirement has nothing to act on. "na" — not
+        # a silent pass: it is rendered, listed, and reported fleet-wide. Same
+        # scoping monitor.py has always used for NO-CI ("has a remote but no
+        # workflows"); the two checkers disagreed until resume-workshop, local-
+        # only by its D-005 (client PII), read BEHIND forever on a workflow that
+        # could never run (retrofit-2.6.4 notice, 2026-09-28; Decision 81).
+        # Only a POSITIVE "git repo with zero remotes" is n/a. A folder git
+        # cannot read is uncertainty, and uncertainty keeps the requirement —
+        # absence is never read as compliance (this repo's standing rule).
+        rem = subprocess.run(["git", "-C", repo, "remote"], capture_output=True, text=True)
+        if rem.returncode == 0 and not rem.stdout.strip():
+            return "na"
+        kind = "dir-nonempty"
     if kind == "dir-nonempty":
         return os.path.isdir(p) and any(
             f.endswith((".yml", ".yaml")) for f in os.listdir(p))
@@ -462,7 +478,10 @@ def report(repo, kit_dir):
         reqs = REQUIREMENTS.get(ver, [])
         checks = [{"label": lbl, "present": _present(repo, tgt, kind)}
                   for lbl, tgt, kind in reqs]
-        missing = [c["label"] for c in checks if not c["present"]]
+        for c in checks:
+            if c["present"] == "na":
+                out.setdefault("not_applicable", []).append(c["label"])
+        missing = [c["label"] for c in checks if c["present"] is False]
         if missing:
             out["behind"].append({
                 "version": ver, "date": date, "title": title,
@@ -486,7 +505,12 @@ def render(r):
     for b in r["behind"]:
         lines.append(f"  → {b['version']} ({b['date']}) {b['title']}")
         for c in b["checks"]:
-            lines.append(f"      [{'x' if c['present'] else ' '}] {c['label']}")
+            mark = "-" if c["present"] == "na" else ("x" if c["present"] else " ")
+            lines.append(f"      [{mark}] {c['label']}"
+                         + (" — n/a (no remote)" if c["present"] == "na" else ""))
+    if r.get("not_applicable"):
+        lines.append("  n/a here: " + ", ".join(r["not_applicable"])
+                     + " (no remote — listed so the gap stays visible)")
     if r["current"] and not r.get("declared_but_missing"):
         lines.append("  nothing to do — re-running the retrofit is a no-op")
     return "\n".join(lines)
