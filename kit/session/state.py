@@ -52,17 +52,64 @@ def _session_md(repo):
         return fh.read()
 
 
+# What a ROADMAP heading uses to say "this phase is the current one", taken from
+# the fleet's own roadmaps (2026-09-27 survey), not guessed. The plain word
+# "active" is NOT a marker: the kit's own template heading "Invariants under
+# active protection" sits in a dozen roadmaps above the real phase, and matched
+# first. Likewise "current" alone ("not in current scope"). Case-sensitive
+# ACTIVE only when shouted or bolded, because that is how repos that use it write it.
+_PHASE_MARK = re.compile(
+    r"(?i:in[- ]progress|\u2190\s*current|current (?:phase|focus|frontier)|\(current\b|\u25b6)"
+    r"|\bACTIVE\b|\*\*active\*\*", )
+
+
+_BULLET_PHASE = re.compile(
+    r"(?i:\u2190\s*current|current phase|\bphase\b[^.\n]{0,40}?(?:in[- ]progress|\bactive\b))")
+_DONE_BEFORE = re.compile(r"(?i:\b(?:done|closed|completed?|shipped)\b|was:)|\bMET\b|\u2705")
+
+
 def _current_phase(repo):
     """The phase ROADMAP marks as current. ROADMAP outranks other docs on
-    direction (doctrine), so this is the authority on 'what are we doing'."""
+    direction (doctrine), so this is the authority on 'what are we doing'.
+
+    HEADINGS only, and only an explicit marker (`_PHASE_MARK`). The first
+    version took any line starting `#`, `-`, `*` or `|` containing current /
+    in progress / active — so a bolded paragraph of a CLOSED phase's gate prose
+    ("**Gate: MET.** … active") won over the in-progress heading below it
+    (resume-workshop brief, 2026-09-27), and the template heading "Invariants
+    under active protection" won in Sluice, Maw and ten others. None when
+    nothing is marked: an honest blank beats a confident wrong phase."""
     p = os.path.join(repo, "ROADMAP.md")
     if not os.path.isfile(p):
         return None
     with open(p, encoding="utf-8", errors="ignore") as fh:
-        for line in fh:
-            if re.search(r"(?i)\b(current|in progress|active)\b", line) and line.lstrip().startswith(("#", "-", "*", "|")):
-                return line.strip()[:200]
+        lines = fh.readlines()
+    for line in lines:
+        if re.match(r"^#{1,6} ", line) and _PHASE_MARK.search(line):
+            return line.strip()[:200]
+    # Second pass, only when no heading is marked: some roadmaps mark the phase
+    # in a bullet ("- **D3 — The analyst.** **← current phase.**" in distillery,
+    # "- **Phase:** 0b in progress." in refraction-bench). Stricter than the
+    # heading pass, because bullets are where SUB-items live: "Status: in
+    # progress" in a bullet was a queue item or an intake brief in Maw, Sluice
+    # and Tonality-Live, not the phase. So a bullet counts only if it says
+    # "← current" / "current phase", or names a Phase next to an in-progress
+    # marker — and nothing marking it DONE comes before the marker ("DONE … Was:
+    # in-progress" in Sluice is history). Plain checkboxes are tasks, excluded.
+    for line in lines:
+        if not re.match(r"^\s*[-*|] (?!\[[ xX]\])", line):
+            continue
+        m = _BULLET_PHASE.search(line)
+        if m and not _DONE_BEFORE.search(line[:m.start()]):
+            return line.strip()[:200]
     return None
+
+
+# A heading that carries an entry ID: "### D-043 — …", "## ADR-12", "## Decision
+# 7", "### 118 — …", "## D1: …". The ID must be followed by punctuation-or-space,
+# so a date heading ("## 2026-08-01 …") is not read as entry 2026.
+_ID_HEADING = re.compile(r"^#{1,6}\s+(?:Decision\s+|ADR-?|DEC-?|D-?)?(\d+)(?=[.):]?\s|\s*[\u2014\u2013-]\s)")
+_NUMBERED_LINE = re.compile(r"^(\d+)[.)]\s")
 
 
 def _decisions_tail(repo, n=3):
@@ -73,19 +120,27 @@ def _decisions_tail(repo, n=3):
     lines in the file are decisions 16-18 while the repo is at 66. Showing
     those to someone catching up is worse than showing nothing, because it
     looks like an answer. Where entries are numbered, the highest numbers are
-    the newest — which is also why the next number is max+1, never last+1."""
+    the newest — which is also why the next number is max+1, never last+1.
+
+    WHICH lines are entries depends on the file's own style, decided once per
+    file. If any heading carries an ID, headings are the entries and numbered
+    lines are list items inside them — a body's "1.–4." outranked every real
+    `### D-043` heading until 2026-09-27 (resume-workshop brief; the same shape
+    in Sluice, Maw, HYPERSAW, FOUNDATIONS, Residuum, spectrogen). Otherwise
+    top-level numbered lines are the entries, which is this repo's own style
+    (`79. **…**` under a plain title), so that case must keep working."""
     p = os.path.join(repo, "DECISIONS.md")
     if not os.path.isfile(p):
         return []
     with open(p, encoding="utf-8", errors="ignore") as fh:
-        heads = [l.strip() for l in fh if re.match(r"^(#{1,3} |\d+\. )", l)]
-    numbered = []
-    for h in heads:
-        m = re.match(r"^(?:#{1,3} )?(?:Decision )?(\d+)[.)]?\s", h)
-        if m:
-            numbered.append((int(m.group(1)), h))
-    if numbered:
-        return [h for _, h in sorted(numbered, key=lambda t: t[0])[-n:]]
+        lines = [l.rstrip("\n") for l in fh]
+    by_heading = [(int(m.group(1)), l.strip()) for l in lines for m in [_ID_HEADING.match(l)] if m]
+    if by_heading:
+        return [h for _, h in sorted(by_heading, key=lambda t: t[0])[-n:]]
+    by_line = [(int(m.group(1)), l.strip()) for l in lines for m in [_NUMBERED_LINE.match(l)] if m]
+    if by_line:
+        return [h for _, h in sorted(by_line, key=lambda t: t[0])[-n:]]
+    heads = [l.strip() for l in lines if re.match(r"^#{1,3} ", l)]
     return heads[-n:]
 
 
@@ -205,6 +260,9 @@ def render(s):
         L.append(f"verify: exit {v['exit']} at {v.get('at')} ({v['note']})")
     if s["phase"]:
         L.append(f"phase:  {s['phase']}")
+    else:
+        L.append("phase:  none marked — mark the current phase's ROADMAP heading "
+                 "\"IN PROGRESS\" or \"← current\" and this line will show it")
     if s["session_md"]:
         first = next((l for l in s["session_md"].splitlines() if l.strip()
                       and not l.startswith("#")), "")

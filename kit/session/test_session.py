@@ -54,6 +54,47 @@ class State(unittest.TestCase):
         tail = state.gather(self.repo)["decisions_tail"]
         self.assertTrue(any("Newest" in t for t in tail))
 
+    def _file(self, name, text):
+        with open(os.path.join(self.repo, name), "w", encoding="utf-8") as fh:
+            fh.write(text)
+
+    def test_closed_gate_prose_is_not_the_current_phase(self):
+        """resume-workshop brief, fixture 1: a bolded closed-gate paragraph
+        containing "active" above the real in-progress heading."""
+        self._file("ROADMAP.md", "## Phase 1 — Intake\n\n**Gate: MET.** `./verify fast` green with "
+                   "the validator active.\n\n## Phase 7 — First real client *(in progress; operator work)*\n")
+        self.assertTrue(state._current_phase(self.repo).startswith("## Phase 7"))
+
+    def test_the_kit_template_heading_is_not_a_phase(self):
+        """"Invariants under active protection" sits in a dozen roadmaps."""
+        self._file("ROADMAP.md", "## Invariants under active protection\n\n## M0 — Port · **IN PROGRESS**\n")
+        self.assertIn("M0", state._current_phase(self.repo))
+        self._file("ROADMAP.md", "## Invariants under active protection\n\n## M0 — Port\n")
+        self.assertIsNone(state._current_phase(self.repo))
+        self.assertIn("none marked", state.render(state.gather(self.repo)))
+
+    def test_a_bullet_marks_the_phase_only_explicitly_and_never_when_done(self):
+        self._file("ROADMAP.md", "- **D3 — The analyst.** **\u2190 current phase.** Fan-out.\n")
+        self.assertIn("D3", state._current_phase(self.repo))
+        self._file("ROADMAP.md", "- **Status:** DONE 2026-09-21. Was: in-progress, phase gate.\n"
+                   "- **Status:** in-progress (an intake brief)\n")
+        self.assertIsNone(state._current_phase(self.repo))
+
+    def test_list_items_inside_a_decision_are_not_decisions(self):
+        """resume-workshop brief, fixture 2: ### D-041..D-043 headings, a
+        numbered list 1.-4. inside D-042's body."""
+        self._file("DECISIONS.md", "# Decisions\n\n### D-041 — a\n\nbody\n\n### D-042 — b\n\n"
+                   "1. one\n2. two\n3. three\n4. four\n\n### D-043 — c\n")
+        self.assertEqual([d.split(" —")[0] for d in state._decisions_tail(self.repo)],
+                         ["### D-041", "### D-042", "### D-043"])
+
+    def test_numbered_line_entries_still_work_and_dates_are_not_ids(self):
+        """This repo's own style — `79. **…**` under a plain title — must keep
+        working; a date heading must never be read as entry 2026."""
+        self._file("DECISIONS.md", "# Decisions\n\n## 2026-08-01 — context\n\n79. **newest**\n"
+                   "12. **older**\n78. **middle**\n")
+        self.assertEqual([d.split(".")[0] for d in state._decisions_tail(self.repo)], ["12", "78", "79"])
+
     def test_stale_reflections_are_flagged_for_graduate_or_drop(self):
         old = (datetime.date.today() - datetime.timedelta(days=40)).isoformat()
         new = datetime.date.today().isoformat()
