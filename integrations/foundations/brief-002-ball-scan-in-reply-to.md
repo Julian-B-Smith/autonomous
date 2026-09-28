@@ -3,10 +3,13 @@ id: foundations-002
 from: FOUNDATIONS
 organ: mediator
 to: autonomous
-status: filed
-ball: provider
+status: closed — see response-004.md: in-reply-to, answers and answered_by are thread edges; both guards taken
+ball: none
+seq: 1
+cites: FOUNDATIONS DECISIONS #110, #119; HYPERSAW ack-fleet-protocol
 filed: 2026-09-27
 respond-by: 2026-10-11
+answered_by: response-004.md
 ---
 
 # Brief — `ball_scan` cannot see a reply that carries its own id: 27 false balls buried one real one for six weeks
