@@ -10,10 +10,15 @@
 - **Brand — every plugin ships under the company/manufacturer name
   "Mindlathe", one word.** JUCE `COMPANY_NAME "Mindlathe"`; for CLAP-first
   builds the descriptor's vendor string and clap-wrapper's
-  `AUV2_MANUFACTURER_NAME`. That is what a host's browser shows. NEW plugins
-  take the bundle-identifier prefix `com.mind-lathe.<Plugin>`; EXISTING plugins
-  keep the bundle IDs they shipped with (renaming one buys nothing a user sees
-  and churns the macOS component cache). ("Lifted Truck" was a placeholder,
+  `AUV2_MANUFACTURER_NAME`. That is what a host's browser shows. The brand is ONE
+  name in every form a person or a new identifier sees: "Mindlathe" displayed,
+  `mindlathe` in anything lower-case — NEW plugins take the bundle-identifier
+  prefix `com.mindlathe.<Plugin>` and, when CLAP-first, the CLAP id
+  `com.mindlathe.<plugin>` (human ruling 2026-09-27, Decision 80; the hyphenated
+  `mind-lathe` survives only as the name of the website repo). EXISTING plugins
+  keep the bundle IDs and CLAP ids they shipped with, hyphen or not (Sluice's
+  `com.mind-lathe.sluice` included): renaming one buys nothing a user sees,
+  churns the macOS component cache, and for a CLAP id changes the VST3 class ID. ("Lifted Truck" was a placeholder,
   never a brand — ruled 2026-09-04; spelled "Mindlathe" by the human's
   2026-09-27 ruling, matching the org and Sluice's D-089. Applied across the
   installed fleet the same day, Decision 79.) Applies to all VST/AU/CLAP
@@ -25,7 +30,8 @@
   (`com.lifted-truck.hypersaw` and the like), so in a CLAP-first repo that id
   string is identity even though it reads like a name — freeze it. A JUCE
   plugin with no explicit `BUNDLE_ID` gets one derived from `COMPANY_NAME`;
-  pin it before changing the name. Hosts bind saved sessions to those, not to names — 28
+  pin it before changing the name.
+  Hosts bind saved sessions to those, not to names — 28
   Ableton sets kept loading across Horde's earlier HYPERSAW→horde rename
   precisely because the class ID stayed fixed. A rename may touch every
   human-readable string and must touch neither of these; changing them, or

@@ -237,6 +237,17 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+80. **The brand is one name in every new form: "Mindlathe" displayed,
+    `mindlathe` lower-case, `com.mindlathe.<plugin>` for new bundle IDs and
+    CLAP ids** (2026-09-27, human: "I've decided I prefer the single name").
+    Decision 79 had already made the displayed name one word; what remained
+    two-part was the prefix CONVENTIONS prescribed for new plugins,
+    `com.mind-lathe.<Plugin>`. Existing identifiers are untouched, hyphen or
+    not: Sluice's frozen `com.mind-lathe.sluice` (its CLAP id derives its VST3
+    class ID), horde's `com.lifted-truck.hypersaw`, and every shipped bundle
+    ID. `mind-lathe` remains the name of the website repo, which is a repo
+    name, not the brand. Rejected: renaming shipped identifiers for
+    consistency (orphans saved sets for a string no user sees).
 79. **The Ableton browser vendor is "Mindlathe" across the installed fleet;
     the integrator made the change in seven idle plugin repos as a ONE-TIME,
     human-granted exception to writes-stay-home** (2026-09-27, human request
