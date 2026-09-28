@@ -288,6 +288,25 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.6.5 — 2026-09-28 — CI is required only where there is a remote
+
+Found by resume-workshop's retrofit notice: a repo that is local-only by ratified
+decision (its D-005 — real client PII, never pushed) read BEHIND forever on
+"CI workflow", because a workflow is a mirror of what gets pushed and nothing
+is. The two checkers disagreed: `monitor.py` has always scoped NO-CI to
+"has a remote but no workflows"; `currency.py` did not.
+
+- `currency.py` — new requirement kind `ci-if-remote`. No remote: the row
+  renders `[-] CI workflow — n/a (no remote)`, is excluded from `behind`, and
+  is listed in the report's `not_applicable` and in an `n/a here:` line even
+  when the repo reads CURRENT, so the gap stays visible, never silent.
+- Not a general exemption: nothing a repo writes can switch a requirement off.
+  The condition is a fact of the tree (`git remote` is empty), the same fact
+  monitor.py already reads. A general, declared per-repo exemption is a policy
+  question for the human (Decision 81).
+- **Retrofit action:** none required — TOOL-ONLY.
+- **Verify gate:** none new; tests in `kit/test_currency.py`.
+
 ## 2.6.4 — 2026-09-26 — session boundaries run themselves (O0)
 
 The first phase of the ratified session-oversight design (Decision 77,

@@ -33,6 +33,13 @@ outcomes, and they decide the whole session:
   `[ ]` is a gap to close; every `[x]` is done and MUST NOT be touched.
   Read `~/Documents/Claude/autonomous/kit/CHANGELOG.md` for each entry's
   **retrofit action** — that text is what you apply.
+- **Ungated entries still carry actions, and the checker cannot show them.**
+  An entry with no requirement row never appears in the delta — 2.1.0's
+  `## Mailbox` charter section is the case that bit: a repo missing it reads
+  CURRENT, and eleven did (resume-workshop, 2026-09-28). So read the
+  CHANGELOG from the declared version up (from 2.0.0 if pre-2.0.0), EVERY
+  entry, and apply each retrofit action the tree lacks — not only the ones
+  `currency.py` lists.
 
 Then follow the canonical procedure at
 `~/Documents/Claude/autonomous/ONBOARDING.md` → Part 2 → "Retrofitting an

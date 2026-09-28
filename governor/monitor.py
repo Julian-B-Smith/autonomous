@@ -205,6 +205,14 @@ def check_repo(proj, today, stale_days):
 
     gaps = [k for k in ("claude_md", "roadmap", "traces", "manifest", "library")
             if not st.get(k)]
+    # kit 2.1.0's charter section has NO currency requirement, by design
+    # (gating prose rewards the words over the understanding), so a repo
+    # missing it reads CURRENT and no retrofit ever points at the gap: 11 of 47
+    # vendored repos on 2026-09-28, found by resume-workshop's retrofit notice.
+    # Listed here at INFO so it is at least visible; never a gate.
+    if st.get("claude_md") and not re.search(
+            r"(?im)^#{1,6} .*mailbox", _read(proj["path"], "CLAUDE.md") or ""):
+        gaps.append("mailbox_section")
     if gaps and (st["claude_md"] or st["verify"]) and not dormant:
         out["GAPS"] = ("INFO", "missing " + ",".join(gaps))
     return out
