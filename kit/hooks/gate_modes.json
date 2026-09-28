@@ -1,0 +1,6 @@
+{
+  "_doc": "Per-gate authority (Decision 84). 'observe' logs would-deny and never blocks; 'deny' blocks. A gate moves to 'deny' only by a PR carrying a signed GATE-CHANGE decision, after it has fired correctly on a planted case and run a clean week in observe.",
+  "hook-selftest": "observe",
+  "config-guard": "observe",
+  "gate-change": "observe"
+}

@@ -415,12 +415,12 @@ before the mechanisms exist is a frame written about nothing.
   - **O0 — hands-off boundaries.** *BUILT 2026-09-26, kit 2.6.4; hooks
     installed and stale rows swept the same day.* *Gate:* a week in which
     every normally exited session closed its own record.
-  - **O0.5 — gates on the gates.** SessionStart self-test (expected hooks
-    present and executable, else `hook-missing`); ConfigChange guard on
-    user/project settings; `GATE-CHANGE:` token rule for edits to `./verify`,
-    hooks, thresholds; per-repo append-only JSONL event log. *Waits on
-    Decision 78 (a) for whether its guards log or deny.* *Gate:* each fires on
-    a plant; a deliberately removed hook produces `hook-missing`.
+  - **O0.5 — gates on the gates.** *BUILT 2026-09-28 in observe (Decision
+    84):* `hook-selftest.py`, `config-guard.py`, `gate-change.py`, one central
+    append-only log at `~/.claude/fleet/events.jsonl`, per-gate modes in
+    `kit/hooks/gate_modes.json`. *Gate:* each fires on its plant (tested); a
+    week of real events in the log; then each gate is flipped or retuned by
+    its own signed GATE-CHANGE.
   - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's
     eleven sync checks plus the packet's budget table, as interrupt/accrue
     findings; versioned thresholds file per project + global default;
