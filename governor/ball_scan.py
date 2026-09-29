@@ -49,6 +49,103 @@ def _field(fm, name):
     return m.group(1).strip() if m else None
 
 
+def _refs(fm, name):
+    """A link field's targets: ids or filenames, comma/space separated, `.md`
+    optional, lower-cased. A trailing comment (`# …`) is not a target."""
+    v = _field(fm, name) or ""
+    v = v.split("#", 1)[0]
+    return [t[:-3] if t.endswith(".md") else t
+            for t in (x.strip().lower() for x in re.split(r"[,\s]+", v)) if t]
+
+
+def _threads(files):
+    """Group mailbox files into threads: a shared `id:`, OR an explicit edge —
+    `in-reply-to:` / `answers:` naming another file's id or filename, or
+    `answered_by:` naming the file that answers it.
+
+    Grouping by `id:` alone was the rule until 2026-09-28. A reply that carries
+    its OWN id (`foundations-response-sluice-001` answering `sluice-001`) then
+    opened a new thread and left the original looking unanswered forever:
+    FOUNDATIONS measured 27 false balls on itself burying one real one for six
+    weeks (brief foundations-002). The fleet already writes these edges — 123
+    `in-reply-to`, 22 `answered_by`, 16 `answers` — so following them adds no
+    convention, only reading. NOT an edge: `thread:` (a topic label that spans
+    distinct threads, e.g. `harness-kit`) and `re:` (prose).
+
+    Returns ({root: [file, ...]}, depth, later_than) where depth[path] counts reply hops
+    from the thread's first file: a file that replies to another is causally
+    LATER, which orders same-day members without file mtimes (they change on
+    every clone and branch switch — FOUNDATIONS' #110). A file never answers
+    itself: a self-reference is not an edge."""
+    parent = {f["path"]: f["path"] for f in files}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[rb] = ra
+
+    by_id, by_name = {}, {}
+    for f in files:
+        by_id.setdefault(f["id"].lower(), []).append(f["path"])
+        stem = os.path.basename(f["path"])[:-3].lower()
+        by_name.setdefault(stem, []).append(f["path"])
+    for paths in by_id.values():
+        for q in paths[1:]:
+            union(paths[0], q)
+
+    dated = {f["path"]: (f["date"] or "9999", f["path"]) for f in files}
+
+    def resolve(f, ref):
+        # A reference to the file's OWN id adds nothing — the id already puts
+        # it in the thread — and treating it as an edge makes the file "reply
+        # to" every other file sharing that id, including ones written weeks
+        # LATER (HYPERSAW's ack-fleet-protocol names its own thread id; it
+        # would have answered FOUNDATIONS' closing reply six weeks in advance).
+        # FOUNDATIONS' guard 1: a file cannot answer itself.
+        if ref == f["id"].lower():
+            return []
+        if ref in by_name:              # a filename is exact
+            hits = by_name[ref]
+        else:                           # an id names a thread: answer its FIRST file
+            hits = by_id.get(ref, [])
+            if len(hits) > 1:
+                first = min(dated[h] for h in hits)
+                hits = [h for h in hits if dated[h] == first]
+        same_dir = [h for h in hits if os.path.dirname(h) == os.path.dirname(f["path"])]
+        return same_dir or hits
+
+    later_than = []                     # (later, earlier) causal pairs
+    for f in files:
+        for ref in f["replies_to"]:
+            for t in resolve(f, ref):
+                if t != f["path"]:
+                    union(f["path"], t); later_than.append((f["path"], t))
+        for ref in f["answered_by"]:
+            for t in resolve(f, ref):
+                if t != f["path"]:
+                    union(f["path"], t); later_than.append((t, f["path"]))
+
+    depth = {f["path"]: 0 for f in files}
+    for _ in range(len(files)):         # bounded relaxation; a cycle cannot loop forever
+        moved = False
+        for late, early in later_than:
+            if depth[late] <= depth[early]:
+                depth[late] = depth[early] + 1
+                moved = True
+        if not moved:
+            break
+    groups = {}
+    for f in files:
+        groups.setdefault(find(f["path"]), []).append(f)
+    return groups, depth, later_than
+
+
 def _state(status):
     """The STATE a status line declares: its first word, lowercased, with any
     glued punctuation dropped. A status may explain itself — `closed — all
@@ -85,6 +182,9 @@ def _parse(path):
         "ball": (_field(fm, "ball") or "").lower(),
         "status": (_field(fm, "status") or "").lower(),
         "state": _state(_field(fm, "status")),   # the first word; see _state
+        # Explicit edges to other files of the same exchange (see _threads).
+        "replies_to": _refs(fm, "in-reply-to") + _refs(fm, "answers"),
+        "answered_by": _refs(fm, "answered_by"),
         "respond_by": _field(fm, "respond-by"),
         # Sort key: the newest date the file claims. Files with no date at all
         # sort oldest, so a dated answer always outranks an undated opener.
@@ -148,9 +248,16 @@ def scan_repo(path, repo_name, today=None):
         if p:
             files.append(p)
 
+    groups, depth, later_than = _threads(files)
+    replies_to = {}                      # earlier path -> [paths that explicitly answer it]
+    for late, early in later_than:
+        replies_to.setdefault(early, []).append(late)
+    by_path = {f["path"]: f for f in files}
     threads = {}
-    for f in files:
-        threads.setdefault(f["id"], []).append(f)
+    for members in groups.values():
+        # The thread is named by its FIRST file: fewest reply hops, then oldest.
+        root = min(members, key=lambda m: (depth[m["path"]], m["date"] or "9999", m["path"]))
+        threads[root["id"]] = members
 
     out = []
     for tid, members in sorted(threads.items()):
@@ -173,7 +280,20 @@ def scan_repo(path, repo_name, today=None):
                      if _ball_token(m["ball"]) not in ("", "none", "-")]
         if not claimants:
             continue                       # open, but nobody is holding anything
-        latest = max(claimants, key=lambda m: (m["date"], m["mtime"], m["path"]))
+        latest = max(claimants, key=lambda m: (m["date"], depth[m["path"]], m["mtime"], m["path"]))
+        # An EXPLICIT answer to the ball-holding file discharges it, even when
+        # the answer says `ball: none`. Without edges `ball: none` could only be
+        # ignored, because an unrelated FYI note filed after an ask once masked
+        # a live request (the rule above). The edge separates the two cases: a
+        # note that replies to nothing still moves nothing; a reply that names
+        # the claimant is the holder acting. FOUNDATIONS' discharging replies
+        # say `ball: none` and read as still-owed until this (foundations-002).
+        # Discharged is not CLOSED — closure stays `status:`'s job (Decision
+        # 67); the thread simply has no holder until someone claims one.
+        answers = [by_path[q] for q in replies_to.get(latest["path"], [])
+                   if q in by_path and q != latest["path"]]
+        if answers and all(_ball_token(a["ball"]) in ("", "none", "-") for a in answers):
+            continue
         # The live commitment is the LATEST respond-by in the thread: a refile
         # or a counter-brief resets the clock, and honouring a superseded date
         # would report an obligation nobody currently holds.

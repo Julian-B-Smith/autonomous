@@ -237,6 +237,25 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+83. **A thread is a shared id OR an explicit reply edge; an explicit answer
+    discharges the ball even when it says `ball: none`** (2026-09-28,
+    integrator, FOUNDATIONS brief foundations-002). `ball_scan.scan_repo`
+    grouped files by `id:` alone, so a reply carrying its own id opened a new
+    thread and the original read unanswered forever: FOUNDATIONS measured 27
+    false balls on itself burying one real item for six weeks. Edges now:
+    `in-reply-to:` / `answers:` naming another file's id or filename, and
+    `answered_by:` naming the answer (all already written by the fleet — 161
+    uses). Not edges: `thread:` (a topic label spanning distinct threads) and
+    `re:` (prose). An explicit answer to the ball-holding file discharges it
+    even at `ball: none`; an unlinked `ball: none` note still moves nothing, so
+    the FYI-masking rule stands. Guards: a reference to a file's own id is not
+    an edge, and an id naming several files resolves to the thread's first
+    (without this, HYPERSAW's ack "answered" a file filed six weeks later and
+    a genuine FOUNDATIONS obligation read discharged); same-day order is causal
+    from the edges before mtime. Measured across every mailbox: owed 43 → 16,
+    overdue 4 → 2; FOUNDATIONS owed 28 → 2, both standing by their own text.
+    Deferred: `frontmatter_lies`, a blocking gate, still groups by id — widening
+    it is its own measured change.
 82. **foundations-001 closed: the contract-version gate LANDED on
     2026-08-09 (Decision 43); what never happened was distribution — it is
     vendored in the next weekly kit batch, after the three composites that

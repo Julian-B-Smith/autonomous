@@ -76,6 +76,61 @@ class TestThreadResolution(unittest.TestCase):
             status="shipped—see PR #12", responded="2026-07-28")
         self.assertEqual(self.scan(), [])
 
+    # --- reply edges (FOUNDATIONS brief foundations-002, 2026-09-28) -------------
+
+    def test_a_reply_carrying_its_own_id_joins_the_thread(self):
+        """27 false balls on FOUNDATIONS: a reply with its own id opened a new
+        thread and left the original reading unanswered forever."""
+        _fm(self.box, "brief.md", id="x-10", ball="provider", status="filed",
+            respond_by="2026-07-01", filed="2026-07-01")
+        _fm(self.box, "response-x.md", id="x-10-reply", in_reply_to="x-10",
+            ball="consumer", status="answered", filed="2026-07-05")
+        self.assertEqual([t for t in self.scan() if t["ours"]], [])
+
+    def test_an_explicit_answer_saying_ball_none_discharges(self):
+        _fm(self.box, "brief.md", id="x-11", ball="provider", status="filed",
+            respond_by="2026-07-01", filed="2026-07-01")
+        _fm(self.box, "response-x.md", id="x-11-reply", in_reply_to="brief",
+            ball="none", status="answered", filed="2026-07-05")
+        self.assertEqual(self.scan(), [])
+
+    def test_an_unlinked_note_still_does_not_mask_a_live_ask(self):
+        """The rule the edges refine, not replace: a ball:none file that answers
+        nothing moves nothing."""
+        _fm(self.box, "brief.md", id="x-12", ball="provider", status="filed",
+            respond_by="2026-07-01", filed="2026-07-01")
+        _fm(self.box, "note.md", id="x-12", ball="none", status="fyi", filed="2026-07-05")
+        self.assertEqual([t["id"] for t in self.scan() if t["ours"]], ["x-12"])
+
+    def test_naming_your_own_thread_id_answers_nothing_later(self):
+        """FOUNDATIONS' guard 1, as it bit here: HYPERSAW's ack names its own
+        thread id, and read as an edge it 'answered' a claim filed weeks later."""
+        _fm(self.box, "brief.md", id="x-13", ball="consumer", status="filed", filed="2026-07-01")
+        _fm(self.box, "ack.md", id="x-13", in_reply_to="x-13", ball="none",
+            status="acknowledged", filed="2026-07-02")
+        _fm(self.box, "claim.md", id="x-13", ball="provider", status="open",
+            respond_by="2026-07-20", filed="2026-07-10")
+        self.assertEqual([t["id"] for t in self.scan() if t["ours"]], ["x-13"])
+
+    def test_same_day_order_is_causal_not_mtime(self):
+        """A reply is later than what it replies to, whatever the clock on the
+        files says — mtimes change on every clone (FOUNDATIONS #110)."""
+        ask = _fm(self.box, "brief.md", id="x-14", ball="provider", status="filed",
+                  respond_by="2026-07-01", filed="2026-07-01")
+        rep = _fm(self.box, "response-x.md", id="x-14-r", in_reply_to="x-14",
+                  ball="consumer", status="answered", filed="2026-07-01")
+        os.utime(rep, (1, 1_000_000)); os.utime(ask, (1, 2_000_000))   # reply looks OLDER
+        self.assertEqual([t for t in self.scan() if t["ours"]], [])
+
+    def test_answered_by_is_an_edge_forward(self):
+        os.makedirs(self.box, exist_ok=True)
+        with open(os.path.join(self.box, "brief.md"), "w") as fh:
+            fh.write("---\nid: x-15\nball: provider\nstatus: filed\nfiled: 2026-07-01\n"
+                     "respond-by: 2026-07-01\nanswered_by: response-x.md\n---\n")
+        _fm(self.box, "response-x.md", id="x-15-r", ball="consumer", status="answered",
+            filed="2026-07-03")
+        self.assertEqual([t for t in self.scan() if t["ours"]], [])
+
     def test_overdue_only_when_ball_is_ours(self):
         """A respond-by binds whoever HOLDS the ball. Once we answer and it
         moves, that date is satisfied — not breached. Without this guard every
