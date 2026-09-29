@@ -44,6 +44,7 @@ fast() {
   # A gate a CHANGELOG claims but no oracle invokes is a claim, not a gate.
   (cd kit && python3 -m unittest -q test_currency test_kit_sync) \
     && (cd kit/session && python3 -m unittest -q test_session test_batch_close) \
+    && (cd kit/hooks && python3 -m unittest -q test_oversight_hooks) \
     && (cd governor && python3 -m unittest -q test_retrofit_verify) \
     || { echo "verify[fast]: kit currency tests red" >&2; ok=1; }
   # Retired doctrine phrases must not survive in INSTALLING artifacts

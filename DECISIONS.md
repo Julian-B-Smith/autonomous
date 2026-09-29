@@ -237,6 +237,27 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+84. **Gates earn the authority to block, one at a time; O0.5's three gates
+    ship in observe** (2026-09-28, human ruling by poll, resolving Decision
+    78's open question (a)). Every gate starts by logging `would-deny`; after
+    it has fired correctly on a planted case and run a clean week, a PR with a
+    signed `GATE-CHANGE:` decision flips it to `deny` in the versioned
+    `kit/hooks/gate_modes.json`. Every block names the fact that lifts it, and
+    the agent can produce that fact itself (run verify, write the rationale),
+    so no block waits on the human; destructive git stays a hard permission
+    rule, outside this ladder. Built the same day, all in observe, all logging
+    to `~/.claude/fleet/events.jsonl` (outside every repo, beside the O1
+    snapshot): `hook-selftest.py` (SessionStart — a configured kit hook whose
+    script is gone is named once instead of silently doing nothing, the
+    install shape the Structural Caution packet caught in our own O0 hooks);
+    `config-guard.py` (ConfigChange — `disableAllHooks`, or a drop in kit
+    hooks); `gate-change.py` (PreToolUse — editing `./verify`, `.kit/`, hook
+    scripts, settings or thresholds without a `GATE-CHANGE:` line added to
+    DECISIONS in the working tree). Seven tests, wired into `./verify fast`.
+    Still open from Decision 78: (b) the bookkeeping denies and (c) unsigned
+    decisions vs push — proposed in chat 2026-09-27, not yet ruled.
+    GATE-CHANGE: this repo's `./verify` gains `test_oversight_hooks`, and
+    `kit/hooks/` gains three observe-mode gates.
 83. **A thread is a shared id OR an explicit reply edge; an explicit answer
     discharges the ball even when it says `ball: none`** (2026-09-28,
     integrator, FOUNDATIONS brief foundations-002). `ball_scan.scan_repo`
