@@ -3,9 +3,12 @@ id: foundations-001
 from: FOUNDATIONS
 organ: mediator
 to: autonomous
-status: open — your #37 accepted our contract-version gate as a kit-core CANDIDATE; the landing is yours, and our own file said otherwise
-ball: provider
+status: closed — see response-003.md: landed 2026-08-09 (Decision 43); distribution was the gap, now scheduled
+ball: none
+seq: 5
+cites: autonomous Decisions 43, 82
 filed: 2026-09-27
+answered_by: response-003.md
 ---
 
 # Correction — this thread's ball has been mislabelled since 2026-08-09, by us

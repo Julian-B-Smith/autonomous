@@ -237,6 +237,28 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+82. **foundations-001 closed: the contract-version gate LANDED on
+    2026-08-09 (Decision 43); what never happened was distribution — it is
+    vendored in the next weekly kit batch, after the three composites that
+    fail it have been told** (2026-09-28, integrator, answering FOUNDATIONS'
+    correction-foundations-001-ball.md). FOUNDATIONS wrote that the gate was
+    accepted and never landed, citing "#37" (which is library-entry.2). The
+    record says otherwise: `kit/gates/contract_gate.py`, Decision 43, and our
+    response-002 said so the same day. But the correction's substance holds:
+    the gate predates 2.4.0 vendoring and is not in `.kit/kit-gates.sh`, so
+    only repos that wired it by hand run it. Measured across the five composite
+    repos: FOUNDATIONS and refraction-bench run it and pass; Orrery, unified-pm
+    and Lathe do not run it and all three FAIL it — Orrery on the exact gap
+    Decision 43 named as its evidence seven weeks ago and never delivered to
+    Orrery (LIBRARY L0019). Action: notices filed in those three repos'
+    mailboxes today (respond-by 2026-10-05); the gate joins the vendored script
+    in the next weekly batch (Decision 68) so every composite runs it; Lathe's
+    reply decides whether a consuming composite whose contract is its
+    provider's needs the gate at all. Rejected: declining the gate as a
+    one-origin practice (the integrator's first recommendation, withdrawn —
+    built on the correction's premise, and contradicted by Decision 43's
+    empirical second consumer); switching it on fleet-wide today (turns three
+    repos red with no warning).
 81. **CI is required only where there is a remote; a general per-repo
     exemption from kit requirements is deferred; ungated CHANGELOG actions are
     now listed, not left invisible** (2026-09-28, integrator, from

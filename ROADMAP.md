@@ -384,6 +384,12 @@ before the mechanisms exist is a frame written about nothing.
   no-oracle-no-swarm rule: a repo without `./verify` cannot be gated on the
   thing being installed. *Gate:* the currency report + a batch plan the
   human ratifies.
+- **K6 — Distribute `contract_gate` via the vendored script** (Decision 82).
+  Next weekly kit batch after 2026-10-05: call it from `.kit/kit-gates.sh` so
+  every composite's `./verify` runs it (inert without `composite.contract`).
+  *Precondition:* Orrery, unified-pm and Lathe have answered their notices —
+  green, or a ruling that the gate is wrong for their shape. *Gate:* all five
+  composites run it and pass; a non-composite is untouched.
 - **K5 — Routines: daily/weekly fleet coordination.** *First target BUILT
   2026-09-26 (Decision 76):* the Threads Board and Session Board are
   re-rendered by `kit/session/boards.py` every 3 hours 9:00–21:00 local as the
