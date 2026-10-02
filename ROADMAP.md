@@ -127,6 +127,29 @@ not for cross-track sequencing):
   2026-09-15) and autonomous; consumed by HYPERSAW/horde as a flat parameter
   surface including routing coefficients (spec v0.2 §14). Registered per brief
   `sluice-001`; `registry.json` already sees it by the immediate-children rule.
+- **culture** (`~/Documents/Claude/culture/`, github.com/Julian-B-Smith/culture)
+  — a cellular automaton in which natures succeed one another: starts as
+  Conway's Life, and when the frontier produces a configuration more improbable
+  than its own history, a new Life-like rule is derived from it and contests
+  the torus. `libculture` (pure C++20 deterministic core), a headless trace CLI,
+  a native macOS viewer with ambient sonification; port-pinned to a JS reference
+  by bit-exact goldens. Spun up 2026-10-01 at kit 2.6.5; survey and
+  ratification by poll; rung 2; attended sessions only. Standalone (consumes
+  nothing, consumed by none; a FOUNDATIONS or Reverb Station brief is a later
+  recorded decision). Registered at the human's request 2026-10-02, no brief
+  filed; notice `autonomous-culture-intake` covers the charter's missing
+  Mailbox section.
+- **loupe** (`~/Documents/Claude/loupe/`, github.com/Julian-B-Smith/loupe;
+  working name) — makes a codebase legible: a deterministic crawler builds the
+  full dependency graph, agents turn it into a navigable visual map, and a
+  conservation check proves after every agent edit that no node or edge was
+  lost. Ships first as a Claude Code skill run in a target repo; first client
+  horde. Spun up 2026-10-01 at kit 2.6.5; survey and ratification by poll;
+  rung 2; supervised sessions. **Open:** its manifest has it write
+  `.loupe/current/` and a `loupe-history` branch inside horde's repo — who runs
+  those writes decides whether that is a resident using a tool or a visitor
+  writing in another tree (writes-stay-home); notices filed to both repos
+  2026-10-02. Registered at the human's request, no brief filed.
 - **MAW** (`~/Documents/Claude/synthetic-worlds/Maw/`, private:
   github.com/Julian-B-Smith/Maw) — multi-stage waveshaper / saturation /
   distortion module (three morphable stages, fourteen curves, five
