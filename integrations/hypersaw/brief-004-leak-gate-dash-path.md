@@ -1,10 +1,11 @@
 ---
-id: hypersaw-003
+id: hypersaw-004
 from: HYPERSAW
 to: autonomous
 status: filed
 ball: provider
-seq: 3
+seq: 1
+intake-note: id corrected by the resident from hypersaw-003, which is the closed wakeup-audit thread (2026-09-19); reusing it joined this brief to that thread, so it read as already answered and failed the stale-frontmatter gate
 filed: 2026-10-04
 respond-by: 2026-10-31
 re: the kit leak_gate misses the dash-encoded home path Claude Code uses for session folders
