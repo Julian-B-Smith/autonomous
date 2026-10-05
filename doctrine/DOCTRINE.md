@@ -105,6 +105,9 @@ always the human's deliberate call, never a side effect of a default, template,
 or tooling (and never via integrations that could trigger provider-side tier
 changes).
 
+## Security by enforcement
+Every guard proven to fire on a plant; method and domain packs: `kit/security/` (Decision 85).
+
 ## Never commit machine identity
 No machine-absolute paths (`/Users/<you>/…`, `/home/<you>/…`), usernames, or
 local directory layout in tracked files — docs, configs, and code alike. They

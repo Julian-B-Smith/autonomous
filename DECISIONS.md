@@ -237,6 +237,32 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+85. **The fleet adopts a security method: inventory trust boundaries,
+    catalogue vulnerability × surface pairs, guard each one with a guard proven
+    to fire, pentest independently — housed in `kit/security/`, domain packs
+    beside it, audio plugins first** (2026-10-05, human rulings by poll on
+    horde's brief hypersaw-005, all four as recommended). The human opened it
+    in horde: "I haven't nearly enforced enough security measures over the life
+    cycle of this build … I'm not an expert in this matter and will need you to
+    guide me to best practices", and asked for the method to live here for the
+    whole fleet. Rulings: (1) **location** — `kit/security/` holds the method,
+    catalogue schema, coverage gate, drill harness and templates; DOCTRINE gets
+    one line (it sat at 8,840 of 9,000 bytes); `governor/REPO-HYGIENE.md` stays
+    the leak and secrets spec. (2) **packs** — in `kit/security/packs/`,
+    versioned with the kit, the audit loop carrying a finding in one project up
+    to its pack. (3) **gate scope** — `security_coverage_check` is required for
+    repos that ship binaries to others or parse untrusted input, opt-in
+    elsewhere, and enters observe-first (Decision 84). (4) **pentest floor** —
+    independence means a different model family AND prompt lineage; a human
+    expert or public disclosure path before any binary ships to strangers;
+    triggered by change, with a quarterly floor. The method is adopted from
+    the brief nearly verbatim; its strongest idea is the one this repo keeps
+    relearning — every guard ships with a planted case that turns it red, and
+    re-runs it, because a guard can rot and stay green. Kit deliverables are
+    ROADMAP Phase S; horde runs the method first (its B446 P0) and reports
+    what it gets wrong. The audio pack seed is unverified until that pass.
+    Same day, from horde's brief hypersaw-004: kit 2.7.0, the leak gate sees
+    the dash-encoded home path (CHANGELOG).
 84. **Gates earn the authority to block, one at a time; O0.5's three gates
     ship in observe** (2026-09-28, human ruling by poll, resolving Decision
     78's open question (a)). Every gate starts by logging `would-deny`; after

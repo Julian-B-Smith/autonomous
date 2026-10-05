@@ -61,6 +61,14 @@ HIGH_PATTERNS = [
     # `C:\\Users\\` (how it lands in JSON/configs); a one-backslash pattern
     # misses the escaped form silently.
     (r"[A-Za-z]:\\+Users\\+[^\\]", "windows absolute home path"),
+    # Dash-encoded home path (kit 2.7.0, horde brief hypersaw-004): Claude Code
+    # names session/project folders by replacing every slash with a dash, so a
+    # quoted scratchpad path carries the username in a form the slash pattern
+    # cannot see. Until this, the scan caught horde's instance only through the
+    # literal-username pattern — which works only on the machine whose name it is.
+    # POSIX ERE, run through `git grep -E`: [[:space:]], never \s (L0002 —
+    # the first draft of this very line used \s and matched nothing).
+    (r"(^|[/[:space:](=])-(Users|home)-[^-/[:space:]]+-", "dash-encoded home path"),
     (username_pattern(USER), "local username"),
 ]
 INFO_PATTERNS = [
@@ -76,7 +84,7 @@ INFO_PATTERNS = [
 # (two detectors — bash gate, python scanner — that must stay consistent; when
 # one changes, change both. The gate once had %/@ that this lacked, so the
 # monitor false-flagged repos the gate passed.)
-_PLACEHOLDER = re.compile(r"/(Users|home)/[<${@%]|[A-Za-z]:\\+Users\\+[<${@%]")
+_PLACEHOLDER = re.compile(r"/(Users|home)/[<${@%]|[A-Za-z]:\\+Users\\+[<${@%]|-(Users|home)-[<${@%]")
 
 
 def _is_placeholder(line):
@@ -116,7 +124,7 @@ def scan_repo(path, private_names=None, public=None):
     excludes = _excludes(path)
     for pat, label in HIGH_PATTERNS:
         for line in _git_grep(path, pat, excludes):
-            if label == "absolute home path" and _is_placeholder(line):
+            if label in ("absolute home path", "dash-encoded home path") and _is_placeholder(line):
                 continue  # docs about the pattern, not a leak
             findings.append(("HIGH", label, line))
     for pat, label in INFO_PATTERNS:

@@ -3,10 +3,11 @@ id: hypersaw-005
 from: HYPERSAW
 to: autonomous
 thread: security-method
-status: filed
-ball: provider
+status: ratified — method adopted, four rulings; see response-007-security-method.md
+ball: HYPERSAW
 seq: 1
 filed: 2026-10-05
+answered_by: response-007-security-method.md
 respond-by: 2026-11-02
 cites: none
 re: a fleet method for software security (vulnerability catalogue, enforced guards, independent pentests), with an audio-plugin domain pack as its first instance

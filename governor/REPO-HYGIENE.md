@@ -52,7 +52,7 @@ Roughly in order of frequency:
 ### 2a. Identity (the shipped gate — always available, fail-closed by nature)
 
 The canonical check is `leak_gate` in every repo's `./verify`: `git grep` for
-`/(Users|home)/[^/]+/` and the live `$USER`, honoring `.leakcheck-allow` and
+`/(Users|home)/[^/]+/`, the dash-encoded `-(Users|home)-<name>-` form Claude Code uses for session folders (kit 2.7.0), and the live `$USER`, honoring `.leakcheck-allow` and
 filtering prose placeholders (`/Users/<user>/`, `$`, `%`, `@`, `{`). Pure git —
 no tool to be missing, so it can never silently skip. Runs locally (Stop hook)
 AND in CI. Fleet-wide: `governor/leak_scan.py` (+ cross-repo private-name check
