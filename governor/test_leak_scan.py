@@ -55,9 +55,37 @@ class TestUsernamePattern(unittest.TestCase):
         self.assertEqual(len(hits), 2)
 
     def test_pattern_is_posix_ere(self):
-        """git grep -E has no \b/\s/\d (L0002); the pattern must not lean on them."""
-        for dead in ("\b", "\s", "\d", "\w"):
+        r"""git grep -E has no \b/\s/\d (L0002); the pattern must not lean on them.
+
+        RAW strings, deliberately: as plain strings "\b" was a BACKSPACE byte,
+        so this assertion checked for the wrong character and could never fail
+        on a real \b — a dead guard against dead patterns (found 2026-10-05
+        from CI's SyntaxWarnings)."""
+        for dead in (r"\b", r"\s", r"\d", r"\w"):
             self.assertNotIn(dead, self.pat)
+        for pat, _ in leak_scan.HIGH_PATTERNS:
+            for dead in (r"\s", r"\d", r"\w"):
+                self.assertNotIn(dead, pat, f"dead ERE escape in HIGH pattern {pat!r}")
+
+
+class TestDashEncodedPath(unittest.TestCase):
+    """kit 2.7.0 (horde brief hypersaw-004): the scan sees the dash-encoded home
+    path by SHAPE, not only through the literal username of this machine.
+    Plants assembled so this file never trips a leak gate itself."""
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        subprocess.run(["git", "init", "-q", self.tmp], check=True)
+        real = "/tmp/c/" + "-" + "Users" + "-somebody-Documents-x/a"
+        with open(os.path.join(self.tmp, "t.md"), "w") as fh:
+            fh.write(f"one {real}\ntwo -" + "Users" + "-<user>-Documents\nthree a multi-home-office plan\n")
+        subprocess.run(["git", "-C", self.tmp, "add", "-A"], check=True)
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_shape_fires_placeholder_and_prose_do_not(self):
+        hits = [f for f in leak_scan.scan_repo(self.tmp) if f[1] == "dash-encoded home path"]
+        self.assertEqual([h[2].split(":")[1] for h in hits], ["1"])
 
 
 if __name__ == "__main__":

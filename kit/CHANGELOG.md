@@ -288,6 +288,33 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.7.0 — 2026-10-05 — the leak gate sees the dash-encoded home path
+
+Found by horde (brief hypersaw-004): two traces quoted the session scratchpad
+path, which Claude Code names by turning every slash of the project path into a
+dash, so the username sat in tracked text as `-Users-<name>-…`. The gate's
+slash patterns cannot see that form; horde's `./verify fast` passed, and the
+fleet scanner caught it only through the literal-username pattern, which works
+only on the machine whose name it is.
+
+- `kit/vendor/kit-gates.sh` `leak_gate` — a third alternative for the
+  dash-encoded form, anchored to a path or word boundary so hyphenated prose
+  does not match; the placeholder allowance extends to it (`-Users-<user>-`).
+  `governor/leak_scan.py` and `governor/algedonic.py` carry the same pattern
+  (three detectors, one policy).
+- `currency.py` plants a dash-form line beside the POSIX and Windows ones; new
+  requirement **leak_gate fires on dash-encoded identity**.
+- Measured before release: **zero** repos in the roster carry a dash-encoded
+  home path in tracked files (horde scrubbed its two in PR #920), so syncing
+  turns no repo red.
+- Also fixed: `governor/test_leak_scan.py`'s guard against `\b` in patterns was
+  written as a plain string, so it tested for a backspace byte and could never
+  fail; it is raw now and checks every HIGH pattern.
+- **Retrofit action:** `python3 <kit>/kit_sync.py <repo>` — mechanical, no
+  judgement: rewrites `.kit/kit-gates.sh` + `.kit/MANIFEST`. Commit both. A
+  repo with a hand-written verify must show its gate fires on the dash plant.
+- **Verify gate:** the new requirement, proven by the probe's plant.
+
 ## 2.6.5 — 2026-09-28 — CI is required only where there is a remote
 
 Found by resume-workshop's retrofit notice: a repo that is local-only by ratified

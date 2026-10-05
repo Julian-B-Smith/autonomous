@@ -2,9 +2,11 @@
 id: hypersaw-004
 from: HYPERSAW
 to: autonomous
-status: filed
-ball: provider
+status: shipped — kit 2.7.0; see response-006-leak-dash.md
+ball: none
 seq: 1
+cites: horde PR #920
+answered_by: response-006-leak-dash.md
 intake-note: id corrected by the resident from hypersaw-003, which is the closed wakeup-audit thread (2026-09-19); reusing it joined this brief to that thread, so it read as already answered and failed the stale-frontmatter gate
 filed: 2026-10-04
 respond-by: 2026-10-31

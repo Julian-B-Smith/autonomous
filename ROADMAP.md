@@ -65,7 +65,7 @@ consume Track A standards and feed back only through their group scope's
 knowledge-loop harvest — listed so the governor and audits know they exist,
 not for cross-track sequencing):
 
-- **HYPERSAW** (`~/Documents/Claude/synthetic-worlds/HYPERSAW/`, public:
+- **HYPERSAW / horde** (`~/Documents/Claude/synthetic-worlds/horde/` — folder renamed from `HYPERSAW` 2026-10-04; correspondent name unchanged — public:
   github.com/Julian-B-Smith/horde) — coupled-oscillator synthesizer plugin
   (CLAP/VST3). Spun up 2026-07-17 via /spinup; manifest ratified same day;
   rung 2; CI mirrors the Stop hook (`verify fast` only — audio Layer-E is
@@ -464,6 +464,17 @@ before the mechanisms exist is a frame written about nothing.
     artifact boards and `fleet-boards` retire.
   - **O5 — HALT**, armed only by the human per repo. Deferred until O2's
     noise is measured.
+
+- **Phase S — Security by enforcement (Decision 85; method:
+  `kit/security/README.md`).** S0: catalogue schema + `SECURITY.md` and
+  `SECURE-PATTERNS.md` templates. S1: `security_coverage_check`, observe-first,
+  required for repos that ship binaries or parse untrusted input. S2:
+  guard-drill harness (re-run every guard's planted control on a schedule).
+  S3: supply-chain and repository-settings checklists; pentest runbook.
+  *First instance:* horde B446 P0 — surface inventory, verified research,
+  catalogue, guards with controls — whose findings shape S0–S2 before they
+  freeze. *Gate:* horde runs `security_coverage_check` and the drill harness
+  in its own `./verify` and reports in thread hypersaw-005.
 
 **Also opened by this directive, NOT in Phase K:**
 - **The file-restructuring sweep is back on the table** — the human's own

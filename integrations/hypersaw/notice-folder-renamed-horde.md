@@ -2,10 +2,11 @@
 id: hypersaw-notice-folder-renamed-horde
 from: HYPERSAW
 to: autonomous
-status: filed
+status: closed — ROADMAP path updated; registry.json resolves by folder rule, no entry to change
 ball: none
 filed: 2026-10-04
 cites: none
+closed: 2026-10-05
 ---
 
 > **Origin.** The horde (HYPERSAW) lead session, 2026-10-04, after the human renamed the local

@@ -43,8 +43,9 @@ ORG = os.environ.get("ALGEDONIC_ORG", "Julian-B-Smith")
 
 # Kept byte-identical in spirit to the leak_gate / leak_scan patterns: POSIX
 # ERE, both identity shapes, `\\+` for the escaped Windows form.
-_LEAK = r'/(Users|home)/[^/]+/|[A-Za-z]:\\+Users\\+[^\\]'
-_PLACEHOLDER = r'/(Users|home)/[<$@{%]|[A-Za-z]:\\+Users\\+[<$@{%]'
+# Third alternative: the dash-encoded home path (kit 2.7.0, hypersaw-004).
+_LEAK = r'/(Users|home)/[^/]+/|[A-Za-z]:\\+Users\\+[^\\]|(^|[/[:space:](=])-(Users|home)-[^-/[:space:]]+-'
+_PLACEHOLDER = r'/(Users|home)/[<$@{%]|[A-Za-z]:\\+Users\\+[<$@{%]|-(Users|home)-[<$@{%]'
 
 
 def _gh(*args):

@@ -69,6 +69,9 @@ def changelog_entries(kit_dir):
 TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4", "2.6.5"}  # 2.3.0/2.4.0 are NOT
 
 REQUIREMENTS = {
+    # 2.7.0: the gate must also fire on the dash-encoded home path (hypersaw-004).
+    # A vendored repo meets it by syncing; a hand-written verify must prove it.
+    "2.7.0": [("leak_gate fires on dash-encoded identity", "verify", "gate-fires:dash")],
     "2.6.5": [],   # tool-only — CI required only where there is a remote (resume-workshop)
     "2.6.4": [],   # tool-only — session hooks open/close the registry record (O0, Decision 77)
     "2.6.3": [],   # tool-only — dirty hook path filter; /wakeup routine-audit step (HYPERSAW)
@@ -267,12 +270,12 @@ def _gate_report(repo):
     # it would only re-derive what the checksum already settled — and probing is
     # what writes files into a foreign working tree.
     if _vendored_current(repo):
-        return {"posix": True, "windows": True, "plant_invisible": True}
+        return {"posix": True, "windows": True, "dash": True, "plant_invisible": True}
     if os.environ.get("KIT_CURRENCY_NESTED"):
-        return {"posix": False, "windows": False, "plant_invisible": False}
+        return {"posix": False, "windows": False, "dash": False, "plant_invisible": False}
     v = os.path.join(repo, "verify")
     if not (os.path.isfile(v) and os.access(v, os.X_OK)):
-        return {"posix": False, "windows": False, "plant_invisible": False}
+        return {"posix": False, "windows": False, "dash": False, "plant_invisible": False}
     try:
         with open(v, "rb") as fh:
             vsum = hashlib.sha1(fh.read()).hexdigest()
@@ -283,12 +286,12 @@ def _gate_report(repo):
         return _GATE_CACHE[ck]
     name = f".kit-currency-plant-{os.getpid()}.md"
     path = os.path.join(repo, name)
-    result = {"posix": False, "windows": False, "plant_invisible": False}
+    result = {"posix": False, "windows": False, "dash": False, "plant_invisible": False}
     _sweep_stale_plants(repo)
     snap = _harness_snapshot(repo)
     try:
         with open(path, "w", encoding="utf-8") as fh:
-            fh.write(f"posix {_POSIX_PLANT}\nwindows {_WIN_PLANT}\n")
+            fh.write(f"posix {_POSIX_PLANT}\nwindows {_WIN_PLANT}\ndash {_DASH_PLANT}\n")
         # KIT_LEAK_PLANT: kit >=2.3.0 gates hide plant files from every run
         # EXCEPT the one that owns them, so our probe cannot red a concurrent
         # session's verify on this tree (mind-lathe, 2026-08-18). Older gates
@@ -308,6 +311,7 @@ def _gate_report(repo):
         r2 = subprocess.run(verify_cmd(), cwd=repo, capture_output=True,
                             text=True, timeout=120, env=env2)
         result = {"posix": f"{name}:1:" in out, "windows": f"{name}:2:" in out,
+                  "dash": f"{name}:3:" in out,
                   "plant_invisible": name not in (r2.stderr + r2.stdout)}
     except (OSError, subprocess.TimeoutExpired):
         pass
@@ -375,6 +379,8 @@ def _gate_fires(repo, plant_lines):
 # the currency checker itself the leak (Decision 55's test fixture lesson).
 _POSIX_PLANT = "/" + "Users" + "/someone/secret"
 _WIN_PLANT = "C:" + "\\" + "Users" + "\\someone\\secret"
+# Dash-encoded (Claude Code session/project folder names), kit 2.7.0.
+_DASH_PLANT = "/tmp/x/" + "-" + "Users" + "-someone-Documents-secret"
 
 
 def _present(repo, target, kind):
@@ -383,6 +389,8 @@ def _present(repo, target, kind):
         return _gate_report(repo)["posix"]
     if kind == "gate-fires:windows":
         return _gate_report(repo)["windows"]
+    if kind == "gate-fires:dash":
+        return _gate_report(repo)["dash"]
     if kind == "plant-invisible":
         return _gate_report(repo)["plant_invisible"]
     if kind == "vendored":

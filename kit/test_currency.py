@@ -207,6 +207,29 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class TestVendoredGateDashForm(unittest.TestCase):
+    """kit 2.7.0 (horde brief hypersaw-004): the vendored leak_gate catches the
+    dash-encoded home path Claude Code uses for session folders, and lets the
+    placeholder form and ordinary hyphenated prose through. Plants are
+    ASSEMBLED: a literal here would trip every leak gate that greps this file."""
+    def test_dash_form_fires_placeholder_and_prose_do_not(self):
+        tmp = tempfile.mkdtemp()
+        try:
+            subprocess.run(["git", "init", "-q", tmp], check=True)
+            real = "/tmp/c/" + "-" + "Users" + "-alice-Documents-x/a"
+            _touch(tmp, "plant.md", f"one {real}\ntwo -" + "Users" + "-<user>-Documents\n"
+                   "three a multi-home-office plan\n")
+            r = subprocess.run(["bash", "-c", ". " + os.path.join(_KIT, "vendor", "kit-gates.sh")
+                                + "; HARNESS_DIR=.harness; leak_gate"],
+                               cwd=tmp, capture_output=True, text=True)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("plant.md:1:", r.stderr)
+            self.assertNotIn("plant.md:2:", r.stderr)
+            self.assertNotIn("plant.md:3:", r.stderr)
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 class TestProbeLeavesHarnessAlone(unittest.TestCase):
     """juce-rag 2026-08-18: the gate-fires probe runs the target's ./verify,
     whose record() overwrote .harness/last-verify.json with the probe's exit 1
