@@ -164,6 +164,31 @@ not for cross-track sequencing):
   autonomous and, from M1, FOUNDATIONS; consumed by HYPERSAW/horde as FX-C
   (notice `maw-notice-spinup` in their tree). Registered per brief `maw-001`;
   `registry.json` already sees it by the immediate-children rule.
+- **Bulwark** (`~/Documents/Claude/synthetic-worlds/Bulwark/`, formerly
+  Dynamite; github.com/Julian-B-Smith/bulwark; created public, ruled private
+  for now on 2026-10-08, Decision 88, and the flip is the human's) is horde's
+  dynamics family: one detector-and-gain core with three faces (Compressor,
+  OTT, Limiter/clipper), hosted by horde as FX-rack modules. The FX design
+  lab's compressor is its R&D twin and, after a one-time audit, its port
+  reference. No plugin of its own. Spun up 2026-10-02 via /spinup on kit
+  2.6.5 (survey by poll), with leak, private-name, structure, manifest and
+  lab-determinism gates. Rung 2; CI mirrors the Stop hook (`fast` only).
+  Consumes autonomous and, from M1, FOUNDATIONS; consumed by horde (notice
+  `dynamite-notice-spinup` in their tree). Registered per brief
+  `dynamite-001`; `registry.json` sees it by the immediate-children rule.
+- **Scape** (`~/Documents/Claude/synthetic-worlds/Scape/`;
+  github.com/Julian-B-Smith/scape; created public by the human's choice,
+  Scape D-001; ruled private for now on 2026-10-08, Decision 88, and the
+  flip is the human's) is horde's reverb: pre-delay, early reflections,
+  diffusion, an FDN with damping, and swarm/Kuramoto delay modulation. It
+  was spun out of horde like MAW and Sluice. It is a C++ core behind a
+  FOUNDATIONS-shaped module ABI (M1) plus a headless harness. The browser lab
+  is the R&D twin and, after the Phase A audit-fix gate, the parity
+  reference. No plugin of its own. Spun up 2026-10-02 via /spinup on kit
+  2.6.5, with leak, private-name and determinism-smoke gates. Rung 2; CI
+  mirrors the Stop hook (`fast` only). Consumes autonomous and, from M1,
+  FOUNDATIONS; consumed by horde as an FX-rack module (notice
+  `scape-notice-spinup` in their tree). Registered per brief `scape-001`.
 - **opportunity-scanner** (`~/Documents/Claude/opportunity-scanner/`,
   no remote yet — local-only) — marketplace-surface scanner: a Markdown+YAML
   registry/signals/trials corpus as the durable product, with disposable
@@ -410,9 +435,13 @@ before the mechanisms exist is a frame written about nothing.
 - **K6 — Distribute `contract_gate` via the vendored script** (Decision 82).
   Next weekly kit batch after 2026-10-05: call it from `.kit/kit-gates.sh` so
   every composite's `./verify` runs it (inert without `composite.contract`).
-  *Precondition:* Orrery, unified-pm and Lathe have answered their notices —
-  green, or a ruling that the gate is wrong for their shape. *Gate:* all five
-  composites run it and pass; a non-composite is untouched.
+  *BUILT 2026-10-08 as kit 2.8.0, observing (Decision 86):* `contract_check`
+  rides `kit_integrity`, reports and never blocks. It ships in the batch on or
+  after 2026-10-12. The three notices went unanswered because those repos are
+  dormant, so the precondition moved to the deny flip. *Gate to deny:* six
+  composites run it, Orrery and unified-pm add a version line, Lathe answers
+  whether a prose `composite.contract` naming a provider's file is a shape the
+  gate must accept, a clean week, then a signed GATE-CHANGE.
 - **K5 — Routines: daily/weekly fleet coordination.** *First target BUILT
   2026-09-26 (Decision 76):* the Threads Board and Session Board are
   re-rendered by `kit/session/boards.py` every 3 hours 9:00–21:00 local as the
@@ -434,7 +463,9 @@ before the mechanisms exist is a frame written about nothing.
 - **Phase O — Session oversight (Decisions 77, 78; designs:
   `briefs/2026-09-26-session-oversight.proposal.md`,
   `briefs/2026-09-26-structural-caution.md` + `.response.md`).** One plan.
-  Authority is report-only until Decision 78's open question (a) is ruled.
+  Authority: gates earn deny one by one (Decision 84). Bookkeeping never
+  blocks, and unsigned decisions notify rather than block (Decision 87); O1
+  counts `ruled-by:` markers.
   - **O0 — hands-off boundaries.** *BUILT 2026-09-26, kit 2.6.4; hooks
     installed and stale rows swept the same day.* *Gate:* a week in which
     every normally exited session closed its own record.

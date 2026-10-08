@@ -69,6 +69,9 @@ def changelog_entries(kit_dir):
 TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4", "2.6.5"}  # 2.3.0/2.4.0 are NOT
 
 REQUIREMENTS = {
+    # 2.8.0 (K6, Decision 86): composites' contract check rides kit_integrity,
+    # observe-first. Syncing meets it; nothing else is asked of a repo.
+    "2.8.0": [("contract check vendored (observe)", ".kit/kit-gates.sh", "contains:contract_check")],
     # 2.7.0: the gate must also fire on the dash-encoded home path (hypersaw-004).
     # A vendored repo meets it by syncing; a hand-written verify must prove it.
     "2.7.0": [("leak_gate fires on dash-encoded identity", "verify", "gate-fires:dash")],

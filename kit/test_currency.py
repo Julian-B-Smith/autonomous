@@ -230,6 +230,56 @@ class TestVendoredGateDashForm(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+class TestVendoredContractCheck(unittest.TestCase):
+    """K6 (Decision 86): the contract check rides kit_integrity so every
+    ./verify runs it without being edited. Observe mode reports and never
+    changes the exit code; deny mode is the plant that proves it can fire."""
+    def _run(self, files, mode=None):
+        tmp = tempfile.mkdtemp()
+        try:
+            subprocess.run(["git", "init", "-q", tmp], check=True)
+            sys.path.insert(0, _KIT)
+            import kit_sync
+            kit_sync.install(tmp)
+            for name, body in files.items():
+                _touch(tmp, name, body)
+            env = dict(os.environ)
+            env.pop("KIT_CONTRACT_MODE", None)
+            if mode:
+                env["KIT_CONTRACT_MODE"] = mode
+            r = subprocess.run(["bash", "-c", ". .kit/kit-gates.sh; kit_integrity"],
+                               cwd=tmp, capture_output=True, text=True, env=env)
+            return r.returncode, r.stderr
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    _UNVERSIONED = {"project.manifest.json": '{"composite": {"contract": "C.md"}}',
+                    "C.md": "# contract\n"}
+
+    def test_observe_reports_but_passes(self):
+        rc, err = self._run(self._UNVERSIONED)
+        self.assertEqual(rc, 0)
+        self.assertIn("contract (observe: would fail", err)
+
+    def test_deny_fires_on_the_plant(self):
+        rc, err = self._run(self._UNVERSIONED, mode="deny")
+        self.assertEqual(rc, 1)
+        self.assertIn("C.md declares no contract-version", err)
+
+    def test_missing_contract_file_is_named(self):
+        rc, err = self._run({"project.manifest.json": '{"composite": {"contract": "gone.md"}}'},
+                            mode="deny")
+        self.assertEqual(rc, 1)
+        self.assertIn("gone.md", err)
+
+    def test_versioned_contract_and_non_composite_are_silent(self):
+        for files in ({"project.manifest.json": '{"composite": {"contract": "C.md"}}',
+                       "C.md": "contract-version: 1.2.0\n"},
+                      {"project.manifest.json": '{"name": "x"}'}, {}):
+            rc, err = self._run(files, mode="deny")
+            self.assertEqual((rc, "contract" in err), (0, False), files)
+
+
 class TestProbeLeavesHarnessAlone(unittest.TestCase):
     """juce-rag 2026-08-18: the gate-fires probe runs the target's ./verify,
     whose record() overwrote .harness/last-verify.json with the probe's exit 1

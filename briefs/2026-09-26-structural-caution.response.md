@@ -4,7 +4,7 @@ from: autonomous (resident integrator)
 to: julian
 ball: julian
 date: 2026-09-26
-status: triaged; unified plan ratified (Decision 78); conflict (a) ruled — gates earn blocking per gate (Decision 84); (b), (c) open
+status: triaged; unified plan ratified (Decision 78); conflict (a) ruled — gates earn blocking per gate (Decision 84); (b), (c) ruled 2026-10-08 (Decision 87); all five conflicts ruled; §5 questions remain
 answers: 2026-09-26-structural-caution.md
 ---
 

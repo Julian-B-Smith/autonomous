@@ -119,5 +119,48 @@ kit_integrity() {
     got=$(shasum -a 256 ".kit/$f" 2>/dev/null | cut -d' ' -f1)
     [ "$got" = "$want" ] || { echo "verify: .kit/$f was edited — it is kit-owned. Re-run kit_sync.py" >&2; bad=1; }
   done < "$man"
+  contract_check || bad=1
   return "$bad"
+}
+
+# --- contract check (kit-core, K6 — Decisions 43, 82, 86) -------------------
+# A composite's contract must declare `contract-version:`; without it no
+# version event exists and consumers have nothing to pin (INTEGRATIONS rule 4).
+# Same question as kit/gates/contract_gate.py, which predates vendoring and so
+# only ran where a repo wired it by hand. WHY IT RIDES kit_integrity: every
+# ./verify already calls that by name, and a new top-level function would run
+# only after 70 project-owned verify files were edited to call it — the
+# distribution gap K6 exists to close. Inert without `composite.contract`.
+# MODE: every new gate enters observing (Decision 84) — it prints the line it
+# would fail on and never changes the exit code. It moves to `deny` only by a
+# kit release carrying a signed GATE-CHANGE decision. Python is passed with
+# -c, not a heredoc: macOS bash 3.2 misparses heredocs inside $( ).
+KIT_CONTRACT_MODE="${KIT_CONTRACT_MODE:-observe}"
+_KIT_CONTRACT_PY='
+import json, os, re, sys
+try:
+    mf = json.load(open("project.manifest.json", encoding="utf-8"))
+except Exception:
+    sys.exit(0)
+c = (mf.get("composite") or {}).get("contract")
+if not c:
+    sys.exit(0)
+if not os.path.isfile(c):
+    print("manifest names " + c + " as the contract, but that file does not exist")
+    sys.exit(1)
+if not re.search(r"^contract-version:\s*\S+", open(c, encoding="utf-8", errors="ignore").read(), re.M):
+    print(c + " declares no contract-version: line, so consumers have nothing to pin (INTEGRATIONS rule 4)")
+    sys.exit(1)
+'
+contract_check() {
+  [ -f project.manifest.json ] || return 0
+  command -v python3 >/dev/null 2>&1 || { echo "verify: contract check skipped (no python3)" >&2; return 0; }
+  local msg
+  msg=$(python3 -c "$_KIT_CONTRACT_PY") && return 0
+  if [ "$KIT_CONTRACT_MODE" = deny ]; then
+    echo "verify: contract: $msg" >&2
+    return 1
+  fi
+  echo "verify: contract (observe: would fail, not blocking): $msg" >&2
+  return 0
 }

@@ -237,6 +237,55 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+88. **Bulwark (formerly Dynamite) and Scape registered; both ruled private
+    for now** (2026-10-08, human ruling via poll, answering briefs
+    dynamite-001 and scape-001). Both are horde FX libraries spun out like
+    Sluice and MAW, and both were created PUBLIC with no LICENSE. VISIBILITY.md
+    makes novel music devices private by default and says a public repo must
+    carry a license. Asked to choose between keeping them public under a
+    license and flipping them, the human said "we should probably switch both
+    temporarily to private". The word *temporarily* is recorded: this is a
+    hold that keeps the patent and licensing options open, not a final call.
+    The flip itself is the human's act (charter). Dynamite was renamed Bulwark
+    before this reply. The thread keeps its id `dynamite-001`, because ids are
+    frozen, and its file moves to `integrations/bulwark/`, where Bulwark's
+    next brief will land.
+    ruled-by: human (poll 2026-10-08)
+87. **Structural Caution conflicts (b) and (c) ruled: no bookkeeping denies,
+    and unsigned decisions notify rather than block** (2026-10-08, human
+    rulings via poll, as recommended in
+    `briefs/2026-09-26-structural-caution.response.md` §3). **(b)** Both
+    proposed denies are dropped: blocking the first write until a wake-up
+    marker exists, and blocking writes while another session is open. O0's
+    hooks write and close session records themselves, so an open record now
+    means a crash, and a crash elsewhere must never block work here. Stale
+    records accrue to the dashboard and are told to the next session in that
+    repo. This keeps the 2026-08-17 rule that a session never blocks on
+    bookkeeping. **(c)** `git push` is never denied, because pushing is how
+    work reaches review (Decision 66). Instead every decision from this one
+    on carries a machine-readable last line, `ruled-by: human (…)` or
+    `ruled-by: integrator (…)`. O1 counts the ones with no human ruling, and
+    past the threshold O2 notifies the human. Entries before Decision 86 are
+    not backfilled: their prose says who ruled, and a guessed marker is worse
+    than none. All five Structural Caution conflicts are now ruled.
+    ruled-by: human (poll 2026-10-08)
+86. **K6 ships observing: the contract check rides `kit_integrity` in every
+    repo, and reports instead of blocking until it earns deny** (2026-10-08,
+    human ruling via poll; kit 2.8.0). Decision 82 made K6 wait for Orrery,
+    Lathe and unified-pm to answer their notices, due 2026-10-05. None has
+    had a session since 2026-08-28, so the silence is dormancy, not
+    disagreement. Shipping in observe mode, the Decision 84 path, removes the
+    wait without letting the gate fail a repo nobody is looking at. Each repo
+    sees the would-fail line the next time a session runs verify there. The
+    check lives inside `kit_integrity` because every verify already calls it
+    by name, and a new function would need 70 project-owned files edited.
+    Measured at release: 3 of 6 composites pass. Orrery and unified-pm lack a
+    version line. **Lathe's `composite.contract` is a prose sentence naming
+    Orrery's file, not a path.** That is exactly the "the gate is wrong for
+    our shape" answer Decision 82 invited, so the flip to deny waits for
+    Lathe's answer as well as a clean week. Ships in the weekly batch on or
+    after 2026-10-12 (Decision 68).
+    ruled-by: human (poll 2026-10-08)
 85. **The fleet adopts a security method: inventory trust boundaries,
     catalogue vulnerability × surface pairs, guard each one with a guard proven
     to fire, pentest independently — housed in `kit/security/`, domain packs
