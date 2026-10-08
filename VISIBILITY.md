@@ -35,6 +35,10 @@ might be worth patenting, public code forecloses the strongest options.
   *Suggested license at eventual release:* source-available/non-commercial
   (e.g. PolyForm Noncommercial) or all-rights-reserved until a commercial
   decision — NOT permissive, or you hand competitors the product.
+  *Created public, ruled private for now (Decision 88, 2026-10-08):*
+  **Bulwark** (formerly Dynamite) and **Scape**, horde's dynamics and reverb
+  libraries, created public with no license. The human ruled "temporarily",
+  so this is a hold, not a final call. Pick the license when they go public.
   *Kept PUBLIC deliberately (resume showcase, human decision 2026-07-13):*
   **Tonality**, **Audiology**.
 

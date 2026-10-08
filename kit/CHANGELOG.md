@@ -288,6 +288,29 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.8.0 — 2026-10-08 — the contract check reaches every composite (observe)
+
+K6 (Decisions 43, 82, 86). `kit/gates/contract_gate.py` landed on 2026-08-09
+but predates vendoring, so it ran only where a repo wired it by hand. Two of
+six composites did.
+
+- `kit/vendor/kit-gates.sh`: new `contract_check`, called from inside
+  `kit_integrity`. That is the one kit function every `./verify` already calls,
+  so no project file needs editing. It is inert unless the manifest has
+  `composite.contract`.
+- **Observe mode** (Decision 84): a failing contract prints
+  `verify: contract (observe: would fail, not blocking): …` and the exit code
+  is unchanged. `KIT_CONTRACT_MODE=deny` is how the tests prove it fires. The
+  default flips only by a kit release carrying a signed GATE-CHANGE.
+- Measured before release, across 6 composites: FOUNDATIONS, refraction-bench
+  and endless-trance pass. Orrery and unified-pm lack a `contract-version:`
+  line. Lathe's `composite.contract` is a prose sentence, not a path. That is
+  a shape question for Lathe, and the reason this ships observing.
+- **Retrofit action:** `python3 <kit>/kit_sync.py <repo>` (mechanical; commit
+  `.kit/`). Ships in the weekly batch on or after 2026-10-12 (Decision 68).
+- **Verify gate:** `kit/test_currency.py` `TestVendoredContractCheck`. If the
+  call is unwired, 3 of its 4 tests fail.
+
 ## 2.7.0 — 2026-10-05 — the leak gate sees the dash-encoded home path
 
 Found by horde (brief hypersaw-004): two traces quoted the session scratchpad
