@@ -257,6 +257,11 @@ def run_tables(bodies):
                     e.update(KIT_FLEET_DIR=fleet, **env)
                     if tmpdir:
                         e["TMPDIR"] = tmpdir
+                    # From a subdirectory the gate is invoked by RELATIVE path,
+                    # as a shim with no CLAUDE_PROJECT_DIR would: the first
+                    # version resolved its own location after changing directory.
+                    if cwd:
+                        hook = os.path.relpath(hook, os.path.join(repo, cwd))
                     r = subprocess.run(["bash", hook], cwd=os.path.join(repo, cwd), input=json.dumps(inp),
                                        capture_output=True, text=True, env=e)
                     events, log = [], os.path.join(fleet, "events.jsonl")

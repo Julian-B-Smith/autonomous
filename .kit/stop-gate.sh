@@ -40,6 +40,11 @@ INPUT=$(cat)
 ACTIVE=$(printf '%s' "$INPUT" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("stop_hook_active",False))' 2>/dev/null || echo "False")
 [ "$ACTIVE" = "True" ] && exit 0
 
+# Where this file lives, resolved BEFORE the `cd` below: invoked by a relative
+# path from a subdirectory, the path stops resolving once the directory
+# changes, and the gate could not find kit-gates.sh beside it.
+SELF_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)
+
 # A hook starts in the session's current directory, which may be a
 # subdirectory after a `cd`. Every path below is relative to the repo root:
 # from elsewhere the record was not found (a RED record passed) and only that
@@ -76,7 +81,7 @@ fi
 
 # --- test 3: is this the tree verify judged? --------------------------------
 [ -n "$TOP" ] || exit 0                                         # not a repository
-. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/kit-gates.sh"
+. "$SELF_DIR/kit-gates.sh"
 
 CUR="" BASE_TREE="" MAN=""
 cleanup() { [ -n "$MAN" ] && rm -f "$MAN"; }
