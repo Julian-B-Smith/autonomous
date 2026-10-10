@@ -485,9 +485,9 @@ before the mechanisms exist is a frame written about nothing.
     never verified in this checkout, a green run on Linux, then a signed
     GATE-CHANGE. *Next, in order:* the **decision
     queue** (one file per repo, a third board); then the **run ledger**, after
-    horde pilots the receipt. *Open, the human's:* whether a closing gate
-    becomes a baseline requirement (50 of 82 roster repos have none); and the
-    scope of this machine's `gh` token, which now sees 32 repositories, so
+    horde pilots the receipt. *Ruled (Decision 92):* a repo with a `./verify`
+    must carry the gate, wired; 20 repos read behind until retrofit. *Open,
+    the human's:* the scope of this machine's `gh` token, which now sees 32 repositories, so
     local sweeps and kit-sync PR batches cover only those. *Carried to O1:*
     a close-time check for gate files changed through the shell.
   - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's

@@ -112,5 +112,11 @@ To move:
 
 PR #1029 can merge first as an interim. Step 2 replaces it either way.
 
+**Two rulings after your brief** (autonomous Decision 92). A repo with a
+`./verify` must now carry the closing gate, wired to its Stop hook: 20 roster
+repos had a verify and no gate at all. You already meet it once step 2 is
+done. And the clean-branch rule above stays as you built it until a week of
+observe data is in.
+
 **Ball: HYPERSAW**, for a pilot report: any block you judge false, and what
 the fingerprint costs on a tree your size. It took about 0.05s here.

@@ -320,8 +320,13 @@ here on the template before the fix.
 - `harness/.claude/hooks/stop-gate.sh` is now a shim that runs the kit's gate.
   A missing gate blocks once; it does not fail open.
 - Measured at release: 32 roster repos carry a Stop gate (30 identical to the
-  template, 2 drifted) and **50 carry none**. This version does not change
-  that; the requirement is n/a where there is no gate to migrate.
+  template, 2 drifted) and 50 carry none. Of those 50, **20 have a `./verify`
+  and no gate**, so nothing stopped a session there ending on unverified
+  work. **New requirement (Decision 92): a repo with a `./verify` must carry
+  the closing gate, wired to its Stop hook.** Those 20 read BEHIND until
+  retrofit. The other 30 have no `./verify`, are already behind on 2.0.0, and
+  read n/a here. This repo was one of the 20 and gains the gate in this
+  release.
 
 **A green record did not say what ran.**
 
@@ -345,8 +350,11 @@ here on the template before the fix.
   the branch its work merges into).
 
 - **Retrofit action:** (1) `python3 <kit>/kit_sync.py <repo>`, commit `.kit/`.
-  (2) If the repo has `.claude/hooks/stop-gate.sh`, replace it with the kit's
-  shim (`harness/.claude/hooks/stop-gate.sh`), keeping any local mode line.
+  (2) Put the kit's shim at `.claude/hooks/stop-gate.sh` (copy
+  `harness/.claude/hooks/stop-gate.sh`, executable), replacing any local copy
+  of the gate, and make sure `.claude/settings.json` runs it on `Stop` and
+  `SubagentStop` (see `harness/.claude/settings.json`). A repo that never had
+  the harness hooks adds only those two entries; nothing else is required.
   (3) Optional: wrap gates in `./verify` with `gate`, with a floor on any gate
   that loops over a corpus. Ships in the weekly batch on or after 2026-10-12.
 - **Verify gate:** `kit/test_stop_gate.py`: a 41-row verdict table run against

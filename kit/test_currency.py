@@ -60,6 +60,8 @@ def _full_baseline(root):
     # 2.9.0: a full baseline carries the Stop shim, so its requirement is MET
     # here and the n/a list in the tests below stays about what each test means.
     _touch(root, ".claude/hooks/stop-gate.sh", 'exec bash "$CLAUDE_PROJECT_DIR/.kit/stop-gate.sh"\n')
+    _touch(root, ".claude/settings.json", json.dumps({"hooks": {"Stop": [{"hooks": [
+        {"type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.sh"}]}]}}))
     _touch(root, ".gitattributes", "* text=auto eol=lf")
     # 2.5.0 asks whether .gitattributes is TRACKED, not merely on disk — an
     # untracked one reaches no clone and no CI. The fixture must therefore
@@ -111,13 +113,14 @@ class TestReport(unittest.TestCase):
         # requirements is unmet, so entries with no requirements of their own
         # never appear — "behind by everything" now means every version that
         # actually asks for something.
-        # 2.9.0 is the exception by design: its one requirement is about a Stop
-        # hook an empty repo does not carry, so it reads n/a (listed below),
-        # not behind. Any other version turning n/a here should fail this test.
+        # 2.9.0 is the exception by design: its requirement applies to a repo
+        # WITH a ./verify, which an empty repo lacks (it is already behind on
+        # 2.0.0 for that), so it reads n/a (listed below), not behind twice.
+        # Any other version turning n/a here should fail this test.
         expected = [v for v, reqs in currency.REQUIREMENTS.items()
                     if reqs and v not in currency.TOOL_ONLY and v != "2.9.0"]
         self.assertEqual(len(r["behind"]), len(expected))
-        self.assertEqual(r.get("not_applicable"), ["stop gate delegates to the kit's"])
+        self.assertEqual(r.get("not_applicable"), ["closing gate wired to the kit's"])
         # the baseline entry is the one with real requirements
         base = next(b for b in r["behind"] if b["version"] == "2.0.0")
         self.assertEqual(len(base["missing"]), len(currency.REQUIREMENTS["2.0.0"]))
@@ -237,22 +240,30 @@ class TestVendoredGateDashForm(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
-class TestStopGateDelegation(unittest.TestCase):
-    """2.9.0: a repo that carries a Stop hook must hand it to the kit's gate; a
-    repo with none has nothing to migrate and reads n/a, never a silent pass."""
-    def test_three_states(self):
-        with tempfile.TemporaryDirectory() as root:
-            kind, f = "delegates-if-present:.kit/stop-gate.sh", ".claude/hooks/stop-gate.sh"
-            self.assertEqual(currency._present(root, f, kind), "na")
-            _touch(root, f, "#!/usr/bin/env bash\n[ -f .harness/dirty ] && exit 2\nexit 0\n")
-            self.assertIs(currency._present(root, f, kind), False)      # its own copy: behind
-            _touch(root, f, 'exec bash "$CLAUDE_PROJECT_DIR/.kit/stop-gate.sh"\n')
-            self.assertIs(currency._present(root, f, kind), True)
+class TestClosingGateRequirement(unittest.TestCase):
+    """2.9.0 (Decision 92): a repo with a ./verify must carry the kit's closing
+    gate, wired. Each state below was a real repo on the day it shipped."""
+    SHIM = 'exec bash "$CLAUDE_PROJECT_DIR/.kit/stop-gate.sh"\n'
+    WIRED = json.dumps({"hooks": {"Stop": [{"matcher": "", "hooks": [
+        {"type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.sh"}]}]}})
 
-    def test_the_template_shim_satisfies_it(self):
-        shim = os.path.join(_KIT, "..", "harness")
-        self.assertIs(currency._present(shim, ".claude/hooks/stop-gate.sh",
-                                        "delegates-if-present:.kit/stop-gate.sh"), True)
+    def test_states(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.assertEqual(currency._closing_gate(root), "na")          # no ./verify at all
+            _touch(root, "verify", "#!/bin/sh\n", exe=True)
+            self.assertIs(currency._closing_gate(root), False)            # verify, no gate (20 repos)
+            _touch(root, ".claude/hooks/stop-gate.sh", "[ -f .harness/dirty ] && exit 2\nexit 0\n")
+            _touch(root, ".claude/settings.json", self.WIRED)
+            self.assertIs(currency._closing_gate(root), False)            # its own copy (32 repos)
+            _touch(root, ".claude/hooks/stop-gate.sh", self.SHIM)
+            self.assertIs(currency._closing_gate(root), True)
+            _touch(root, ".claude/settings.json", '{"hooks": {}}')
+            self.assertIs(currency._closing_gate(root), False)            # a shim nothing invokes
+            _touch(root, ".claude/settings.json", "{not json")
+            self.assertIs(currency._closing_gate(root), False)
+
+    def test_the_template_satisfies_it(self):
+        self.assertIs(currency._closing_gate(os.path.join(_KIT, "..", "harness")), True)
 
 
 class TestVendoredContractCheck(unittest.TestCase):

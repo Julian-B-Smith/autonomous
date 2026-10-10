@@ -69,12 +69,13 @@ def changelog_entries(kit_dir):
 TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4", "2.6.5"}  # 2.3.0/2.4.0 are NOT
 
 REQUIREMENTS = {
-    # 2.9.0 (hypersaw-009): the closing gate is the kit's. A repo that carries a
-    # Stop hook must delegate it; a repo with none is n/a HERE, because the
-    # baseline never required one (50 of 82 roster repos had none at release,
-    # an open question for the human, not something this row may decide).
-    "2.9.0": [("stop gate delegates to the kit's", ".claude/hooks/stop-gate.sh",
-               "delegates-if-present:.kit/stop-gate.sh")],
+    # 2.9.0 (hypersaw-009; Decisions 89, 92): the closing gate is the kit's,
+    # and a repo with a `./verify` must carry it, WIRED. The baseline never
+    # required one: at release 20 roster repos had a verify and no gate at all,
+    # so nothing stopped a session there ending on unverified work. A repo with
+    # no `./verify` has nothing for the gate to ask for and reads n/a here; it
+    # is already behind on 2.0.0.
+    "2.9.0": [("closing gate wired to the kit's", None, "closing-gate")],
     # 2.8.0 (K6, Decision 86): composites' contract check rides kit_integrity,
     # observe-first. Syncing meets it; nothing else is asked of a repo.
     "2.8.0": [("contract check vendored (observe)", ".kit/kit-gates.sh", "contains:contract_check")],
@@ -392,6 +393,29 @@ _WIN_PLANT = "C:" + "\\" + "Users" + "\\someone\\secret"
 _DASH_PLANT = "/tmp/x/" + "-" + "Users" + "-someone-Documents-secret"
 
 
+def _closing_gate(repo):
+    """True only if the Stop hook REACHES the kit's gate: the project shim
+    hands off to `.kit/stop-gate.sh` AND `.claude/settings.json` runs that shim
+    on Stop. Two checks because the file existing is not the file working (the
+    2.5.0 lesson): a shim nothing invokes is a gate that never runs. "na" for a
+    repo with no executable `./verify`, which has nothing for the gate to
+    demand; listed and counted, never a silent pass."""
+    v = os.path.join(repo, "verify")
+    if not (os.path.isfile(v) and os.access(v, os.X_OK)):
+        return "na"
+    try:
+        with open(os.path.join(repo, ".claude", "hooks", "stop-gate.sh"),
+                  encoding="utf-8", errors="ignore") as fh:
+            if ".kit/stop-gate.sh" not in fh.read():
+                return False            # its own copy of the gate: the drift 2.9.0 ends
+        with open(os.path.join(repo, ".claude", "settings.json"), encoding="utf-8") as fh:
+            stop = (json.load(fh).get("hooks") or {}).get("Stop") or []
+        return any("stop-gate.sh" in (h.get("command") or "")
+                   for g in stop for h in (g.get("hooks") or []))
+    except (OSError, ValueError, AttributeError):
+        return False
+
+
 def _present(repo, target, kind):
     import subprocess
     if kind == "gate-fires:posix":
@@ -404,6 +428,8 @@ def _present(repo, target, kind):
         return _gate_report(repo)["plant_invisible"]
     if kind == "vendored":
         return _vendored_current(repo)
+    if kind == "closing-gate":
+        return _closing_gate(repo)
     p = os.path.join(repo, target)
     if kind == "file":
         return os.path.isfile(p)
@@ -438,12 +464,6 @@ def _present(repo, target, kind):
                               capture_output=True).returncode == 0
     if kind == "exec":
         return os.path.isfile(p) and os.access(p, os.X_OK)
-    if kind.startswith("delegates-if-present:"):
-        # Rendered "na" when the file is absent: an honest "nothing to migrate",
-        # listed and counted, never a silent pass (same rule as ci-if-remote).
-        if not os.path.isfile(p):
-            return "na"
-        kind = "contains:" + kind.split(":", 1)[1]
     if kind.startswith("contains:"):
         needle = kind.split(":", 1)[1]
         try:
