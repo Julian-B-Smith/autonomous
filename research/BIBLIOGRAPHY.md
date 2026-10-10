@@ -601,3 +601,87 @@ as unreliable and not to be cited.
 - IETF drafts, Agent Identity Protocol / AgentID Protocol, both maturing,
   expiring ~2026-09-15/17 — https://datatracker.ietf.org/doc/draft-aip-agent-identity-protocol/
   , https://datatracker.ietf.org/doc/draft-gudlab-agentid-protocol/
+
+---
+
+## 2026-10-10 — Landscape audit (monthly, fourth run)
+
+Report: [proposals/2026-10-10.proposal.md](proposals/2026-10-10.proposal.md).
+Six fan-out agents scoped to "what changed since 2026-09-10." arxiv.org and
+alphaxiv.org failed DNS in every agent; most primary lab/institute hosts were
+unreachable. Entries are search-snippet-sourced unless marked (primary).
+
+**Multi-agent coordination:**
+- Claude Code CHANGELOG.md, v2.1.288–2.1.296 (primary, undated) —
+  https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md
+- arXiv:2609.25396, "Passes Alone, Fails Together" (ID) — https://arxiv.org/pdf/2609.25396
+- arXiv:2609.04630, "Software Engineering in the Agent Era" (title only) — https://arxiv.org/pdf/2609.04630
+- arXiv:2607.04697, agent PR merge-conflict rates — https://arxiv.org/html/2607.04697v2
+- arXiv:2605.20563, STORM — https://arxiv.org/html/2605.20563
+- arXiv:2606.15376, CoAgent — https://arxiv.org/html/2606.15376v1
+- arXiv:2604.03551, AgenticFlict — https://arxiv.org/pdf/2604.03551
+- Bernstein "ten agents one release" — https://bernstein.readthedocs.io/en/latest/blog/ten-agents-one-release/
+- Overstory — https://github.com/hazat/overstory
+- Augment roundup of open-source orchestrators — https://augmentcode.com/tools/open-source-agent-orchestrators
+- Gas City v1.0 report — https://phemex.com/news/article/gas-city-v10-launched-as-versatile-orchestration-sdk-75711
+
+**Agent memory & knowledge loops:**
+- arXiv:2609.13889, PMPA — https://arxiv.org/pdf/2609.13889
+- arXiv:2609.22818, "The Price of Safety" — https://arxiv.org/pdf/2609.22818
+- arXiv:2609.33013, "The Epistemics of Agent Memory" — https://arxiv.org/pdf/2609.33013
+- arXiv:2607.27080, MemSecBench — https://arxiv.org/pdf/2607.27080
+- arXiv:2607.14651, MemPoison — https://arxiv.org/pdf/2607.14651
+- arXiv:2606.04329, "From Untrusted Input to Trusted Memory" — https://arxiv.org/pdf/2606.04329
+- arXiv:2606.22030, provenance-capped belief updating — https://arxiv.org/pdf/2606.22030
+- arXiv:2608.30177, 2607.10526, 2608.00303, 2605.03228 (titles/snippets only)
+- A-MemGuard (ICML 2026 poster) — https://icml.cc/virtual/2026/poster/61006
+- "Auto Dream" claim (unverified, do not cite) — https://agentconn.com/blog/ai-agent-memory-auto-dream-context-files-2026
+- AGENTS.md vs skills secondary summary — https://mcp.directory/blog/claude-md-vs-agents-md-vs-skills-2026
+
+**Governance, halting, and agentic safety:**
+- CSO Online, Anthropic 4th containment incident — https://www.csoonline.com/article/4221160/anthropic-finds-evidence-of-a-fourth-ai-escaping-from-containment.html
+- InfoWorld, same — https://www.infoworld.com/article/4221240/anthropic-finds-evidence-of-a-fourth-ai-escaping-from-containment-3.html
+- CSA research note, AI evaluation escapes — https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-evaluation-escapes-systemic-governance/
+- Redwood HF incident page (fetch blocked) — https://www.redwoodresearch.org/research/hugging-face-incident
+- Implicator, METR spoofed-logs coverage — https://www.implicator.ai/metr-700-openai-agents-hugging-face-spoofed-logs/
+- Decrypt — https://decrypt.co/376680
+- Infosecurity Magazine, OpenAI tightens safeguards — https://www.infosecurity-magazine.com/news/openai-tightens-ai-safeguards/
+- Stibbe analysis — https://www.stibbe.com/publications-and-insights/when-the-software-acts-on-its-own-what-the-openai-v-hugging-face-incident
+- CNBC, Nvidia Open Agent Safety Platform, 2026-09-28 — https://www.cnbc.com/2026/09/28/nvidia-releases.html
+- Forkast, AI Kill Switch Act — https://forkast.news/aisis-autonomous-deception-findings-give-the-ai-kill-switch-act-its-first-real-evidence
+- Daily Sabah, UK rejects kill switch — https://www.dailysabah.com/business/tech/uk-rejects-ai-kill-switch-plan-despite-rogue-model-fears
+- GovAI on RSP v3.0 — https://governance.ai/analysis/anthropics-rsp-v3-0-how-it-works-whats-changed-and-some-reflections
+- OpenAI Preparedness Framework page — https://openai.com/index/updating-our-preparedness-framework/
+- DeepMind Frontier Safety Framework — https://deepmind.google/frontier-safety/
+- Cuatrecasas, EU AI Omnibus — https://www.cuatrecasas.com/en/spain/intellectual-property/art/key-aspects-ai-omnibus-regulation
+- arXiv:2609.10630, 2607.26314 (titles only)
+
+**Verification and CI-as-arbiter:**
+- Cursor, reward hacking in coding benchmarks — https://cursor.com/blog/reward-hacking-coding-benchmarks
+- Digital Applied, reward hacking rates (2026-09-17) — https://www.digitalapplied.com/blog/ai-coding-agent-reward-hacking-rates-published-data
+- MIRI, State of Reward Hacking, Sept 2026 — https://intelligence.org/wp-content/uploads/The-State-of-Reward-Hacking-in-AI-September-2026.pdf
+- Tianpan, flaky tests poison agent loops (2026-07-02) — https://tianpan.co/blog/2026-07-02-flaky-tests-poison-agent-loops
+- UiPath FlakeWarden — https://forum.uipath.com/t/flakewarden-agentic-flaky-test-triage-on-test-cloud-agenthack-2026-winner/5770067
+- arXiv:2607.23002 adversarial test hardening — https://arxiv.org/pdf/2607.23002
+- arXiv:2607.03223 round-trip mutation testing; 2602.08146 AdverTest
+- SWE-Mutation (ACL 2026 Findings) — https://preview.aclanthology.org/ingest-acl/2026.findings-acl.1976/
+- AI-to-AI Code Reviews, ESEM 2026 — https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ESEM.2026.75
+- arXiv:2606.08960, 2604.17596, 2605.12673, 2511.21654, 2605.21384 (background)
+
+**Context engineering and harness design:**
+- Claude Code CHANGELOG.md v2.1.281–2.1.296 (primary, undated) — same URL as above
+- arXiv:2602.11988, "Evaluating AGENTS.md" — https://arxiv.org/html/2602.11988v1
+- arXiv:2601.20404 — https://arxiv.org/html/2601.20404v2
+- arXiv:2606.23525 Self-Compacting Agents; 2605.23296 Parallel Context Compaction — https://www.alphaxiv.org/abs/2605.23296
+- Governance Decay re-surfaced — https://codex.danielvaughan.com/2026/07/03/governance-decay-self-compacting-agents-context-compaction-safety-constraints-codex-cli-constraint-pinning/
+- WorkOS compaction settings — https://workos.com/blog/coding-agent-context-window-compaction-settings
+- Anthropic engineering index (no post found after 2026-04) — https://www.anthropic.com/engineering
+
+**Open-scope:**
+- Akamai, new MCP specification — https://www.akamai.com/blog/security-research/new-mcp-specification-security-teams-must-prepare
+- SiliconANGLE on the same — https://siliconangle.com/2026/06/25/new-mcp-specification-kills-old-risks-opens-fresh-attack-surfaces-akamai-finds/
+- OX Security MCP advisory — https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/
+- CSA MCP security note — https://labs.cloudsecurityalliance.org/research/csa-research-note-mcp-security-crisis-20260504-csa-styled/
+- arXiv:2607.05744, Unicode TAG concealment in MCP — https://arxiv.org/pdf/2607.05744
+- CSA, China agent regulation — https://labs.cloudsecurityalliance.org/research/csa-research-note-china-ai-agent-regulation-enforcement-2026/
+- Obsidian Security, agent regulations 2026 — https://www.obsidiansecurity.com/academy/ai-agent-regulations-2026
