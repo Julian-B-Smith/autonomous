@@ -87,6 +87,21 @@ def main():
     if held:
         bits.append("ball on us: " + ", ".join(t["id"] for t in held))
 
+    # 1b. What this repo's last GREEN verify did not do (kit 2.9.0). A skipped
+    #     gate or an empty corpus leaves the same green record as a full run,
+    #     and a reader nobody invokes makes nothing visible (review, 2026-10-10),
+    #     so the brief says it. Silent when every wrapped gate ran.
+    try:
+        sys.path.insert(0, os.path.join(AUT, "governor"))
+        import receipts
+        with open(os.path.join(root, ".harness", "last-verify.json"), encoding="utf-8") as fh:
+            short = receipts.findings(json.load(fh))
+        if short:
+            bits.append("last green verify: " + "; ".join(short[:4])
+                        + (f" (+{len(short) - 4} more)" if len(short) > 4 else ""))
+    except Exception:
+        pass
+
     # 2. Mailbox writes a visitor left here that a RESIDENT must commit.
     try:
         unc = ball_scan.untracked_mailbox_files(root)

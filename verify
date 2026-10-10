@@ -23,18 +23,30 @@ fi
 fast() {
   # ---- Layer-0: seconds. CI-blocking. --------------------------------------
   local ok=0
+  # Every suite below is wrapped in `gate` (kit 2.9.0) so the record says what
+  # RAN and how many tests it judged, and each carries a floor: a suite that
+  # silently collects fewer tests than this (a renamed file, a broken import
+  # that discovery swallows) is red, not green-on-less. Raise a floor when you
+  # add tests; lowering one is a gate change and needs its GATE-CHANGE line.
+  _ut() { # _ut <dir> <unittest args…>: run a suite, report its count
+    local d="$1" out rc; shift
+    out=$(cd "$d" && python3 -m unittest "$@" 2>&1); rc=$?
+    printf '%s\n' "$out"
+    printf '%s\n' "$out" | sed -n 's/^Ran \([0-9][0-9]*\) test.*/KIT-GATE cases=\1/p'
+    return "$rc"
+  }
   # 0. Privacy: no machine-absolute paths committed
-  kit_integrity || ok=1   # kit-owned files match .kit/MANIFEST
-  leak_gate || ok=1
+  gate kit_integrity kit_integrity || ok=1   # kit-owned files match .kit/MANIFEST
+  gate leak leak_gate || ok=1
   # 1. Sweep primitive + governor monitor unit tests
-  (cd kit/sweep && python3 -m unittest discover -q .) \
+  gate --min-cases 22 sweep-tests _ut kit/sweep discover -q . \
     || { echo "verify[fast]: sweep tests red" >&2; ok=1; }
-  (cd governor && python3 -m unittest discover -q .) \
+  gate --min-cases 92 governor-tests _ut governor discover -q . \
     || { echo "verify[fast]: governor tests red" >&2; ok=1; }
   # kit/gates ships checks that OTHER repos wire into their own verify. If its
   # tests are not discovered here, a broken kit gate propagates outward silently
   # — the shipped-untested case is worse than the untested-local one.
-  (cd kit/gates && python3 -m unittest discover -q .) \
+  gate --min-cases 33 kit-gate-tests _ut kit/gates discover -q . \
     || { echo "verify[fast]: kit gate tests red" >&2; ok=1; }
   # kit/currency.py drives every /retrofit in the fleet; its REQUIREMENTS
   # table must stay in lockstep with CHANGELOG.md (a test pins that).
@@ -42,11 +54,13 @@ fast() {
   # actually RUN here. It did not, for three commits — and thinning
   # harness/verify quietly broke three of its cases while this stayed green.
   # A gate a CHANGELOG claims but no oracle invokes is a claim, not a gate.
-  (cd kit && python3 -m unittest -q test_currency test_kit_sync) \
-    && (cd kit/session && python3 -m unittest -q test_session test_batch_close) \
-    && (cd kit/hooks && python3 -m unittest -q test_oversight_hooks) \
-    && (cd governor && python3 -m unittest -q test_retrofit_verify) \
-    || { echo "verify[fast]: kit currency tests red" >&2; ok=1; }
+  # test_stop_gate and test_receipt are 2.9.0's gates, named the same way.
+  gate --min-cases 59 kit-tests _ut kit -q test_currency test_kit_sync test_stop_gate test_receipt \
+    || { echo "verify[fast]: kit tests red" >&2; ok=1; }
+  gate --min-cases 38 session-tests _ut kit/session -q test_session test_batch_close \
+    || { echo "verify[fast]: session tests red" >&2; ok=1; }
+  gate --min-cases 8 hook-tests _ut kit/hooks -q test_oversight_hooks \
+    || { echo "verify[fast]: oversight hook tests red" >&2; ok=1; }
   # Retired doctrine phrases must not survive in INSTALLING artifacts
   # (hypersaw-002): a rule corrected where it is READ but left in the charter
   # and CHANGELOG action that COPY it is correct where nobody looks and wrong

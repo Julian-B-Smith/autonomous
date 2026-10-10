@@ -31,7 +31,9 @@ _ROOT = os.path.join(_HERE, "..")
 
 # Vendored set: kit-OWNED mechanism only. A file listed here is machine-owned
 # in every consuming repo — never hand-edited there, never project-specific.
-VENDORED = ["kit-gates.sh"]
+# stop-gate.sh joined in 2.9.0 (horde brief hypersaw-009): the closing gate was
+# project-owned and so could only be fixed one repo at a time.
+VENDORED = ["kit-gates.sh", "stop-gate.sh"]
 
 
 def _sha(path):

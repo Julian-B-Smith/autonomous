@@ -237,6 +237,98 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+91. **horde's P0 security report adopted into the method: its catalogue
+    shape is the schema's starting point, and four lessons become rules**
+    (2026-10-10, integrator, under Decision 85, which said to build the schema
+    from what the first instance needed; report hypersaw-008). Adopted in
+    `kit/security/README.md`: (1) a gate counts as coverage only if `./verify`
+    or a CI workflow is PARSED and found to invoke it. horde's lead, writing
+    from memory, counted a validator only a human runs. (2) An `approved:`
+    field cannot tell a human from an agent, and the method now says so. The
+    decision queue (Decision 90) is where an approval an agent could not have
+    typed would come from. (3) Parallel lanes need an integration pass that
+    runs every new gate against every other lane's output. (4) A committed
+    generated report breaks parallel PRs: generate on demand, or stack the
+    producers and check where a stacked PR landed. The landing check
+    (Decision 90) is that check, automated. horde's fifth item, a finding
+    about inbound mailboxes, arrives as its own brief.
+    ruled-by: integrator (under Decision 85)
+90. **Observability is built as extensions of what exists, in this order:
+    verify receipt and landing check now, decision queue next, run ledger
+    after horde pilots the first two** (2026-10-10, human rulings via poll,
+    answering brief hypersaw-010). horde listed a week of events nobody could
+    see at the time: stalled agents, a PR merged to a dead branch, CI green on
+    47 of 74 oracles, a parity gate green on an empty corpus. **Built (kit
+    2.9.0):** the receipt (`gate`, `record`, `governor/receipts.py`, a line in
+    the session brief) and the landing check in `algedonic.py`. A "fewer cases
+    than the run before" comparison was built and removed the same day: a drop
+    showed for one run and then became the new normal. The floor
+    (`gate --min-cases`) does that job and fails the run. **Ruled for the queue:** one small
+    committed file per repo lists what is waiting on the human, each item with
+    a recommendation, the date raised and what it blocks. An item leaves the
+    file when ruled, and DECISIONS.md stays a record of rulings only. A third
+    board renders the roster's items oldest first. **Run ledger, deferred:**
+    the hooks reference (read 2026-10-10, not tested here) documents agent id,
+    type, model and duration on SubagentStart, SubagentStop and the Agent
+    tool's PostToolUse. It documents NO run-total token count on any hook, and
+    none at all for a background launch, so cost per dispatch has to come from
+    Claude Code's telemetry export. A brief's hash is a position, not content,
+    and is acceptable in the central log. Scope globs are not a field anywhere
+    and would need a convention horde should propose. **Found while building:**
+    the landing check's first run flagged 49 lines, 46 of them noise. Asking
+    whether the PR's HEAD reached the default branch (horde's wording) and
+    printing one line per branch left 3. And the `gh` credential on this
+    machine is now a fine-grained token that sees 32 repositories, so every
+    local `gh`-based sweep and any kit-sync PR batch covers only those. That
+    scope is the human's to set.
+    GATE-CHANGE: `kit/vendor/kit-gates.sh` (`gate`, `record` writes `tree` and
+    `gates`) and this repo's `verify` (suites wrapped, each with a floor).
+    Both add checks; neither removes one.
+    ruled-by: human (poll 2026-10-10)
+89. **The closing gate becomes kit-owned and judges the tree by an exact
+    fingerprint; the new test observes fleet-wide for a week while horde
+    blocks** (2026-10-10, human rulings via poll, answering brief
+    hypersaw-009; kit 2.9.0). horde found that the Stop gate could be passed
+    without `./verify` ever running, and it reproduced here on the template: a
+    shell edit with no record, and a shell commit after a green record, both
+    exit 0. The gate trusted a marker only two tools set. **Kit-owned**,
+    because it was a project-owned copy in 32 repos, the shape the leak gate
+    had before it drifted into ten implementations. **Fingerprint, not file
+    times:** horde's fix compares modification times and cannot see a
+    deletion. `record` now stores a hash of the working tree as content and
+    the gate recomputes it, so deletions are seen, an edit reverted to the
+    verified bytes passes, and verify-then-commit passes. **Observe first**
+    (Decision 84): repos with no remote or a non-`main` default branch are
+    where a false block is likeliest, and the table covers both, but a table
+    is not a week of real sessions. horde opts in to deny through its shim.
+    **Answer to horde's question 3:** yes, `gate-change.py` covers that hook.
+    The log shows horde's edit as a would-deny at 11:46Z, and under the rule a
+    GATE-CHANGE line was due. Nothing blocked because the gate observes.
+    **Reviewed before commit** by a fresh-context critic (same lineage, so
+    one more read and not an independent one). It reproduced four defects that
+    would have made deny wrong: a stale record blocked a session that had only
+    pulled; a record made invalid by `cases=007` read as green; the gate ran
+    from the session's current directory; a failed `git add` fingerprinted the
+    old index. All four are fixed, the table grew from 25 rows to 41, and
+    eleven mutations of the gate each fail it. One rule is kept as horde built
+    it and is open for the human: a clean, pushed branch that was never
+    verified in this checkout blocks. Each observe event records `clean` and
+    `pushed`, so that rule can be judged on a week of data.
+    **Three things this exposed, none fixed here.** (a) `gate-change.py` has
+    the same blind spot it was asked about: it fires on Edit and Write only,
+    so a shell edit to a gate file is not logged. The close-time check
+    belongs in O1 (gate files changed since the session opened, with no
+    GATE-CHANGE line). (b) **50 of 82 roster repos carry no closing gate at
+    all**, and currency never required one. Whether it becomes a baseline
+    requirement is the human's call. (c) 30 of the first week's 46
+    gate-change events were filed under worktree folder names; fixed here
+    (`fleet_events.repo_name`), and most of the 46 were ordinary additions to
+    `verify`, which is evidence for that gate's own flip review.
+    GATE-CHANGE: `kit/vendor/stop-gate.sh` (new), `harness/.claude/hooks/
+    stop-gate.sh` (now a shim to it), `kit/hooks/gate-change.py` and
+    `fleet_events.py` (repo label only). The two existing Stop tests keep
+    their authority; the third is added in observe.
+    ruled-by: human (poll 2026-10-10)
 88. **Bulwark (formerly Dynamite) and Scape registered; both ruled private
     for now** (2026-10-08, human ruling via poll, answering briefs
     dynamite-001 and scape-001). Both are horde FX libraries spun out like

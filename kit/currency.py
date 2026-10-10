@@ -69,6 +69,12 @@ def changelog_entries(kit_dir):
 TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4", "2.6.5"}  # 2.3.0/2.4.0 are NOT
 
 REQUIREMENTS = {
+    # 2.9.0 (hypersaw-009): the closing gate is the kit's. A repo that carries a
+    # Stop hook must delegate it; a repo with none is n/a HERE, because the
+    # baseline never required one (50 of 82 roster repos had none at release,
+    # an open question for the human, not something this row may decide).
+    "2.9.0": [("stop gate delegates to the kit's", ".claude/hooks/stop-gate.sh",
+               "delegates-if-present:.kit/stop-gate.sh")],
     # 2.8.0 (K6, Decision 86): composites' contract check rides kit_integrity,
     # observe-first. Syncing meets it; nothing else is asked of a repo.
     "2.8.0": [("contract check vendored (observe)", ".kit/kit-gates.sh", "contains:contract_check")],
@@ -432,6 +438,12 @@ def _present(repo, target, kind):
                               capture_output=True).returncode == 0
     if kind == "exec":
         return os.path.isfile(p) and os.access(p, os.X_OK)
+    if kind.startswith("delegates-if-present:"):
+        # Rendered "na" when the file is absent: an honest "nothing to migrate",
+        # listed and counted, never a silent pass (same rule as ci-if-remote).
+        if not os.path.isfile(p):
+            return "na"
+        kind = "contains:" + kind.split(":", 1)[1]
     if kind.startswith("contains:"):
         needle = kind.split(":", 1)[1]
         try:
@@ -518,10 +530,10 @@ def render(r):
         for c in b["checks"]:
             mark = "-" if c["present"] == "na" else ("x" if c["present"] else " ")
             lines.append(f"      [{mark}] {c['label']}"
-                         + (" — n/a (no remote)" if c["present"] == "na" else ""))
+                         + (" — n/a (nothing here for it to act on)" if c["present"] == "na" else ""))
     if r.get("not_applicable"):
         lines.append("  n/a here: " + ", ".join(r["not_applicable"])
-                     + " (no remote — listed so the gap stays visible)")
+                     + " (nothing here for it to act on — listed so the gap stays visible)")
     if r["current"] and not r.get("declared_but_missing"):
         lines.append("  nothing to do — re-running the retrofit is a no-op")
     return "\n".join(lines)

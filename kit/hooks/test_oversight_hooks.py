@@ -78,5 +78,21 @@ class OversightHooks(unittest.TestCase):
                          {"hook-selftest": "observe", "config-guard": "observe", "gate-change": "observe"})
 
 
+
+class TestRepoName(unittest.TestCase):
+    def test_a_worktree_is_filed_under_its_main_repo(self):
+        import fleet_events as fe
+        with tempfile.TemporaryDirectory() as root:
+            main = os.path.join(os.path.realpath(root), "myrepo")
+            os.makedirs(main)
+            git = ["git", "-C", main, "-c", "user.email=t@example.invalid", "-c", "user.name=t"]
+            subprocess.run(["git", "init", "-q", main], check=True)
+            subprocess.run(git + ["commit", "-q", "--allow-empty", "-m", "i"], check=True)
+            wt = os.path.join(os.path.realpath(root), "agent-abc123")
+            subprocess.run(git + ["worktree", "add", "-q", wt], check=True, capture_output=True)
+            self.assertEqual(fe.repo_name(wt), "myrepo")
+            self.assertEqual(fe.repo_name(main), "myrepo")
+            self.assertEqual(fe.repo_name(os.path.join(root, "not-a-repo")), "not-a-repo")
+
 if __name__ == "__main__":
     unittest.main()

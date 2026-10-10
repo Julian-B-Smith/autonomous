@@ -475,6 +475,21 @@ before the mechanisms exist is a frame written about nothing.
     `kit/hooks/gate_modes.json`. *Gate:* each fires on its plant (tested); a
     week of real events in the log; then each gate is flipped or retuned by
     its own signed GATE-CHANGE.
+  - **O0.6 — the record says what ran, and the closing gate judges the tree**
+    *(BUILT 2026-10-10, kit 2.9.0, Decisions 89 and 90; from horde briefs
+    hypersaw-009 and -010).* Kit-owned `.kit/stop-gate.sh` with a tree
+    fingerprint, observing; verify receipt (`gate`, `governor/receipts.py`);
+    landing check in the weekly alarm. *Gate to deny for the tree test:* a
+    week of `stop-gate` would-deny events read with their `clean` and `pushed`
+    fields, horde's pilot report, the human's ruling on a clean pushed branch
+    never verified in this checkout, a green run on Linux, then a signed
+    GATE-CHANGE. *Next, in order:* the **decision
+    queue** (one file per repo, a third board); then the **run ledger**, after
+    horde pilots the receipt. *Open, the human's:* whether a closing gate
+    becomes a baseline requirement (50 of 82 roster repos have none); and the
+    scope of this machine's `gh` token, which now sees 32 repositories, so
+    local sweeps and kit-sync PR batches cover only those. *Carried to O1:*
+    a close-time check for gate files changed through the shell.
   - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's
     eleven sync checks plus the packet's budget table, as interrupt/accrue
     findings; versioned thresholds file per project + global default;
@@ -505,7 +520,11 @@ before the mechanisms exist is a frame written about nothing.
   *First instance:* horde B446 P0 — surface inventory, verified research,
   catalogue, guards with controls — whose findings shape S0–S2 before they
   freeze. *Gate:* horde runs `security_coverage_check` and the drill harness
-  in its own `./verify` and reports in thread hypersaw-005.
+  in its own `./verify` and reports in thread hypersaw-005. *P0 reported
+  2026-10-08 (hypersaw-008; Decision 91):* S0's schema starts from horde's
+  catalogue row (`id`, `title`, `status`, `gates`, `gaps`, `tracked_by`,
+  `expires`, `tripwire`) and S1 must PARSE `./verify` and CI to decide whether
+  a gate exists.
 
 **Also opened by this directive, NOT in Phase K:**
 - **The file-restructuring sweep is back on the table** — the human's own

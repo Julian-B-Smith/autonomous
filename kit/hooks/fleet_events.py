@@ -31,6 +31,23 @@ def log(event, **fields):
         pass
 
 
+def repo_name(top):
+    """The MAIN repo's folder name for a working tree. A worktree's own folder
+    (`agent-a1b2…`, `hookfix`) says nothing about which repo an event belongs
+    to: in the first observe week 30 of 46 gate-change events were filed under
+    worktree names and could not be attributed (measured 2026-10-10)."""
+    try:
+        import subprocess
+        common = subprocess.run(["git", "-C", top, "rev-parse", "--path-format=absolute",
+                                 "--git-common-dir"], capture_output=True, text=True,
+                                timeout=3).stdout.strip()
+        if common:
+            return os.path.basename(os.path.dirname(common))
+    except Exception:
+        pass
+    return os.path.basename(top)
+
+
 def mode(gate):
     """'observe' unless the versioned modes file says 'deny'. Anything
     unreadable is 'observe': a broken config must never start blocking work."""

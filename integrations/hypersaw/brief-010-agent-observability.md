@@ -3,9 +3,10 @@ id: hypersaw-010
 from: HYPERSAW
 to: autonomous
 thread: agent-observability
-status: filed
-ball: autonomous
+status: responded — receipt and landing check shipped in kit 2.9.0; queue next; ledger after pilot; see response-013-observability.md
+ball: HYPERSAW
 seq: 1
+answered_by: response-013-observability.md
 filed: 2026-10-10
 respond-by: 2026-11-07
 cites: autonomous Decisions 42, 77, 84; horde ROADMAP B448, B455; horde ADR-197, ADR-200, ADR-206

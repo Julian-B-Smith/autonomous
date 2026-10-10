@@ -288,6 +288,81 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.9.0 — 2026-10-10 — the closing gate judges the tree, and the record says what ran
+
+Two findings from horde (briefs hypersaw-009 and hypersaw-010), Decisions 89
+and 90.
+
+**The closing gate could be passed without `./verify` running.** It trusted a
+marker only the Edit and Write tools set, and a record a new worktree does not
+have. A shell edit, or a commit made after a green record, passed. Reproduced
+here on the template before the fix.
+
+- `kit/vendor/stop-gate.sh` is new and **kit-owned** (vendored, checksummed).
+  It was project-owned, which is why this could only be fixed one repo at a
+  time. It keeps the two old tests and adds a third: is this the tree verify
+  judged?
+- `kit-gates.sh` `kit_tree_hash`: one hash for the working tree as content
+  (tracked, new-and-not-ignored, deletions). `record` stores it as `tree`; the
+  gate recomputes and compares. Verify-then-commit still passes, because a
+  commit does not change the bytes. About 0.05s on this repo. It uses a
+  throwaway index and object store, so nothing is written under `.git`.
+  Nested repositories that are not submodules (agent worktrees) are left out.
+- The tree test passes when the tree equals what verify judged, OR equals the
+  point where the branch left the default branch (no local work). So a pull,
+  a stash or a switch back to the default branch never blocks.
+- Two holes in the OLD tests are closed, and these block in every mode: a
+  record that cannot be parsed is red (it used to read as green), and the gate
+  runs from the repo root (from a subdirectory it did not find the record).
+- **Observe mode** (Decision 84): the new test logs `would-deny` to the fleet
+  event log and never blocks. A repo may opt in early with
+  `KIT_STOP_GATE_MODE=deny` in its shim. The two old tests block as before.
+- `harness/.claude/hooks/stop-gate.sh` is now a shim that runs the kit's gate.
+  A missing gate blocks once; it does not fail open.
+- Measured at release: 32 roster repos carry a Stop gate (30 identical to the
+  template, 2 drifted) and **50 carry none**. This version does not change
+  that; the requirement is n/a where there is no gate to migrate.
+
+**A green record did not say what ran.**
+
+- `kit-gates.sh` `gate <name> <command…>`: wraps a gate so the record lists it
+  as `ran`, `skipped` (with a reason) or `failed`, plus a case count. The
+  wrapped command reports with `KIT-GATE skipped: <reason>` and
+  `KIT-GATE cases=<n>` lines. `gate --min-cases N` fails a gate that ran and
+  judged fewer than N. Opt-in per gate; an unwrapped gate is unchanged.
+- A wrapped gate's output is printed when the gate ends, not live, with
+  stderr folded into stdout. That is the price of running it in the calling
+  shell with no pipe.
+- `record` now writes `tree`, `tree_start` (the tree when the first gate
+  began) and `gates`, plus `last-verify.tree`, the path list the Stop gate
+  uses to name what changed.
+- `governor/receipts.py` (fleet reader): green records that skipped a gate,
+  judged zero cases, or whose tree changed while verify ran. The session
+  brief reports the same for its own repo.
+- `governor/algedonic.py` landing check: a PR merged in the last 14 days whose
+  head never reached the default branch. First live run: 3 lines across 32
+  repos (one stranded stacked PR; one repo whose GitHub default branch is not
+  the branch its work merges into).
+
+- **Retrofit action:** (1) `python3 <kit>/kit_sync.py <repo>`, commit `.kit/`.
+  (2) If the repo has `.claude/hooks/stop-gate.sh`, replace it with the kit's
+  shim (`harness/.claude/hooks/stop-gate.sh`), keeping any local mode line.
+  (3) Optional: wrap gates in `./verify` with `gate`, with a floor on any gate
+  that loops over a corpus. Ships in the weekly batch on or after 2026-10-12.
+- **Verify gate:** `kit/test_stop_gate.py`: a 41-row verdict table run against
+  the real gate, with three controls (a gate that never blocks fails all 22
+  block rows; one that always blocks fails all 19 allow rows; the pre-2.9.0
+  gate fails exactly the rows this change is for). Eleven mutations of the
+  gate were each run against the table and each failed it. Also
+  `kit/test_receipt.py`, `governor/test_receipts.py`,
+  `governor/test_algedonic.py`.
+- **Reviewed before release** by a fresh-context critic (same model lineage,
+  so not independent). It reproduced four defects that would have made deny
+  mode wrong, all fixed here: a stale record blocking an untouched tree, an
+  invalid-JSON record reading as green, the wrong working directory, and a
+  failed `git add` fingerprinting the wrong thing. Not run on Linux or GNU
+  userland before release; CI is the first run there.
+
 ## 2.8.0 — 2026-10-08 — the contract check reaches every composite (observe)
 
 K6 (Decisions 43, 82, 86). `kit/gates/contract_gate.py` landed on 2026-08-09
