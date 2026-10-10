@@ -49,6 +49,13 @@ class RetrofitVerify(unittest.TestCase):
         kit_sync.install(self.truth)
         with open(os.path.join(self.truth, "project.manifest.json"), "w") as fh:
             json.dump({"kit_version": KIT_VERSION}, fh)
+        # 2.9.0: a current repo with a ./verify carries the closing gate, wired.
+        # Copied from the harness template for the same reason as above: the
+        # template is what a real retrofit installs.
+        for rel in (os.path.join(".claude", "hooks", "stop-gate.sh"),
+                    os.path.join(".claude", "settings.json")):
+            os.makedirs(os.path.dirname(os.path.join(self.truth, rel)), exist_ok=True)
+            shutil.copy(os.path.join(ROOT, "harness", rel), os.path.join(self.truth, rel))
         # 2.5.0: a current repo has .gitattributes TRACKED, not just present.
         # This fixture builds a repo by hand, so it has to stage like a real
         # one — the same correction the currency fixture needed.

@@ -237,6 +237,29 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+92. **Two rulings that follow from Decision 89: a repo with a `./verify`
+    must carry the closing gate, and the clean-branch rule is decided on a
+    week of data** (2026-10-10, human rulings via poll). **Required where
+    verify exists.** Measuring for Decision 89 showed 50 of 82 roster repos
+    with no closing gate; 20 of them have a `./verify`, so a session there
+    could end on unverified work with nothing to say so, and currency had
+    never asked for one. The requirement checks that the Stop hook actually
+    reaches the kit's gate (the shim hands off, and `settings.json` runs the
+    shim), because a shim nothing invokes is a gate that never runs. The 30
+    repos with no `./verify` read n/a: they are the standing retrofit backlog
+    (Decision 68) and marking them behind twice adds nothing. Rejected:
+    requiring it everywhere, and leaving it optional. This repo was one of
+    the 20; it now carries the shim and a `.claude/settings.json` with the two
+    Stop entries, observing like every other repo. **Clean, pushed, never
+    verified here.** A session on a branch that is fully committed and pushed,
+    in a checkout where verify never ran, blocks today, as horde built it.
+    Letting it stop would rest on CI, and `verify full` runs only locally.
+    Ruled: keep it as it is in horde, read the `clean` and `pushed` fields of
+    a week of observe events, then rule on numbers.
+    GATE-CHANGE: `kit/currency.py` gains the `closing-gate` requirement
+    (stricter); `.claude/settings.json` and `.claude/hooks/stop-gate.sh` are
+    new in this repo.
+    ruled-by: human (poll 2026-10-10)
 91. **horde's P0 security report adopted into the method: its catalogue
     shape is the schema's starting point, and four lessons become rules**
     (2026-10-10, integrator, under Decision 85, which said to build the schema
