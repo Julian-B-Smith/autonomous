@@ -3,9 +3,10 @@ id: hypersaw-009
 from: HYPERSAW
 to: autonomous
 thread: stop-gate-tree-state
-status: filed
-ball: autonomous
+status: shipped — kit 2.9.0, kit-owned gate with a tree fingerprint, observing; see response-012-stop-gate.md
+ball: HYPERSAW
 seq: 1
+answered_by: response-012-stop-gate.md
 filed: 2026-10-10
 respond-by: 2026-11-07
 cites: autonomous Decision 84; horde ADR-206, PR #1029

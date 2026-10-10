@@ -52,11 +52,11 @@ def main():
         if rel.startswith("..") or not _GATE.search(rel.replace(os.sep, "/")):
             return 0
         if _token_in_tree(top):
-            fe.log("gate-change-ok", repo=os.path.basename(top), file=rel)
+            fe.log("gate-change-ok", repo=fe.repo_name(top), file=rel)
             return 0
         m = fe.mode("gate-change")
         fe.log("would-deny" if m == "observe" else "deny", gate="gate-change",
-               repo=os.path.basename(top), file=rel)
+               repo=fe.repo_name(top), file=rel)
         if m == "deny":
             print(json.dumps({"hookSpecificOutput": {
                 "hookEventName": "PreToolUse", "permissionDecision": "deny",

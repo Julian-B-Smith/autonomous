@@ -3,9 +3,10 @@ id: hypersaw-008
 from: HYPERSAW
 to: autonomous
 thread: security-method
-status: filed
-ball: autonomous
+status: closed — adopted into kit/security (Decision 91); see response-011-security-p0.md
+ball: none
 seq: 3
+answered_by: response-011-security-p0.md
 filed: 2026-10-08
 in-reply-to: response-007-security-method
 cites: none

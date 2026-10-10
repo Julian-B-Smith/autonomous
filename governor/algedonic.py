@@ -31,6 +31,7 @@ Exit 0 = quiet. Exit 2 = pain (the workflow turns that into a notification).
 Exit 1 = the check itself failed and MUST be treated as unknown, never quiet.
 """
 
+import datetime
 import json
 import os
 import re
@@ -49,7 +50,12 @@ _PLACEHOLDER = r'/(Users|home)/[<$@{%]|[A-Za-z]:\\+Users\\+[<$@{%]|-(Users|home)
 
 
 def _gh(*args):
-    r = subprocess.run(["gh", *args], capture_output=True, text=True, timeout=60)
+    try:
+        r = subprocess.run(["gh", *args], capture_output=True, text=True, timeout=60)
+    except subprocess.TimeoutExpired:
+        # One slow call must not kill the run with a traceback: every PAIN line
+        # already gathered (leaks included) would never be printed.
+        raise RuntimeError(f"gh {' '.join(args[:3])}… timed out")
     if r.returncode != 0:
         raise RuntimeError(f"gh {' '.join(args[:3])}… failed: {r.stderr.strip()[:200]}")
     return r.stdout
@@ -112,6 +118,66 @@ def public_leak(name, branch):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+# --- landing check (horde brief hypersaw-010) ---------------------------------
+# GitHub shows a PR as MERGED whichever branch it merged into. A stacked PR
+# whose base merged first lands on the base's dead branch: the work looks
+# shipped and is not on the default branch. horde hit it twice in one week (a
+# PR merged eight seconds after its base, before GitHub retargeted it). Only
+# the remote can show this, and nobody sees it once the PR page says "merged".
+LANDING_DAYS = 14
+
+
+def unlanded(prs, default, status_of, now, days=LANDING_DAYS):
+    """{base branch: [PR numbers]} merged within `days` and not on `default`.
+
+    Pure: `prs` is `gh pr list --json number,baseRefName,headRefOid,mergeCommit,
+    mergedAt` output; `status_of(oid)` is GitHub's compare status of a commit
+    against the default branch, where `behind`/`identical` mean "an ancestor".
+    A PR merged INTO the default branch is landed by definition and costs no
+    call. Otherwise it is landed if its HEAD commit reached the default branch
+    (a later merge or catch-up carried it), or failing that its merge commit.
+    The head is asked first because it is the one a catch-up carries: the first
+    live run flagged four repaired PRs when only the merge commit was asked.
+    Limit, stated: work re-applied as NEW commits (a squash, a cherry-pick) is
+    on the default branch and still reported; the line says check, not lost."""
+    out = {}
+    for pr in prs:
+        try:
+            merged = datetime.datetime.strptime(pr["mergedAt"], "%Y-%m-%dT%H:%M:%SZ")
+        except (KeyError, TypeError, ValueError):
+            continue
+        if (now - merged).days > days or pr.get("baseRefName") == default:
+            continue
+        oids = [pr.get("headRefOid"), (pr.get("mergeCommit") or {}).get("oid")]
+        if not any(o and status_of(o) in ("behind", "identical") for o in oids):
+            out.setdefault(pr.get("baseRefName"), []).append(pr["number"])
+    return {base: sorted(nums) for base, nums in out.items()}
+
+
+def unlanded_merges(name, branch):
+    """{base branch: [PR numbers]} for one repo, or None if it cannot be asked.
+
+    The search is filtered SERVER-side to the window and to PRs whose base is
+    not the default branch. Listing the latest 50 merges and filtering here
+    covered two days of a busy repo (horde merged 200+ in 14 days), and a
+    weekly run then never looked at the other five. A compare call that fails
+    makes the whole repo UNKNOWN: "could not ask" is not "not landed"."""
+    since = (datetime.datetime.now(datetime.timezone.utc)
+             - datetime.timedelta(days=LANDING_DAYS)).strftime("%Y-%m-%d")
+    try:
+        prs = json.loads(_gh("pr", "list", "-R", f"{ORG}/{name}", "--state", "merged",
+                             "--search", f"merged:>={since} -base:{branch}", "--limit", "1000",
+                             "--json", "number,baseRefName,headRefOid,mergeCommit,mergedAt"))
+
+        def status_of(oid):
+            return _gh("api", f"repos/{ORG}/{name}/compare/{branch}...{oid}",
+                       "--jq", ".status").strip()
+        return unlanded(prs, branch, status_of,
+                        datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None))
+    except (RuntimeError, ValueError):
+        return None
+
+
 def main():
     try:
         repos = list_repos()
@@ -126,6 +192,17 @@ def main():
             unknown.append(f"{name}: CI state unqueryable")
         elif red:
             pain.append(f"CI RED on {name}@{branch}")
+        stray = unlanded_merges(name, branch)
+        if stray is None:
+            unknown.append(f"{name}: merged PRs unqueryable")
+        # One line per base branch, not per PR: a repo whose GitHub default
+        # branch is not the branch its work merges into (Maw: default `spinup`,
+        # 43 PRs into `main`) is ONE fact, and 43 lines would mute the channel.
+        for base, nums in sorted((stray or {}).items()):
+            shown = " ".join(f"#{n}" for n in nums[:6]) + (" …" if len(nums) > 6 else "")
+            pain.append(f"MERGED BUT NOT ON {branch}: {name}, {len(nums)} PR(s) into '{base}' "
+                        f"({shown}) — check the work reached {branch}, or that {branch} "
+                        f"is the right default branch")
         if vis == "PUBLIC":
             hits = public_leak(name, branch)
             if hits is None:

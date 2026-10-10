@@ -28,7 +28,12 @@ horde runs the method first, as its B446 P0, and reports what it gets wrong.
    `security_coverage_check` fails when any vulnerability × surface cell is
    neither guarded nor accepted. **Scope (Decision 85):** required for repos
    that ship binaries to others or parse untrusted input; opt-in elsewhere;
-   enters observe-first like every gate (Decision 84).
+   enters observe-first like every gate (Decision 84). **A gate counts only
+   if it is invoked** (Decision 91): the coverage check parses `./verify` and
+   the CI workflows to see that each named gate actually runs, and never
+   takes the catalogue's word for it. A gate still being built is listed as
+   pending and is not coverage. A cell with no gate must be a dated, tracked
+   hole, and an expired hole is red.
 4. **Guards, strongest first, each proven to fire.** (1) safe by
    construction — the defect cannot be written (one bounded reader, one path
    API), with a cheap check banning the way around it; (2) dynamic — fuzzing
@@ -58,6 +63,35 @@ horde runs the method first, as its B446 P0, and reports what it gets wrong.
    permissions, not prose; no security verdict by AI alone); response
    (`SECURITY.md`, a patch-release runbook, a user update path); risk
    acceptance in DECISIONS **with an expiry date**.
+
+## Learned in the first instance (horde P0, report hypersaw-008)
+
+Adopted as rules (Decision 91). Each cost horde something real.
+
+- **Parsed, not declared.** An assessment written from memory counted a
+  validator that only a human runs, and missed an architecture CI does
+  exercise. Coverage is read from `./verify` and the workflows.
+- **Approvals are unauthenticated, and the method says so.** An `approved:`
+  field on a ratchet or a tolerance registry cannot tell whether the human or
+  an agent wrote it. A reviewer diffing the baseline file in every PR is
+  review, not enforcement. The decision queue (ROADMAP Phase O) is intended to
+  give an approval a source an agent could not have typed.
+- **Ratchets catch their siblings.** A weakening counter's first real catch
+  was in tools another lane built in parallel. Parallel lanes need an
+  integration pass that runs every new gate against every other lane's
+  output before merge.
+- **Committed generated reports break parallel PRs.** A freshness-checked
+  dashboard that counts files two sibling PRs add is green in one merge order
+  only. Generate it on demand, or stack the producers and check where each
+  stacked PR actually landed. `governor/algedonic.py` now runs that check
+  weekly across the roster.
+- **One catalogue.** horde keeps correctness risks and security categories in
+  a single catalogue with one gate. A project may do the same.
+
+Catalogue row, as horde built it and as S0 will start from: `id`, `title`,
+`status` (`guarded` / `partial` / `hole`), `gates` (names, each optionally
+`pending`), `gaps` (neutral prose), `tracked_by` (required unless guarded),
+`expires` (required on a hole), `tripwire` (a one-line human signal).
 
 ## Domain packs
 
