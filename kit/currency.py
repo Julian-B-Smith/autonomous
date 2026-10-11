@@ -69,6 +69,10 @@ def changelog_entries(kit_dir):
 TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4", "2.6.5"}  # 2.3.0/2.4.0 are NOT
 
 REQUIREMENTS = {
+    # 2.9.1 (hypersaw-014): the fingerprint must keep the index's own time, or
+    # git stops re-reading same-second edits. Syncing meets it.
+    "2.9.1": [("tree fingerprint keeps the index's time", ".kit/kit-gates.sh",
+               'contains:cp -p "$real"')],
     # 2.9.0 (hypersaw-009; Decisions 89, 92): the closing gate is the kit's,
     # and a repo with a `./verify` must carry it, WIRED. The baseline never
     # required one: at release 20 roster repos had a verify and no gate at all,
