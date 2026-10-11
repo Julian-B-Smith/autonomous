@@ -237,6 +237,40 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+94. **Kit 2.9.1: the tree fingerprint keeps the index's own time, closing a
+    silent allow horde found in a day** (2026-10-11, integrator, answering
+    report hypersaw-014). The fingerprint copied git's index with a plain
+    `cp`. The copy's new timestamp switched off git's re-read of entries as
+    new as the index, so a same-size edit made in the same second git
+    recorded the file left the fingerprint unchanged. Reproduced here, 8 of 8
+    missed. horde's one-word fix (`cp -p`) is adopted; 0 of 8 after. The
+    lesson is about the tests, not the word: 41 rows, three controls and
+    twelve mutations all passed, because none arranged the clock. A property
+    that depends on timing needs a test that sets the timing up and checks it
+    held, or it is tested by luck. The new test does both and fails if it
+    cannot. Found by the pilot repo, which is what a pilot is for, and before
+    the fleet batch, so no other repo ran the faulty version.
+    GATE-CHANGE: `kit/vendor/kit-gates.sh` `kit_tree_hash`, `cp` to `cp -p`.
+    Stricter: it removes a false pass.
+    ruled-by: integrator (fix to a shipped gate; horde's report and measurement)
+93. **This machine's GitHub token covers all repositories, with its
+    permissions unchanged** (2026-10-11, human ruling via poll, then
+    confirmed in chat: "I'm comfortable with showing all repos"). The token
+    had been narrowed to 32 selected repositories during horde's security
+    work, and the integrator's fleet checks and kit-sync PR batches then
+    covered only those. 29 roster repos were unreachable, among them three
+    with open threads here. The human was told before choosing that there is
+    one GitHub login per machine, read by every session and sub-agent, so
+    widening it for this role widens it for all of them, client-confidential
+    repositories included; and that a second token used only by this repo's
+    sessions was the alternative. Chosen: all repositories, because new repos
+    are then covered without a token edit. What still limits an agent is the
+    token's permission list, which the human owns and which a token cannot
+    report about itself. Verified after the change: 67 repositories visible,
+    all 53 roster repos with a remote among them. First full run of the fleet
+    checks: no new landing findings, no default branch with red CI, and 37 of
+    the 47 kit 2.7.0 PRs opened on 2026-10-05 still open.
+    ruled-by: human (poll 2026-10-10, confirmed 2026-10-11)
 92. **Two rulings that follow from Decision 89: a repo with a `./verify`
     must carry the closing gate, and the clean-branch rule is decided on a
     week of data** (2026-10-10, human rulings via poll). **Required where

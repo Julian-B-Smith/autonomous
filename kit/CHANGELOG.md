@@ -288,6 +288,29 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.9.1 — 2026-10-11 — the fingerprint sees a same-size edit made in the same second
+
+Found by horde within a day of adopting 2.9.0 (report hypersaw-014), and
+reproduced here: 8 of 8 such edits were missed.
+
+- `kit-gates.sh` `kit_tree_hash` copied the real index with a plain `cp`. Git
+  trusts a file's recorded size and time only if the entry is older than the
+  index file, and re-reads by content otherwise. The copy carried a new time,
+  later than every entry, so an edit that kept the file's size and landed in
+  the same second git recorded the file was never opened. The Stop gate then
+  allowed the stop, and `record` could store the fingerprint of the old bytes.
+- The fix is one word, horde's: `cp -p`, which keeps the index's own time.
+  Measured after: 0 of 8 missed, and no change in cost (0.08s here).
+- It needs a scripted, sub-second rewrite straight after a checkout, add or
+  commit. Rare by hand, plausible in a generator. It was a silent allow, and
+  the 41-row table and twelve mutations could not show it, because the row
+  depends on the clock.
+- **Retrofit action:** `python3 <kit>/kit_sync.py <repo>`, commit `.kit/`.
+  Ships with 2.8.0 and 2.9.0 in the weekly batch on or after 2026-10-12.
+- **Verify gate:** `kit/test_stop_gate.py` `TestSameSecondSameSizeEdit`. It
+  arranges the timing and checks that it held, so the property is tested on
+  every run. Without `-p` both of its tests fail, every run.
+
 ## 2.9.0 — 2026-10-10 — the closing gate judges the tree, and the record says what ran
 
 Two findings from horde (briefs hypersaw-009 and hypersaw-010), Decisions 89

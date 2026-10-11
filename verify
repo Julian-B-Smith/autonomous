@@ -55,7 +55,7 @@ fast() {
   # harness/verify quietly broke three of its cases while this stayed green.
   # A gate a CHANGELOG claims but no oracle invokes is a claim, not a gate.
   # test_stop_gate and test_receipt are 2.9.0's gates, named the same way.
-  gate --min-cases 59 kit-tests _ut kit -q test_currency test_kit_sync test_stop_gate test_receipt \
+  gate --min-cases 61 kit-tests _ut kit -q test_currency test_kit_sync test_stop_gate test_receipt \
     || { echo "verify[fast]: kit tests red" >&2; ok=1; }
   gate --min-cases 38 session-tests _ut kit/session -q test_session test_batch_close \
     || { echo "verify[fast]: session tests red" >&2; ok=1; }

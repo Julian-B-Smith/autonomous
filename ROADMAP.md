@@ -486,9 +486,11 @@ before the mechanisms exist is a frame written about nothing.
     GATE-CHANGE. *Next, in order:* the **decision
     queue** (one file per repo, a third board); then the **run ledger**, after
     horde pilots the receipt. *Ruled (Decision 92):* a repo with a `./verify`
-    must carry the gate, wired; 20 repos read behind until retrofit. *Open,
-    the human's:* the scope of this machine's `gh` token, which now sees 32 repositories, so
-    local sweeps and kit-sync PR batches cover only those. *Carried to O1:*
+    must carry the gate, wired; 20 repos read behind until retrofit. *Ruled
+    (Decision 93):* this machine's `gh` token covers all repositories, so
+    local sweeps and kit-sync PR batches reach the whole roster again. *Fixed
+    in 2.9.1 (Decision 94):* the fingerprint missed a same-size edit made in
+    the same second; found by horde's pilot. *Carried to O1:*
     a close-time check for gate files changed through the shell.
   - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's
     eleven sync checks plus the packet's budget table, as interrupt/accrue

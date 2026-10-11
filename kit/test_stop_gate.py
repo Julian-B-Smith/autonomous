@@ -344,6 +344,63 @@ class TestStopGateTable(unittest.TestCase):
         self.assertEqual(wrong, {n for n, _s, _k, _e, _i, _w, t in TABLE if t in (T, "corrupt", "cwd")})
 
 
+class TestSameSecondSameSizeEdit(unittest.TestCase):
+    """kit 2.9.1 (horde report hypersaw-014). An edit that keeps a file's size,
+    made in the same second git recorded that file, must change the
+    fingerprint. It did not: the fingerprint copied the index with a new
+    timestamp, which switches off git's own re-read of such entries.
+
+    No table row could hold this, because the property depends on the clock:
+    horde's own row failed one run in ten. So the timing is ARRANGED (start of
+    a second, then add, verify and edit inside it) and CHECKED: a run whose
+    edit slipped into the next second proves nothing and is retried. If the
+    timing cannot be arranged at all the test fails; it never passes untested."""
+
+    def _arranged(self):
+        import time
+        for _ in range(6):
+            repo = new_repo()
+            time.sleep(1 - time.time() % 1 + 0.02)            # the start of a second
+            write(repo, "racy.txt", "ONE\n")
+            sh(repo, *_GIT, "add", "racy.txt")
+            sh(repo, *_GIT, "commit", "-q", "-m", "base")
+            sh(repo, "git", "update-ref", "refs/remotes/origin/main", "HEAD")
+            verify(repo)
+            recorded = int(os.stat(os.path.join(repo, "racy.txt")).st_mtime)
+            write(repo, "racy.txt", "two\n")                   # same size, same second
+            st = os.stat(os.path.join(repo, "racy.txt"))
+            if int(st.st_mtime) == recorded and int(st.st_ctime) == recorded:
+                time.sleep(1.2)                                # the gate runs in a later second
+                return repo
+            shutil.rmtree(repo, ignore_errors=True)
+        self.fail("could not land an edit in the same second as the recorded file in 6 tries")
+
+    def test_gate_blocks_it(self):
+        repo = self._arranged()
+        try:
+            r = subprocess.run(["bash", ".kit/stop-gate.sh"], cwd=repo, input="{}", text=True,
+                               capture_output=True,
+                               env=dict(os.environ, KIT_STOP_GATE_MODE="deny",
+                                        KIT_FLEET_DIR=os.path.join(repo, "nofleet")))
+            self.assertEqual(r.returncode, 2, r.stderr)
+            self.assertIn("racy.txt", r.stderr)
+        finally:
+            shutil.rmtree(repo, ignore_errors=True)
+
+    def test_record_does_not_store_the_old_bytes(self):
+        # `record` uses the same function: a verify run right after such an
+        # edit must fingerprint the NEW bytes, or it blesses what it never saw.
+        repo = self._arranged()
+        try:
+            verify(repo)
+            with open(os.path.join(repo, ".harness", "last-verify.json"), encoding="utf-8") as fh:
+                tree = json.load(fh)["tree"]
+            head = sh(repo, "git", "rev-parse", "HEAD^{tree}").stdout.strip()
+            self.assertNotEqual(tree, head)
+        finally:
+            shutil.rmtree(repo, ignore_errors=True)
+
+
 class TestShimDoesNotFailOpen(unittest.TestCase):
     """A shim whose target is missing must block once, not exit 127 (which
     Claude Code treats as a non-blocking error: the gate silently off)."""
