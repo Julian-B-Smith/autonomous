@@ -490,7 +490,10 @@ before the mechanisms exist is a frame written about nothing.
     (Decision 93):* this machine's `gh` token covers all repositories, so
     local sweeps and kit-sync PR batches reach the whole roster again. *Fixed
     in 2.9.1 (Decision 94):* the fingerprint missed a same-size edit made in
-    the same second; found by horde's pilot. *Carried to O1:*
+    the same second; found by horde's pilot. *Fleet batch 2026-10-12
+    (Decision 95):* 49 PRs open, one per repo, carrying 2.8.0 to 2.9.1 and
+    the mechanical closing-gate retrofit; the tree test's observe week starts
+    in each repo when its PR merges. *Carried to O1:*
     a close-time check for gate files changed through the shell.
   - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's
     eleven sync checks plus the packet's budget table, as interrupt/accrue

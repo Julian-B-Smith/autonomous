@@ -237,6 +237,29 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+95. **The weekly batch carried kit 2.8.0, 2.9.0 and 2.9.1 to the fleet, and
+    did the mechanical half of the closing-gate retrofit with it**
+    (2026-10-12, human rulings via poll: "Everything mechanical" and "Close
+    them as superseded"). A kit-files-only batch would have left every repo
+    with a closing gate or a `./verify` reading behind on 2.9.0, so the batch
+    also made the two changes that need no judgement, each anchored and never
+    guessed: a closing gate byte-identical to the old template is replaced by
+    the shim (25 repos); a repo with a `./verify` and no closing gate gets the
+    shim and two Stop entries in its settings (19 repos). Anything else is
+    named in that repo's PR and left alone: two repos carry their own variant
+    of the gate, and one gitignores its settings file. **Result:** 49 PRs,
+    one per repo, each opened only after the kit gates passed on the branch,
+    the shim ran, the wiring check passed and the repo's own `./verify fast`
+    was green or equally red before and after (45 green, 2 with no verify, 2
+    already red). The 37 kit 2.7.0 PRs still open from 2026-10-05 were closed
+    as superseded, each with a link. One repo's push was blocked by its own
+    pre-push build, for the dependency pin already filed in its mailbox; its
+    gate was not bypassed. 29 roster repos have no remote and 2 were already
+    current. **What changes for a repo that gained a gate:** a session there
+    is now blocked once from ending while its last `./verify` is red. That is
+    Decision 92's point, and each of those PRs says so. Merges are the
+    human's.
+    ruled-by: human (poll 2026-10-12)
 94. **Kit 2.9.1: the tree fingerprint keeps the index's own time, closing a
     silent allow horde found in a day** (2026-10-11, integrator, answering
     report hypersaw-014). The fingerprint copied git's index with a plain
