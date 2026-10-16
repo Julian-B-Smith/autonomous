@@ -495,6 +495,12 @@ before the mechanisms exist is a frame written about nothing.
     the mechanical closing-gate retrofit; the tree test's observe week starts
     in each repo when its PR merges. *Carried to O1:*
     a close-time check for gate files changed through the shell.
+  - **Proposed, not ratified: harness-owned actions (Phase A).** Outward
+    actions (push, open or close a PR, fleet batches, mailbox filings) go
+    through tested kit commands; merges and repo settings are denied outright;
+    raw use is logged first and denied per command later. Proposal:
+    `briefs/2026-10-16-harness-owned-actions.proposal.md`. Placed after the
+    decision queue unless the human reorders.
   - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's
     eleven sync checks plus the packet's budget table, as interrupt/accrue
     findings; versioned thresholds file per project + global default;
