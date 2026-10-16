@@ -2,9 +2,9 @@
 proposal: harness-owned-actions
 from: autonomous (resident integrator)
 to: julian
-ball: julian
+ball: none
 date: 2026-10-16
-status: proposed — awaiting ratification by poll
+status: ratified 2026-10-16 by poll — Decision 96 (all four questions as recommended)
 answers: the human's question of 2026-10-16, from reading on harness design —
   "agents aren't allowed to call tools themselves; build the tool call contract
   into the harness and make the calls through it." Is that something we should
@@ -146,7 +146,14 @@ log shows raw outward calls still happening.
 Order: after the decision queue, as the human said, unless reordered at
 ratification.
 
-## Questions for the human (to be asked as a poll at ratification)
+## Rulings (2026-10-16, by poll; Decision 96)
+
+All four as recommended: the observe hook installs **globally** on this Mac;
+this repo goes **PRs only**, so its charter line changes and `act push`
+carries no exception; the **merge and repo-settings denies ship in the next
+kit batch**; **A0 comes first**, then the decision queue.
+
+## Questions as they were asked
 
 1. **Where the observe hook installs.** Globally, so every session on this Mac
    is covered (a settings change only you can approve), or per repo through

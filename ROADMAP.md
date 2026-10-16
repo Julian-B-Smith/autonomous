@@ -495,12 +495,16 @@ before the mechanisms exist is a frame written about nothing.
     the mechanical closing-gate retrofit; the tree test's observe week starts
     in each repo when its PR merges. *Carried to O1:*
     a close-time check for gate files changed through the shell.
-  - **Proposed, not ratified: harness-owned actions (Phase A).** Outward
-    actions (push, open or close a PR, fleet batches, mailbox filings) go
-    through tested kit commands; merges and repo settings are denied outright;
-    raw use is logged first and denied per command later. Proposal:
-    `briefs/2026-10-16-harness-owned-actions.proposal.md`. Placed after the
-    decision queue unless the human reorders.
+  - **Phase A — harness-owned actions (RATIFIED 2026-10-16, Decision 96;
+    `briefs/2026-10-16-harness-owned-actions.proposal.md`). NEXT, before the
+    decision queue.** A0: `kit/act/` with `act batch` (a port of the
+    2026-10-12 batch script, with tests), `act push`, `act pr-open` and
+    `act pr-close`; deny rules for `gh pr merge` and repo edit/delete in the
+    harness template, carried by the next kit batch. *Gate:* each refusal
+    fires on a plant; a dry run of `act batch` classifies unchanged repos as
+    the 2026-10-12 run did. A1: the global observe hook and `act file`; a week
+    of would-deny events read per verb. A2: per-verb denies, each by a signed
+    GATE-CHANGE. A3: credential isolation, only if A1 shows it is needed.
   - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's
     eleven sync checks plus the packet's budget table, as interrupt/accrue
     findings; versioned thresholds file per project + global default;

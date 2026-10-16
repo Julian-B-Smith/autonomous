@@ -237,6 +237,29 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+96. **Outward actions go through harness-owned commands: Phase A ratified,
+    A0 before the decision queue, and this repo is PRs only** (2026-10-16,
+    human rulings via poll on `briefs/2026-10-16-harness-owned-actions.
+    proposal.md`). The human asked whether "agents aren't allowed to call
+    tools themselves; build the tool call contract into the harness" should
+    be implemented here. The answer is the proposal's: Claude Code already
+    mediates every call, so the principle is read as ending AMBIENT authority
+    for the few actions that leave the working tree. Push, open a PR, close a
+    superseded PR, a fleet batch and a mailbox filing each get a tested
+    command in `kit/act/`. Reads, builds, tests and local edits stay free.
+    The record behind it: six incidents in a week, each a check that lived in
+    nobody's code, the largest being 49 PRs opened from a scratch-folder
+    script. **Rulings:** (1) the observe hook installs globally on this Mac
+    (the human approves the settings change by this ruling, applied after
+    merge); (2) this repo is **PRs only**, matching what every change here
+    did this fortnight, so the charter's direct-push line is retired and
+    `act push` has no exception; (3) deny rules for `gh pr merge` and for
+    repo edit and delete ship in the next kit batch. "Merges are the human's"
+    was prose, and the template's deny list did not include it; (4) A0 comes
+    first, so the next fleet batch runs from tested code, then the decision
+    queue. **Limit, stated:** until A3, a command-text hook is best effort,
+    and the wall is a shell with no credential.
+    ruled-by: human (poll 2026-10-16)
 95. **The weekly batch carried kit 2.8.0, 2.9.0 and 2.9.1 to the fleet, and
     did the mechanical half of the closing-gate retrofit with it**
     (2026-10-12, human rulings via poll: "Everything mechanical" and "Close
