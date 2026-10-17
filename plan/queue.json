@@ -1,0 +1,68 @@
+{
+ "format": "kit.queue/0",
+ "items": [
+  {
+   "id": "c0-spine",
+   "question": "Is Phase C0 closed, and is P0 to P4 (the organ fleet) still the roadmap's spine?",
+   "raised": "2026-10-17",
+   "recommendation": "Run the dedup sweep; if clean, close C0. Keep P0 to P4 as the long-range rung-3 track, and move the current-phase marker to where the work is (Phase O and A).",
+   "blocks": [
+    "c0",
+    "p0"
+   ],
+   "lands_in": "DECISIONS.md, then the ROADMAP C0 marker"
+  },
+  {
+   "id": "t2-queue",
+   "question": "Is T2 superseded by the decision queue of Decision 90?",
+   "raised": "2026-10-17",
+   "recommendation": "Yes. Mark T2 superseded by `queue`, and have T0 read the queue files rather than invent a field.",
+   "blocks": [
+    "t2",
+    "queue"
+   ],
+   "lands_in": "DECISIONS.md"
+  },
+  {
+   "id": "clean-branch",
+   "question": "May a clean, pushed branch that was never verified in its checkout stop without running verify?",
+   "raised": "2026-10-10",
+   "recommendation": "Decide on the observe week's counts of `clean` and `pushed` stop-gate events, as Decision 92 ruled.",
+   "blocks": [
+    "o06"
+   ],
+   "lands_in": "DECISIONS.md (Decision 92's follow-up)"
+  },
+  {
+   "id": "interrupt-channel",
+   "question": "Which channel carries interrupts to you?",
+   "raised": "2026-09-26",
+   "recommendation": "The LifeOS channel, if it can push to your phone, so alarms land where the dashboard will; otherwise a chat webhook.",
+   "blocks": [
+    "o2"
+   ],
+   "lands_in": "DECISIONS.md (Structural Caution §5.1)"
+  },
+  {
+   "id": "thresholds",
+   "question": "Start the oversight budgets from the packet's table, or from a month of git history?",
+   "raised": "2026-09-26",
+   "recommendation": "Derive them from the last month of history, with the packet's table as the ceiling.",
+   "blocks": [
+    "o1"
+   ],
+   "lands_in": "DECISIONS.md (Structural Caution §5.2)"
+  },
+  {
+   "id": "registry-home",
+   "question": "Do the session registry and the dashboard data stay under ~/.claude on each machine, or move to the private repo both machines pull?",
+   "raised": "2026-08-17",
+   "recommendation": "Stay under ~/.claude until O4; move when the second machine needs them.",
+   "blocks": [
+    "k3",
+    "o4"
+   ],
+   "lands_in": "DECISIONS.md (K3 gate; Structural Caution §5.4)"
+  }
+ ]
+}

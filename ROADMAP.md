@@ -486,7 +486,10 @@ before the mechanisms exist is a frame written about nothing.
     GATE-CHANGE. *Next, in order:* the **decision
     queue** (one file per repo, a third board), designed together with the
     **plan map** as an opt-in kit module (Decision 97; horde brief
-    hypersaw-016), after Phase A0; then the **run ledger**, after horde pilots
+    hypersaw-016), after Phase A0. *Plan map drafted 2026-10-17 (Decision
+    99):* `kit/plan/`, format `kit.plan/0`, first instance `plan/` here, with
+    the queue's first form in `plan/queue.json`; draft until thread plan-map
+    answers; then the **run ledger**, after horde pilots
     the receipt. *Ruled (Decision 92):* a repo with a `./verify`
     must carry the gate, wired; 20 repos read behind until retrofit. *Ruled
     (Decision 93):* this machine's `gh` token covers all repositories, so

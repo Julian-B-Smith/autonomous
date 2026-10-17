@@ -65,6 +65,12 @@ fast() {
   # end to end against a local remote and a fake gh. No network.
   gate --min-cases 17 act-tests _ut kit/act -q test_act \
     || { echo "verify[fast]: act tests red" >&2; ok=1; }
+  # The plan map (Decision 97; this repo is its first instance): the module's
+  # checks with their controls, then this repo's own plan held to them.
+  gate --min-cases 20 plan-tests _ut kit/plan -q test_plan \
+    || { echo "verify[fast]: plan map tests red" >&2; ok=1; }
+  gate plan-check python3 kit/plan/plan.py check plan \
+    || { echo "verify[fast]: plan/ is red: fix the plan or rebuild it (kit/plan/plan.py build plan)" >&2; ok=1; }
   # Retired doctrine phrases must not survive in INSTALLING artifacts
   # (hypersaw-002): a rule corrected where it is READ but left in the charter
   # and CHANGELOG action that COPY it is correct where nobody looks and wrong
