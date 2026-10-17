@@ -1,0 +1,947 @@
+{
+ "format": "kit.plan/0",
+ "title": "autonomous plan map",
+ "repo": "autonomous",
+ "lede": "Every part of the standards repo, what governs it, where it stands, and what it waits on.",
+ "about": "The plan of record for `autonomous`, drawn as a map of its own records. It is the first instance of the plan-map kit module (Decision 97), so it is also a test of the format. Every status cites a decision, a ROADMAP row or a file; an edge the records do not state is marked as the plan's inference.",
+ "verified": {
+  "date": "2026-10-17",
+  "roadmap_commit": "2340f5e",
+  "decisions_max": 99
+ },
+ "targets": [
+  "p4"
+ ],
+ "status_meaning": {
+  "closed": "Built, and its gate is recorded as met.",
+  "built": "Exists and is tested; its gate is not yet recorded as met.",
+  "in progress": "Work under way, or partly built.",
+  "ruled": "Ratified by the human; not started.",
+  "planned": "In ROADMAP; not ratified in detail and not started.",
+  "later": "Deferred until a stated condition.",
+  "parked": "Tabled by a ruling.",
+  "superseded": "Replaced by another part before it was done."
+ },
+ "inconsistencies": [
+  "ROADMAP marks Phase C0 (Consolidation) as `← current phase`, but its gate has no recorded result, and every phase opened since 2026-08-17 (K, O, S, A) runs as a parallel track. The roadmap's stated spine, P0 to P4, has not moved since. Raised as a decision: `c0-spine`.",
+  "The landscape audit has been live since 2026-07-10 (a monthly cloud routine), yet ROADMAP files it under Deferred / demoted.",
+  "The Kit v2 track's `Shipped so far` paragraph is dated 2026-07-10/11 and lists its next items. Since then, kit versions 2.0.0 to 2.10.0 have shipped under Phase K, and the paragraph has not been updated.",
+  "T2 asks for a declaration form for project-level items waiting on the human. Decision 90 ruled that form: the decision queue, one file per repo. Raised as a decision: `t2-queue`."
+ ],
+ "tracks": [
+  "Build sequence (rung 3)",
+  "Kit currency (K)",
+  "Session oversight (O)",
+  "Harness-owned actions (A)",
+  "Security (S)",
+  "Human TODO surface (T)",
+  "VSM amendments",
+  "Frame and later"
+ ],
+ "parts": [
+  {
+   "id": "c0",
+   "title": "Consolidation",
+   "status": "in progress",
+   "track": "Build sequence (rung 3)",
+   "what": "Pull the ad-hoc corpus into this repo; doctrine single-sourced; pointers wired.",
+   "rows": [
+    "C0"
+   ],
+   "basis": [
+    "R:C0"
+   ],
+   "code": [
+    "doctrine/DOCTRINE.md"
+   ],
+   "note": "ROADMAP still marks this the current phase. Its gate (a clean dedup sweep) has no recorded result; see Inconsistencies."
+  },
+  {
+   "id": "kitv2",
+   "title": "Kit v2 profiles",
+   "status": "in progress",
+   "track": "Build sequence (rung 3)",
+   "what": "Agent profiles the organ phases consume (organ, watchdog, conductor, verifier, critic, curator).",
+   "rows": [
+    "Parallel track — Kit v2"
+   ],
+   "basis": [
+    "R:Parallel track — Kit v2"
+   ],
+   "code": [
+    "kit/contracts",
+    "kit/sweep"
+   ]
+  },
+  {
+   "id": "conductor",
+   "title": "Conductor substrate decision",
+   "status": "later",
+   "track": "Frame and later",
+   "what": "Cron plus headless sessions, a workflow, or a supervisor daemon: decided at P0 entry.",
+   "rows": [
+    "Conductor substrate decision"
+   ],
+   "basis": [
+    "R:Conductor substrate decision"
+   ]
+  },
+  {
+   "id": "p0",
+   "title": "Enforcement floor",
+   "status": "planned",
+   "track": "Build sequence (rung 3)",
+   "what": "Territory hooks, a HALT sentinel and a deterministic watchdog skeleton.",
+   "rows": [
+    "P0"
+   ],
+   "needs": [
+    "c0",
+    "kitv2",
+    "conductor"
+   ],
+   "needs_inferred": [
+    "o05",
+    "a0"
+   ],
+   "note": "Parts of it now exist under other names: O0.5 gates on the gates, A0 harness-owned actions. The links are the plan's inference."
+  },
+  {
+   "id": "p1",
+   "title": "One organ, real loop",
+   "status": "planned",
+   "track": "Build sequence (rung 3)",
+   "what": "One organ with ./verify and a merge queue on a toy codebase, unattended shifts.",
+   "rows": [
+    "P1"
+   ],
+   "needs": [
+    "p0"
+   ]
+  },
+  {
+   "id": "beads",
+   "title": "Ledger choice (Beads or minimal)",
+   "status": "later",
+   "track": "Frame and later",
+   "what": "Deferred to P2, when a task ledger is actually needed.",
+   "rows": [
+    "Beads-vs-minimal-ledger decision"
+   ],
+   "basis": [
+    "R:Beads-vs-minimal-ledger decision"
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Two organs, one seam",
+   "status": "planned",
+   "track": "Build sequence (rung 3)",
+   "what": "Contract dir, consumer contract tests, task ledger, generated boundary linter.",
+   "rows": [
+    "P2"
+   ],
+   "needs": [
+    "p1",
+    "beads"
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Memory and curator",
+   "status": "planned",
+   "track": "Build sequence (rung 3)",
+   "what": "Leaf loops per organ; audit promote-up; curator down-propagation.",
+   "rows": [
+    "P3"
+   ],
+   "needs": [
+    "p2"
+   ]
+  },
+  {
+   "id": "p4",
+   "title": "Full governor and first real project",
+   "status": "planned",
+   "track": "Build sequence (rung 3)",
+   "what": "Coherence critic, metrics dashboard, escalation; a simulated incident caught without a human.",
+   "rows": [
+    "P4"
+   ],
+   "needs": [
+    "p3"
+   ]
+  },
+  {
+   "id": "readme-loop",
+   "title": "Global README-refresh loop",
+   "status": "parked",
+   "track": "Frame and later",
+   "what": "A second global agent refreshing READMEs; decide after P3 whether it is the curator generalized.",
+   "rows": [
+    "Global daily README-refresh loop"
+   ],
+   "basis": [
+    "R:Global daily README-refresh loop"
+   ],
+   "needs": [
+    "p3"
+   ]
+  },
+  {
+   "id": "k0",
+   "title": "Kit version, declared",
+   "status": "closed",
+   "track": "Kit currency (K)",
+   "what": "kit/VERSION, kit_version in manifests, a CHANGELOG whose entries name their retrofit action.",
+   "rows": [
+    "K0"
+   ],
+   "adrs": [
+    51
+   ],
+   "basis": [
+    "D51",
+    "file:kit/test_currency.py"
+   ],
+   "code": [
+    "kit/VERSION",
+    "kit/CHANGELOG.md",
+    "kit/currency.py"
+   ]
+  },
+  {
+   "id": "k1",
+   "title": "/retrofit as a migration",
+   "status": "closed",
+   "track": "Kit currency (K)",
+   "what": "/retrofit reads kit_version and applies CHANGELOG entries in order; re-running is a no-op.",
+   "rows": [
+    "K1"
+   ],
+   "adrs": [
+    52
+   ],
+   "basis": [
+    "D52"
+   ],
+   "needs": [
+    "k0"
+   ],
+   "code": [
+    "kit/commands/retrofit.md"
+   ]
+  },
+  {
+   "id": "k2",
+   "title": "Uniform intake/ structure",
+   "status": "planned",
+   "track": "Kit currency (K)",
+   "what": "intake/ at repo root, one dated drop per subdirectory with a PROVENANCE.md; promoted by explicit act.",
+   "rows": [
+    "K2"
+   ],
+   "needs": [
+    "k1"
+   ]
+  },
+  {
+   "id": "k3",
+   "title": "Session-boundary commands",
+   "status": "built",
+   "track": "Kit currency (K)",
+   "what": "/wakeup, /breakdown, /reorient over a shared state routine and a session registry.",
+   "rows": [
+    "K3"
+   ],
+   "basis": [
+    "R:K3"
+   ],
+   "needs": [
+    "k0"
+   ],
+   "code": [
+    "kit/session",
+    "kit/commands/wakeup.md",
+    "kit/commands/breakdown.md"
+   ],
+   "note": "Core built 2026-08-18. Gate open: the registry location is not named, and /breakdown does not yet write STATUS.json."
+  },
+  {
+   "id": "k4",
+   "title": "Currency audit and fleet catch-up",
+   "status": "closed",
+   "track": "Kit currency (K)",
+   "what": "One sweep answers which repos are behind; catch-up in reviewed batches, never a swarm.",
+   "rows": [
+    "K4"
+   ],
+   "adrs": [
+    61,
+    68,
+    95
+   ],
+   "basis": [
+    "D61",
+    "D95"
+   ],
+   "needs": [
+    "k0",
+    "k1",
+    "k2",
+    "k3"
+   ],
+   "code": [
+    "kit/kit_sync.py",
+    "kit/act/batch.py"
+   ]
+  },
+  {
+   "id": "k5",
+   "title": "Fleet routines",
+   "status": "in progress",
+   "track": "Kit currency (K)",
+   "what": "Daily and weekly coordination: the boards on a cadence first, then sweep, TODO and currency routines.",
+   "rows": [
+    "K5"
+   ],
+   "adrs": [
+    76
+   ],
+   "basis": [
+    "D76"
+   ],
+   "needs": [
+    "k3"
+   ],
+   "code": [
+    "kit/session/boards.py",
+    "routines/boards.prompt.md"
+   ]
+  },
+  {
+   "id": "k6",
+   "title": "contract_gate in every composite",
+   "status": "built",
+   "track": "Kit currency (K)",
+   "what": "The contract-version check rides kit_integrity in every repo, observing.",
+   "rows": [
+    "K6"
+   ],
+   "adrs": [
+    82,
+    86
+   ],
+   "basis": [
+    "D86"
+   ],
+   "needs": [
+    "k0"
+   ],
+   "code": [
+    "kit/gates/contract_gate.py",
+    "kit/vendor/kit-gates.sh"
+   ],
+   "note": "Gate to deny: Orrery and unified-pm add a version line, Lathe answers on its prose contract field, a clean week."
+  },
+  {
+   "id": "restructure",
+   "title": "File-restructuring sweep",
+   "status": "planned",
+   "track": "Kit currency (K)",
+   "what": "Worktrees, registry, move, venvs, retrofit: a clean layout for the second machine.",
+   "rows": [
+    "The file-restructuring sweep is back on the table"
+   ],
+   "needs": [
+    "k4"
+   ]
+  },
+  {
+   "id": "t0",
+   "title": "Human TODO collector",
+   "status": "planned",
+   "track": "Human TODO surface (T)",
+   "what": "todo_scan.py: one list of everything in the fleet waiting on the human, from signals that already exist.",
+   "rows": [
+    "T0"
+   ],
+   "adrs": [
+    50
+   ],
+   "needs_inferred": [
+    "queue"
+   ]
+  },
+  {
+   "id": "t1",
+   "title": "todo.1 schema",
+   "status": "planned",
+   "track": "Human TODO surface (T)",
+   "what": "The list as a contract artifact beside status.1, so consumers render and never re-collect.",
+   "rows": [
+    "T1"
+   ],
+   "needs": [
+    "t0",
+    "k3"
+   ]
+  },
+  {
+   "id": "t2",
+   "title": "Project-level TODO declarations",
+   "status": "planned",
+   "track": "Human TODO surface (T)",
+   "what": "A declaration form for per-project items waiting on the human.",
+   "rows": [
+    "T2"
+   ],
+   "needs": [
+    "t1"
+   ],
+   "note": "Decision 90's decision queue (one file per repo) is this declaration form; see Waiting on you."
+  },
+  {
+   "id": "t3",
+   "title": "The TODO loop closes",
+   "status": "planned",
+   "track": "Human TODO surface (T)",
+   "what": "An item is done when the human did the thing and the next sweep sees it gone; no checkbox.",
+   "rows": [
+    "T3"
+   ],
+   "needs": [
+    "t2"
+   ]
+  },
+  {
+   "id": "t4",
+   "title": "cites_missing blocks",
+   "status": "planned",
+   "track": "Human TODO surface (T)",
+   "what": "Flip the cites check from reporting to blocking once every open thread carries cites:.",
+   "rows": [
+    "T4"
+   ],
+   "adrs": [
+    67
+   ]
+  },
+  {
+   "id": "vsm-a",
+   "title": "S4 freshness and open-PR surfacing",
+   "status": "built",
+   "track": "VSM amendments",
+   "what": "Stale research and unmerged audits warn; open PRs here are reported as the human's.",
+   "rows": [
+    "A. S4 freshness"
+   ],
+   "adrs": [
+    47
+   ],
+   "basis": [
+    "file:governor/s4_scan.py"
+   ],
+   "code": [
+    "governor/s4_scan.py"
+   ]
+  },
+  {
+   "id": "vsm-b",
+   "title": "Outside and then",
+   "status": "built",
+   "track": "VSM amendments",
+   "what": "STATUS.md section: last audit, unconsumed findings, next run.",
+   "rows": [
+    "B. \"Outside & then\" section"
+   ],
+   "adrs": [
+    47
+   ],
+   "basis": [
+    "file:governor/monitor.py"
+   ],
+   "code": [
+    "governor/monitor.py"
+   ]
+  },
+  {
+   "id": "vsm-c",
+   "title": "Environment watch",
+   "status": "built",
+   "track": "VSM amendments",
+   "what": "The landscape audit's remit covers protocol cadence, platform shifts and provider policy.",
+   "rows": [
+    "C. Environment-watch remit"
+   ],
+   "adrs": [
+    47
+   ],
+   "basis": [
+    "file:routines/landscape-audit.cloud.prompt.md"
+   ],
+   "needs": [
+    "landscape"
+   ]
+  },
+  {
+   "id": "vsm-d",
+   "title": "Algedonic cloud check",
+   "status": "built",
+   "track": "VSM amendments",
+   "what": "Weekly deterministic check of what GitHub can see: red CI, public leaks, stranded merges.",
+   "rows": [
+    "D. Algedonic cloud check"
+   ],
+   "adrs": [
+    47,
+    90
+   ],
+   "basis": [
+    "file:governor/algedonic.py"
+   ],
+   "code": [
+    "governor/algedonic.py",
+    ".github/workflows/algedonic.yml"
+   ]
+  },
+  {
+   "id": "landscape",
+   "title": "Landscape audit",
+   "status": "built",
+   "track": "VSM amendments",
+   "what": "Monthly cloud routine: a propose-only PR re-surveying the outside world.",
+   "rows": [
+    "Landscape audit (meta-audit of the protocol itself)"
+   ],
+   "basis": [
+    "R:Landscape audit (meta-audit of the protocol itself)"
+   ],
+   "code": [
+    "routines/landscape-audit.cloud.prompt.md"
+   ],
+   "note": "Live since 2026-07-10, but filed under Deferred / demoted in ROADMAP."
+  },
+  {
+   "id": "o0",
+   "title": "Hands-off session boundaries",
+   "status": "built",
+   "track": "Session oversight (O)",
+   "what": "Start and end hooks open and close each session's record with its facts.",
+   "rows": [
+    "O0"
+   ],
+   "adrs": [
+    77
+   ],
+   "basis": [
+    "D77"
+   ],
+   "needs": [
+    "k3"
+   ],
+   "code": [
+    "kit/hooks/session-open.py",
+    "kit/hooks/session-close.py"
+   ],
+   "note": "Gate: a week in which every normally exited session closed its own record. Not recorded as met."
+  },
+  {
+   "id": "o05",
+   "title": "Gates on the gates",
+   "status": "built",
+   "track": "Session oversight (O)",
+   "what": "Hook self-test, config guard and GATE-CHANGE rule, observing; one central event log.",
+   "rows": [
+    "O0.5"
+   ],
+   "adrs": [
+    84
+   ],
+   "basis": [
+    "D84"
+   ],
+   "needs": [
+    "o0"
+   ],
+   "code": [
+    "kit/hooks/hook-selftest.py",
+    "kit/hooks/config-guard.py",
+    "kit/hooks/gate-change.py",
+    "kit/hooks/fleet_events.py"
+   ]
+  },
+  {
+   "id": "o06",
+   "title": "The record says what ran",
+   "status": "built",
+   "track": "Session oversight (O)",
+   "what": "Kit-owned closing gate with a tree fingerprint (observing), verify receipt, landing check.",
+   "rows": [
+    "O0.6"
+   ],
+   "adrs": [
+    89,
+    90,
+    92,
+    94,
+    95
+   ],
+   "basis": [
+    "D89",
+    "D94"
+   ],
+   "needs": [
+    "o05"
+   ],
+   "code": [
+    "kit/vendor/stop-gate.sh",
+    "governor/receipts.py",
+    "kit/test_stop_gate.py"
+   ],
+   "note": "Gate to deny: a week of stop-gate events read with clean/pushed, horde's pilot report, the clean-branch ruling."
+  },
+  {
+   "id": "o1",
+   "title": "Oversight engine and snapshot",
+   "status": "ruled",
+   "track": "Session oversight (O)",
+   "what": "governor/oversight.py: the eleven sync checks and the budget table as findings; a fleet snapshot.",
+   "rows": [
+    "O1"
+   ],
+   "adrs": [
+    77,
+    78
+   ],
+   "basis": [
+    "D78"
+   ],
+   "needs": [
+    "o0",
+    "o05"
+   ],
+   "needs_inferred": [
+    "o06"
+   ]
+  },
+  {
+   "id": "o2",
+   "title": "Delivery and interrupts",
+   "status": "ruled",
+   "track": "Session oversight (O)",
+   "what": "One-time in-session lines and notifications on interrupts; gates flip per gate.",
+   "rows": [
+    "O2"
+   ],
+   "adrs": [
+    78,
+    84
+   ],
+   "basis": [
+    "D78"
+   ],
+   "needs": [
+    "o1"
+   ]
+  },
+  {
+   "id": "o3",
+   "title": "Setpoint audit and regulator review",
+   "status": "ruled",
+   "track": "Session oversight (O)",
+   "what": "A weekly three-list diff, silent when empty; a monthly review of thresholds and hooks.",
+   "rows": [
+    "O3"
+   ],
+   "adrs": [
+    78
+   ],
+   "basis": [
+    "D78"
+   ],
+   "needs": [
+    "o1"
+   ]
+  },
+  {
+   "id": "o4",
+   "title": "Dashboards",
+   "status": "ruled",
+   "track": "Session oversight (O)",
+   "what": "A standalone app here and the LifeOS fleet page, read-only, empty when healthy.",
+   "rows": [
+    "O4"
+   ],
+   "adrs": [
+    77,
+    78
+   ],
+   "basis": [
+    "D78"
+   ],
+   "needs": [
+    "o1"
+   ]
+  },
+  {
+   "id": "o5",
+   "title": "HALT",
+   "status": "later",
+   "track": "Session oversight (O)",
+   "what": "Human-armed per repo; deferred until O2's noise is measured.",
+   "rows": [
+    "O5"
+   ],
+   "adrs": [
+    78
+   ],
+   "basis": [
+    "R:O5"
+   ],
+   "needs": [
+    "o2"
+   ]
+  },
+  {
+   "id": "ledger",
+   "title": "Run ledger",
+   "status": "later",
+   "track": "Session oversight (O)",
+   "what": "What each dispatch did, written by hooks; cost per dispatch from the telemetry export.",
+   "adrs": [
+    90
+   ],
+   "basis": [
+    "D90"
+   ],
+   "needs": [
+    "o06"
+   ],
+   "note": "After horde pilots the receipt (Decision 90)."
+  },
+  {
+   "id": "queue",
+   "title": "Decision queue",
+   "status": "ruled",
+   "track": "Session oversight (O)",
+   "what": "One small committed file per repo of what waits on the human, and a board over all of them.",
+   "adrs": [
+    90,
+    97
+   ],
+   "basis": [
+    "D90",
+    "D97"
+   ],
+   "needs": [
+    "a0"
+   ],
+   "code": [
+    "plan/queue.json"
+   ],
+   "note": "First instance: this plan's queue.json, read by the map. The cross-repo board is not built."
+  },
+  {
+   "id": "planmap",
+   "title": "Plan map (opt-in kit module)",
+   "status": "in progress",
+   "track": "Session oversight (O)",
+   "what": "One parts.json per repo, generated views, headless checks: this map.",
+   "adrs": [
+    97,
+    99
+   ],
+   "basis": [
+    "D97",
+    "D99"
+   ],
+   "needs": [
+    "a0"
+   ],
+   "needs_inferred": [
+    "queue"
+   ],
+   "code": [
+    "kit/plan/plan.py",
+    "plan/parts.json"
+   ],
+   "note": "First instance: autonomous itself, format kit.plan/0 (draft, open to horde's objection)."
+  },
+  {
+   "id": "a0",
+   "title": "Outward actions through act",
+   "status": "closed",
+   "track": "Harness-owned actions (A)",
+   "what": "act push, pr-open, pr-close and batch, each refusal a planted case; merges denied by rule.",
+   "rows": [
+    "Phase A"
+   ],
+   "adrs": [
+    96,
+    98
+   ],
+   "basis": [
+    "D98"
+   ],
+   "code": [
+    "kit/act"
+   ]
+  },
+  {
+   "id": "a1",
+   "title": "Observe raw outward calls",
+   "status": "ruled",
+   "track": "Harness-owned actions (A)",
+   "what": "A global hook logs every raw git push / gh pr call that skipped act; act file for mailbox filings.",
+   "adrs": [
+    96
+   ],
+   "basis": [
+    "D96"
+   ],
+   "needs": [
+    "a0"
+   ]
+  },
+  {
+   "id": "a2",
+   "title": "Deny raw outward calls",
+   "status": "ruled",
+   "track": "Harness-owned actions (A)",
+   "what": "Each command's raw route denied by its own signed GATE-CHANGE after a clean week.",
+   "adrs": [
+    96
+   ],
+   "basis": [
+    "D96"
+   ],
+   "needs": [
+    "a1"
+   ]
+  },
+  {
+   "id": "a3",
+   "title": "Credential isolation",
+   "status": "later",
+   "track": "Harness-owned actions (A)",
+   "what": "The agent's shell holds no GitHub credential; only act does. Only if A1 shows it is needed.",
+   "adrs": [
+    96
+   ],
+   "basis": [
+    "D96"
+   ],
+   "needs": [
+    "a1"
+   ]
+  },
+  {
+   "id": "s0",
+   "title": "Security catalogue and templates",
+   "status": "ruled",
+   "track": "Security (S)",
+   "what": "Catalogue schema from horde's row; SECURITY.md and SECURE-PATTERNS.md templates.",
+   "rows": [
+    "Phase S"
+   ],
+   "adrs": [
+    85,
+    91
+   ],
+   "basis": [
+    "D85",
+    "D91"
+   ],
+   "code": [
+    "kit/security"
+   ]
+  },
+  {
+   "id": "s1",
+   "title": "Security coverage check",
+   "status": "ruled",
+   "track": "Security (S)",
+   "what": "Observe-first; required where a repo ships binaries or parses untrusted input; parses verify and CI.",
+   "adrs": [
+    85,
+    91
+   ],
+   "basis": [
+    "D85"
+   ],
+   "needs": [
+    "s0"
+   ]
+  },
+  {
+   "id": "s2",
+   "title": "Guard drills",
+   "status": "ruled",
+   "track": "Security (S)",
+   "what": "Re-run every guard's planted control on a schedule.",
+   "adrs": [
+    85
+   ],
+   "basis": [
+    "D85"
+   ],
+   "needs": [
+    "s1"
+   ]
+  },
+  {
+   "id": "s3",
+   "title": "Supply chain and settings checklists",
+   "status": "ruled",
+   "track": "Security (S)",
+   "what": "Checklists and a pentest runbook.",
+   "adrs": [
+    85
+   ],
+   "basis": [
+    "D85"
+   ],
+   "needs": [
+    "s0"
+   ]
+  },
+  {
+   "id": "r",
+   "title": "Recursive VSM frame",
+   "status": "planned",
+   "track": "Frame and later",
+   "what": "What is invariant at every level and what is per level; written from K0–K5's material.",
+   "rows": [
+    "Phase R"
+   ],
+   "adrs": [
+    51
+   ],
+   "needs": [
+    "k0",
+    "k1",
+    "k2",
+    "k3",
+    "k4",
+    "k5"
+   ]
+  },
+  {
+   "id": "messaging",
+   "title": "Live agent-to-agent messaging",
+   "status": "parked",
+   "track": "Frame and later",
+   "what": "Excluded at this scale; revisit only if the task ledger cannot express a needed interaction.",
+   "rows": [
+    "Live agent-to-agent messaging"
+   ],
+   "adrs": [
+    73
+   ],
+   "basis": [
+    "D73"
+   ]
+  }
+ ]
+}

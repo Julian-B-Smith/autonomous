@@ -237,6 +237,30 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+99. **The plan map's first instance is autonomous itself; format `kit.plan/0`
+    is a draft, open to horde's objection** (2026-10-17, integrator, at the
+    human's request: "Please run a plan map yourself for autonomous").
+    `kit/plan/plan.py` builds `PLAN.md` and `plan-map.html` from one
+    `parts.json` and one `queue.json`, and checks them headless in
+    `./verify fast`: records exist, the graph is acyclic, the views are fresh,
+    every status cites a record, code paths exist. Each check has a must-fail
+    control. Autonomous's plan holds 49 parts, every status cited, and 6
+    decisions waiting on the human, which is Decision 90's queue in its first
+    form. **What the map found on its first run, stated, not acted on:** the
+    ROADMAP's current-phase marker still points at C0, while every phase built
+    since 2026-08-17 runs in parallel tracks, so the stated spine (P0 to P4)
+    has not moved; K4 is closed though it cites the unbuilt K2 as a
+    prerequisite; the live landscape audit is filed under Deferred; T2's
+    declaration form is the decision queue. Two of these are now queue items
+    for the human (`c0-spine`, `t2-queue`), and none changed a status. **A
+    design change from horde's map:** the critical path counts cited edges
+    only. On the first run an inferred edge decided it, which let the plan's
+    own guess choose what was critical. **Order:** this moves ahead of what
+    response-017 promised (schema first, then building), because the human
+    asked for the map today. The module stays draft, offered to no other
+    repo, until thread plan-map has had its say (response-018).
+    GATE-CHANGE: `verify` gains `plan-tests` and `plan-check`. Both add checks.
+    ruled-by: integrator (at the human's request)
 98. **Phase A0 built: `kit/act/`, kit 2.10.0; the next batch runs through it**
     (2026-10-17, integrator, building what Decision 96 ratified). `act push`,
     `act pr-open`, `act pr-close` and `act batch`. Each refusal is a pure
