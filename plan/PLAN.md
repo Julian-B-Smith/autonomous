@@ -5,7 +5,7 @@
 
 The plan of record for `autonomous`, drawn as a map of its own records. It is the first instance of the plan-map kit module (Decision 97), so it is also a test of the format. Every status cites a decision, a ROADMAP row or a file; an edge the records do not state is marked as the plan's inference.
 
-**Last verified: 2026-10-17**, against ROADMAP.md at `2340f5e` and DECISIONS.md through Decision 99. ROADMAP.md outranks this file.
+**Last verified: 2026-10-17**, against ROADMAP.md at `2340f5e` and DECISIONS.md through Decision 100. ROADMAP.md outranks this file.
 
 The picture: [`plan-map.html`](plan-map.html).
 

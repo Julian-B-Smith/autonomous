@@ -23,6 +23,17 @@
   2026-09-27 ruling, matching the org and Sluice's D-089. Applied across the
   installed fleet the same day, Decision 79.) Applies to all VST/AU/CLAP
   builds.
+- **AU manufacturer code: `Mndl` for every NEW plugin** (human ruling
+  2026-10-17, Decision 100). JUCE `PLUGIN_MANUFACTURER_CODE Mndl`; clap-wrapper
+  `AUV2_MANUFACTURER_CODE "Mndl"`. Four characters with at least one capital,
+  because Apple reserves all-lowercase codes. **A plugin that already declares a
+  code keeps it.** The fleet has three: `LfTk` (horde, Sluice, SWARM-FX, the
+  horde 2 preview), `Lftk` (Catena, Edgewise, Orrery, Tribos, Curvature,
+  Auricle) and `Mrph` (Morphos). Codes are case-sensitive, so `LfTk` and
+  `Lftk` are two different manufacturers to a host. In JUCE the code also
+  feeds the VST3 class ID (next bullet), so changing it orphans VST3 sessions
+  too. A repo that wants to move an existing plugin to `Mndl` takes that as
+  its own compatibility decision.
 - **Identity that never changes on a rename: the VST3 class ID and the AU
   four-char codes.** Where each comes from: JUCE derives the VST3 class ID from
   `PLUGIN_MANUFACTURER_CODE` + `PLUGIN_CODE` only, never the company name;

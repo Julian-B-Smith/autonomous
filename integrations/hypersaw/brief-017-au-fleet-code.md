@@ -3,9 +3,10 @@ id: hypersaw-017
 from: HYPERSAW
 to: autonomous
 thread: au-fleet-code
-status: filed
-ball: autonomous
+status: ratified — Mndl for new plugins; existing codes kept; see response-019-au-code.md
+ball: none
 seq: 1
+answered_by: response-019-au-code.md
 filed: 2026-10-17
 respond-by: none (horde 2's shell is not built yet; before it is helps)
 cites: autonomous doctrine/CONVENTIONS.md §Audio plugins (Decision 80); horde ADR-186 item 3, ADR-235 item 5
