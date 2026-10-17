@@ -93,7 +93,12 @@ just your repo:
 Work on a branch, commit there when green, then:
 
     git switch -c chore/<short-slug>      # if not already on one
-    git push -u origin HEAD && gh pr create --fill
+    python3 ~/Documents/Claude/autonomous/kit/act/act.py push && python3 ~/Documents/Claude/autonomous/kit/act/act.py pr-open --title "<title>" --body-file <body.md>
+
+The body file's first line states its origin (who, when, which decision), and the
+commit must be the tree a green `./verify` recorded: `act` refuses otherwise and
+says why (Decision 96). Raw `git push` / `gh pr create` still work until Phase A2,
+but skip those checks.
 
 Put the evidence in the PR body — what you proved and how. **Do not merge**;
 merges are the human's. Report the PR URL.

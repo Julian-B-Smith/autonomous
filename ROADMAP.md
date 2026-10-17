@@ -504,7 +504,10 @@ before the mechanisms exist is a frame written about nothing.
     `act pr-close`; deny rules for `gh pr merge` and repo edit/delete in the
     harness template, carried by the next kit batch. *Gate:* each refusal
     fires on a plant; a dry run of `act batch` classifies unchanged repos as
-    the 2026-10-12 run did. A1: the global observe hook and `act file`; a week
+    the 2026-10-12 run did. **BUILT 2026-10-17, kit 2.10.0 (Decision 98):**
+    both parts of the gate met (17 tests and 7 mutations; a fleet
+    classification with zero mismatches). The next batch is
+    `kit/act/plans/2026-10-19.json`. A1: the global observe hook and `act file`; a week
     of would-deny events read per verb. A2: per-verb denies, each by a signed
     GATE-CHANGE. A3: credential isolation, only if A1 shows it is needed.
   - **O1 — engine, budgets, snapshot.** `governor/oversight.py`: Decision 77's

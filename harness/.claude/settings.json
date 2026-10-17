@@ -22,7 +22,12 @@
       "Bash(git reset --hard*)",
       "Bash(rm -rf*)",
       "Read(./.env*)",
-      "Read(./**/secrets*)"
+      "Read(./**/secrets*)",
+      "Bash(gh pr merge*)",
+      "Bash(gh repo edit*)",
+      "Bash(gh repo delete*)",
+      "Bash(gh repo rename*)",
+      "Bash(gh repo archive*)"
     ]
   },
   "hooks": {

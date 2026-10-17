@@ -69,6 +69,11 @@ def changelog_entries(kit_dir):
 TOOL_ONLY = {"2.0.1", "2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.5.1", "2.6.1", "2.6.2", "2.6.3", "2.6.4", "2.6.5"}  # 2.3.0/2.4.0 are NOT
 
 REQUIREMENTS = {
+    # 2.10.0 (Decision 96): merges and repository settings are the human's BY
+    # RULE. A repo that carries a `.claude/settings.json` must deny them; one
+    # without settings is n/a (creating settings is a larger change than a deny
+    # list, and the closing-gate row already asks for them where verify exists).
+    "2.10.0": [("merge and repo-settings commands denied", None, "deny-if-settings")],
     # 2.9.1 (hypersaw-014): the fingerprint must keep the index's own time, or
     # git stops re-reading same-second edits. Syncing meets it.
     "2.9.1": [("tree fingerprint keeps the index's time", ".kit/kit-gates.sh",
@@ -420,6 +425,24 @@ def _closing_gate(repo):
         return False
 
 
+# Kept identical to kit/act/steps.py DENY (a test pins it): the batch step
+# adds exactly what this row asks for.
+DENY_REQUIRED = ("Bash(gh pr merge*)", "Bash(gh repo edit*)", "Bash(gh repo delete*)",
+                 "Bash(gh repo rename*)", "Bash(gh repo archive*)")
+
+
+def _denies(repo):
+    p = os.path.join(repo, ".claude", "settings.json")
+    if not os.path.isfile(p):
+        return "na"
+    try:
+        with open(p, encoding="utf-8") as fh:
+            deny = ((json.load(fh).get("permissions") or {}).get("deny")) or []
+        return all(d in deny for d in DENY_REQUIRED)
+    except (OSError, ValueError, AttributeError):
+        return False
+
+
 def _present(repo, target, kind):
     import subprocess
     if kind == "gate-fires:posix":
@@ -434,6 +457,8 @@ def _present(repo, target, kind):
         return _vendored_current(repo)
     if kind == "closing-gate":
         return _closing_gate(repo)
+    if kind == "deny-if-settings":
+        return _denies(repo)
     p = os.path.join(repo, target)
     if kind == "file":
         return os.path.isfile(p)
