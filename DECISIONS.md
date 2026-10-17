@@ -237,6 +237,25 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+97. **horde's plan map becomes an opt-in kit module, designed together with
+    the decision queue after Phase A0** (2026-10-17, human rulings via poll,
+    answering brief hypersaw-016). horde keeps a plan of record and a map of
+    its parts, each part citing the rows and ADRs that govern it, with five
+    self-checks. It asked the kit to generalize it. **Placement:** an opt-in
+    module in the kit, offered by `/spinup` for multi-part projects and
+    drafted by `/retrofit` on request. Rejected: required in every repo (a
+    parts graph is ceremony for a single-purpose tool) and a separate skill
+    outside the kit's versioning. **Freshness:** the plan shows how many rows
+    and decisions landed since it was last verified, and nothing turns red at
+    first; a threshold earns blocking later (Decision 84). **Order:** with the
+    decision queue, after A0. The plan's "open human decisions" list IS the
+    queue of Decision 90, so the queue file becomes its source and the map
+    links to it, rather than two designs that drift. The integrator's
+    leanings, stated in the reply and open to objection: a JSON source, and a
+    plain-paths code layer before any loupe adapter. horde's rule that a part's
+    status changes only with a cited record is adopted. It is Decision 87's
+    `ruled-by:` idea carried to plan parts.
+    ruled-by: human (poll 2026-10-17)
 96. **Outward actions go through harness-owned commands: Phase A ratified,
     A0 before the decision queue, and this repo is PRs only** (2026-10-16,
     human rulings via poll on `briefs/2026-10-16-harness-owned-actions.

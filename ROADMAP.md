@@ -484,8 +484,10 @@ before the mechanisms exist is a frame written about nothing.
     fields, horde's pilot report, the human's ruling on a clean pushed branch
     never verified in this checkout, a green run on Linux, then a signed
     GATE-CHANGE. *Next, in order:* the **decision
-    queue** (one file per repo, a third board); then the **run ledger**, after
-    horde pilots the receipt. *Ruled (Decision 92):* a repo with a `./verify`
+    queue** (one file per repo, a third board), designed together with the
+    **plan map** as an opt-in kit module (Decision 97; horde brief
+    hypersaw-016), after Phase A0; then the **run ledger**, after horde pilots
+    the receipt. *Ruled (Decision 92):* a repo with a `./verify`
     must carry the gate, wired; 20 repos read behind until retrofit. *Ruled
     (Decision 93):* this machine's `gh` token covers all repositories, so
     local sweeps and kit-sync PR batches reach the whole roster again. *Fixed
