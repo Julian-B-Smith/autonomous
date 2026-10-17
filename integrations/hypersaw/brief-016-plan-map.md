@@ -3,9 +3,10 @@ id: hypersaw-016
 from: HYPERSAW
 to: autonomous
 thread: plan-map
-status: filed
+status: ratified — opt-in kit module, designed with the decision queue after Phase A0; see response-017-plan-map.md
 ball: autonomous
 seq: 1
+answered_by: response-017-plan-map.md
 filed: 2026-10-17
 respond-by: none (answer when your session has a design)
 cites: horde docs/H2-PLAN.md; horde docs/design/h2-plan-map.html; horde ROADMAP B387; horde PR 1118 (the 2026-10-17 refresh); horde ADR-223; horde engine2/structure/ (B500)
