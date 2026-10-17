@@ -60,8 +60,10 @@ def _full_baseline(root):
     # 2.9.0: a full baseline carries the Stop shim, so its requirement is MET
     # here and the n/a list in the tests below stays about what each test means.
     _touch(root, ".claude/hooks/stop-gate.sh", 'exec bash "$CLAUDE_PROJECT_DIR/.kit/stop-gate.sh"\n')
-    _touch(root, ".claude/settings.json", json.dumps({"hooks": {"Stop": [{"hooks": [
-        {"type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.sh"}]}]}}))
+    _touch(root, ".claude/settings.json", json.dumps({
+        "permissions": {"deny": list(currency.DENY_REQUIRED)},
+        "hooks": {"Stop": [{"hooks": [
+            {"type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.sh"}]}]}}))
     _touch(root, ".gitattributes", "* text=auto eol=lf")
     # 2.5.0 asks whether .gitattributes is TRACKED, not merely on disk — an
     # untracked one reaches no clone and no CI. The fixture must therefore
@@ -118,9 +120,10 @@ class TestReport(unittest.TestCase):
         # 2.0.0 for that), so it reads n/a (listed below), not behind twice.
         # Any other version turning n/a here should fail this test.
         expected = [v for v, reqs in currency.REQUIREMENTS.items()
-                    if reqs and v not in currency.TOOL_ONLY and v != "2.9.0"]
+                    if reqs and v not in currency.TOOL_ONLY and v not in ("2.9.0", "2.10.0")]
         self.assertEqual(len(r["behind"]), len(expected))
-        self.assertEqual(r.get("not_applicable"), ["closing gate wired to the kit's"])
+        self.assertEqual(sorted(r.get("not_applicable")),
+                         ["closing gate wired to the kit's", "merge and repo-settings commands denied"])
         # the baseline entry is the one with real requirements
         base = next(b for b in r["behind"] if b["version"] == "2.0.0")
         self.assertEqual(len(base["missing"]), len(currency.REQUIREMENTS["2.0.0"]))
@@ -238,6 +241,26 @@ class TestVendoredGateDashForm(unittest.TestCase):
             self.assertNotIn("plant.md:3:", r.stderr)
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
+
+
+class TestDenyRequirement(unittest.TestCase):
+    """2.10.0 (Decision 96): where settings exist, merges and repo settings
+    are denied. The batch step and this row must ask for the same list."""
+    def test_states(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.assertEqual(currency._denies(root), "na")
+            _touch(root, ".claude/settings.json", json.dumps({"permissions": {"deny": ["Bash(rm -rf*)"]}}))
+            self.assertIs(currency._denies(root), False)
+            _touch(root, ".claude/settings.json", json.dumps({"permissions": {"deny": list(currency.DENY_REQUIRED)}}))
+            self.assertIs(currency._denies(root), True)
+            _touch(root, ".claude/settings.json", "{broken")
+            self.assertIs(currency._denies(root), False)
+
+    def test_batch_step_and_template_ask_for_the_same_list(self):
+        sys.path.insert(0, os.path.join(_KIT, "act"))
+        import steps
+        self.assertEqual(tuple(steps.DENY), currency.DENY_REQUIRED)
+        self.assertIs(currency._denies(os.path.join(_KIT, "..", "harness")), True)
 
 
 class TestClosingGateRequirement(unittest.TestCase):

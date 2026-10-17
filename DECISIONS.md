@@ -237,6 +237,30 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+98. **Phase A0 built: `kit/act/`, kit 2.10.0; the next batch runs through it**
+    (2026-10-17, integrator, building what Decision 96 ratified). `act push`,
+    `act pr-open`, `act pr-close` and `act batch`. Each refusal is a pure
+    contract with the incident that earned it written beside it, and each is
+    a planted case in `kit/act/test_act.py`. Seven mutations of the contracts
+    each fail the tests. **The ratification's batch gate is met:**
+    classifying the live fleet with the 2026-10-12 plan sorted every repo the
+    way that run recorded, with zero mismatches. The comparison had to use the
+    per-repo kinds printed when that batch finished: the script and its
+    results file were gone from the scratch folder within the week. That is
+    the proposal's point, made by the evidence. **Two design calls, stated
+    for objection.** (1) A repo with no `./verify` may push: the contract says
+    "no oracle" in its reason, and does not refuse. Refusing would push agents
+    back to the raw path, and writing a record for a verify that never ran
+    would bless bytes nothing judged. (2) The deny-rules step adds the
+    denies only where a `.claude/settings.json` already exists. Creating
+    settings is a larger change, which the closing-gate step makes only under
+    Decision 92. The next batch's plan is `kit/act/plans/2026-10-19.json`. It
+    supersedes the 2026-10-12 PRs still open, so each repo gets one PR.
+    GATE-CHANGE: `harness/.claude/settings.json` (5 deny rules added),
+    `.claude/settings.json` here (deny rules added, including direct pushes to
+    `main`), `verify` (new `act-tests` gate), `kit/currency.py` (the 2.10.0
+    requirement). All four add checks; none removes one.
+    ruled-by: integrator (building Decision 96)
 97. **horde's plan map becomes an opt-in kit module, designed together with
     the decision queue after Phase A0** (2026-10-17, human rulings via poll,
     answering brief hypersaw-016). horde keeps a plan of record and a map of

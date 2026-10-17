@@ -12,7 +12,9 @@
    `git switch -c <kind>/<short-slug>`  (e.g. `chore/kit-vendor-2.4.1`)
 2. Commit there when your checks are green.
 3. Push the BRANCH and open a PR:
-   `git push -u origin HEAD && gh pr create --fill`
+   `python3 ~/Documents/Claude/autonomous/kit/act/act.py push && python3 ~/Documents/Claude/autonomous/kit/act/act.py pr-open --title "<title>" --body-file <body.md>`
+   (`act` checks the branch, the verify record and the body's origin line first,
+   and refuses with a reason; Decision 96.)
    If the harness DENIES the push, the repo predates kit 2.6.1: say so in
    one line and poll the human to adopt the 2.6.1 permissions block — never
    silently hand them the commands (`kit/prompts/_human-gates.md` §2).

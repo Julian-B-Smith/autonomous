@@ -81,8 +81,13 @@ session's threads.
 
 ```
 git switch -c chore/session-<date>
-git push -u origin HEAD && gh pr create --fill
+python3 ~/Documents/Claude/autonomous/kit/act/act.py push && python3 ~/Documents/Claude/autonomous/kit/act/act.py pr-open --title "<title>" --body-file <body.md>
 ```
+
+The body file's first line states its origin (who, when, which decision), and the
+commit must be the tree a green `./verify` recorded: `act` refuses otherwise and
+says why (Decision 96). Raw `git push` / `gh pr create` still work until Phase A2,
+but skip those checks.
 
 Evidence in the PR body. **Do not merge** — merges are the human's. No remote?
 Commit on `main` and say so. Full contract: `kit/prompts/_closing.md`.

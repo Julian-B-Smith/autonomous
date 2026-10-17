@@ -61,6 +61,10 @@ fast() {
     || { echo "verify[fast]: session tests red" >&2; ok=1; }
   gate --min-cases 8 hook-tests _ut kit/hooks -q test_oversight_hooks \
     || { echo "verify[fast]: oversight hook tests red" >&2; ok=1; }
+  # Phase A0 (Decision 96): the contracts of the outward actions, and `act`
+  # end to end against a local remote and a fake gh. No network.
+  gate --min-cases 17 act-tests _ut kit/act -q test_act \
+    || { echo "verify[fast]: act tests red" >&2; ok=1; }
   # Retired doctrine phrases must not survive in INSTALLING artifacts
   # (hypersaw-002): a rule corrected where it is READ but left in the charter
   # and CHANGELOG action that COPY it is correct where nobody looks and wrong

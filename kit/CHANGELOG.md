@@ -288,6 +288,39 @@ the repo read healthy. Every individual check passed.
 - **Verify gate:** `kit/test_kit_sync.py`, whose fixtures had to become real
   git repos — they had been testing the one machine they ran on.
 
+## 2.10.0 — 2026-10-17 — outward actions through `act`; merges denied by rule
+
+Phase A0 of Decision 96 (`briefs/2026-10-16-harness-owned-actions.proposal.md`).
+
+- **`kit/act/`** (new): `act push`, `act pr-open`, `act pr-close` and
+  `act batch`. Each gathers facts from git and GitHub, asks a pure contract in
+  `checks.py`, and acts only on `ok`. A refusal exits 3 with its reason. Every
+  call is one line in the fleet event log. See `kit/act/README.md`.
+- **`act batch`** is the 2026-10-12 batch script made permanent: a plan file in
+  `kit/act/plans/`, named steps (`kit_sync`, `closing_gate`, `deny_rules`), dry
+  by default, and every push, PR and close through the same contracts.
+  - **Gate met:** run in classify-only mode with the 2026-10-12 plan, it sorted
+    every repo the way that run recorded, with zero mismatches.
+- **Harness template:** `gh pr merge` and `gh repo edit/delete/rename/archive`
+  are denied. "Merges are the human's" had been prose; nothing denied it.
+- **Session commands** (`/breakdown`, `/retrofit`, the closing and migration
+  prompts) push and open PRs through `act`.
+- **This repo:** PRs only (Decision 96), with deny rules for direct pushes to
+  `main`, merges and repo settings in its `.claude/settings.json`.
+- **New requirement:** a repo that carries `.claude/settings.json` denies those
+  commands. A repo without one reads n/a.
+- **Retrofit action:** the next batch (`kit/act/plans/2026-10-19.json`) adds
+  the deny rules where settings exist, and repeats the 2.9 closing-gate step
+  for repos whose 2.9.1 PR never merged. By hand: add the five `Bash(gh …)`
+  entries from `harness/.claude/settings.json` to `permissions.deny`.
+- **Not yet enforced:** the raw `git push` / `gh pr …` path still works. A1
+  logs it; A2 denies it per command.
+- **Verify gate:** `kit/act/test_act.py` (17 tests).
+  - Every refusal is a planted case.
+  - The commands run end to end against a local bare remote and a fake `gh`.
+  - One batch is run from plan to PR.
+  - Seven mutations of the contracts each fail it.
+
 ## 2.9.1 — 2026-10-11 — the fingerprint sees a same-size edit made in the same second
 
 Found by horde within a day of adopting 2.9.0 (report hypersaw-014), and

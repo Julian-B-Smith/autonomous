@@ -1,0 +1,10 @@
+{
+  "id": "2026-10-12",
+  "about_this_file": "The 2026-10-12 fleet batch (Decision 95), written as a plan after the fact. It ran from a scratch script; this file is what that script did, and Phase A0's gate classifies the fleet with it and compares the result with that run.",
+  "branch": "kit-2.9.1-sync",
+  "supersedes": ["kit-2.7.0-sync"],
+  "steps": ["kit_sync", "closing_gate"],
+  "title": "kit 2.9.1: the closing gate judges the tree; the verify record says what ran",
+  "commit_message": "kit 2.9.1: the closing gate judges the tree; the verify record says what ran\n\nSynced .kit/ from autonomous (kit_sync.py): kit 2.8.0, 2.9.0 and 2.9.1.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n",
+  "origin": "> **Origin.** autonomous (standards repo) resident, 2026-10-12: the weekly kit batch, run on the human's poll rulings of the same day (autonomous Decisions 86, 89, 92, 94, 95)."
+}

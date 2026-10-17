@@ -203,7 +203,12 @@ is a request that the effective-state check run now. Two channels, both:
 Close on a BRANCH with a PR, never a commit left on `main`:
 
     git switch -c chore/kit-retrofit-<version>
-    git push -u origin HEAD && gh pr create --fill
+    python3 ~/Documents/Claude/autonomous/kit/act/act.py push && python3 ~/Documents/Claude/autonomous/kit/act/act.py pr-open --title "<title>" --body-file <body.md>
+
+The body file's first line states its origin (who, when, which decision), and the
+commit must be the tree a green `./verify` recorded: `act` refuses otherwise and
+says why (Decision 96). Raw `git push` / `gh pr create` still work until Phase A2,
+but skip those checks.
 
 Evidence goes in the PR body — that is where the human reviews. **Do not
 merge**; merges are theirs. No remote? Commit on `main` and say so plainly.

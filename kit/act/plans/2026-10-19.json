@@ -1,0 +1,12 @@
+{
+  "id": "2026-10-19",
+  "about_this_file": "The weekly kit batch due on or after 2026-10-19, the first run by `act batch` (Decision 96). It supersedes the 2026-10-12 batch's PRs that are still open, so each repo gets one PR carrying everything.",
+  "branch": "kit-2.10.0-sync",
+  "supersedes": ["kit-2.9.1-sync"],
+  "steps": ["kit_sync", "closing_gate", "deny_rules"],
+  "title": "kit 2.10.0: merges are the human's by rule; the closing gate judges the tree",
+  "commit_message": "kit 2.10.0: merges are the human's by rule; the closing gate judges the tree\n\nSynced .kit/ from autonomous (kit_sync.py), carrying kit 2.8.0 to 2.10.0.\nWhere this repo carried the old template's closing gate it is now the\nkit's shim; where it had a ./verify and no gate, the shim and its two Stop\nentries are added. Where it carries .claude/settings.json, agents may no\nlonger run gh pr merge or gh repo edit/delete/rename/archive (autonomous\nDecisions 89, 92, 96).\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n",
+  "origin": "> **Origin.** autonomous (standards repo) resident: the weekly kit batch, the first run through `act batch` (autonomous Decision 96). It replaces this repo's kit 2.9.1 PR if that was still open.",
+  "about": "**What the kit files do now.** The closing gate still blocks on unverified edits and on a red verify, and now treats an unreadable record as red and runs from the repo root. A third test compares a fingerprint of the working tree with the one `./verify` recorded; here it only **logs**. The verify record stores that fingerprint, and a gate wrapped as `gate <name> <command>` records whether it ran, skipped or failed (optional, not done here). Composite repos get a contract-version check that only warns.",
+  "action": "Merge. Nothing else is needed. The new deny rules stop agents from merging PRs or changing repository settings here; you still can."
+}
