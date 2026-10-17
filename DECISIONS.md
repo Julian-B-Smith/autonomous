@@ -237,6 +237,26 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+100. **New Mindlathe plugins take the AU manufacturer code `Mndl`; every
+    plugin that already declares a code keeps it** (2026-10-17, human ruling
+    via poll, answering horde's brief hypersaw-017). horde asked for a fleet
+    code derived from the name, as the human had asked in horde. Checking the
+    brief's facts turned up one it got wrong. It said no sibling declares a
+    code, but the fleet already carries THREE: `LfTk` (horde, Sluice,
+    SWARM-FX, the horde 2 preview), `Lftk` (six JUCE plugins) and `Mrph`
+    (Morphos). Codes are case-sensitive, so the two Lifted Truck spellings
+    are two manufacturers to a host. Nine of these plugins are installed on
+    this machine (read from `auval -a`), so the human's own sets bind to them.
+    For a JUCE plugin the code also feeds the VST3 class ID, so the frozen
+    identity is wider than AU. Hence the rule keys on "already declares a
+    code", not on "released": a public release is not the only thing that
+    binds a session. horde 2 is a new identity (a new CLAP id, ADR-235, and a
+    separate component from the installed preview), so it takes `Mndl`
+    without orphaning anything. Recorded in `doctrine/CONVENTIONS.md`
+    §Audio plugins. Not verified: whether another vendor uses `Mndl`. Apple
+    keeps no public registry to check, and a collision matters only together
+    with the same subtype.
+    ruled-by: human (poll 2026-10-17)
 99. **The plan map's first instance is autonomous itself; format `kit.plan/0`
     is a draft, open to horde's objection** (2026-10-17, integrator, at the
     human's request: "Please run a plan map yourself for autonomous").
