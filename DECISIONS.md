@@ -237,6 +237,32 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+101. **The distillery sweeps itself daily: started by a session-start hook,
+    written in its own worktree, delivered as one PR a week** (2026-10-25,
+    human rulings via poll: "Session-start hook", "One PR a week", "Me, now,
+    as PRs there"). The human noticed the distillery had never run on its
+    own. The record agreed: the ingest was built and gated on 2026-07-11, a
+    daily sweep was ruled on 2026-07-10, and the stream was last written on
+    2026-08-18. A trial run on a copy found 176 lessons from 26 projects
+    waiting. Three things had blocked automation:
+    - its own Decision 10 required a writer lock before any automated writer,
+      and none was built;
+    - launchd cannot read ~/Documents (Decision 42);
+    - nothing said how automated appends reach the committed stream when
+      merges are the human's.
+
+    Built in distillery (its PR #5, decision 23): the lock, and `bin/daily`,
+    which ingests once a day in a worktree outside ~/Documents and publishes
+    through `act`. One PR opens when the oldest unpublished sweep is a week
+    old, and later days push into it. Its first real use exercised `act
+    push`'s path for repos without the 2.9 tree fingerprint. Built here: the
+    hook, which starts `bin/daily` detached and costs nothing on a day it
+    already ran. The hook joins `~/.claude/settings.json` after both PRs
+    merge; picking it in the poll was the approval for that settings change.
+    **Next:** D3, the analyst. Until it exists the distillery collects lessons
+    but does not learn from them.
+    GATE-CHANGE: `verify` hook-tests floor 8 to 11. A new hook, with tests.
+    ruled-by: human (poll 2026-10-25)
 100. **New Mindlathe plugins take the AU manufacturer code `Mndl`; every
     plugin that already declares a code keeps it** (2026-10-17, human ruling
     via poll, answering horde's brief hypersaw-017). horde asked for a fleet
