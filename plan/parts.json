@@ -7,7 +7,7 @@
  "verified": {
   "date": "2026-10-17",
   "roadmap_commit": "2340f5e",
-  "decisions_max": 100
+  "decisions_max": 101
  },
  "targets": [
   "p4"

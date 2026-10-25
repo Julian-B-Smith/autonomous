@@ -94,5 +94,50 @@ class TestRepoName(unittest.TestCase):
             self.assertEqual(fe.repo_name(main), "myrepo")
             self.assertEqual(fe.repo_name(os.path.join(root, "not-a-repo")), "not-a-repo")
 
+
+class TestDistilleryDailyHook(unittest.TestCase):
+    """The hook starts distillery's daily sweep detached and returns at once,
+    and costs nothing on a day it already ran (Decision 101)."""
+    HOOK = os.path.join(HERE, "distillery-daily-async.sh")
+
+    def setUp(self):
+        self.d = tempfile.mkdtemp()
+        os.makedirs(os.path.join(self.d, "distillery", "bin"))
+        self.marker = os.path.join(self.d, "ran")
+        daily = os.path.join(self.d, "distillery", "bin", "daily")
+        with open(daily, "w") as fh:
+            fh.write("import time\ntime.sleep(2)\nopen(%r, 'w').write('x')\n" % self.marker)
+        os.chmod(daily, 0o755)
+        self.env = dict(os.environ, DISTILLERY_HOME=os.path.join(self.d, "distillery"),
+                        DISTILLERY_DAILY_HOME=os.path.join(self.d, "state"))
+
+    def tearDown(self):
+        shutil.rmtree(self.d, ignore_errors=True)
+
+    def test_starts_the_sweep_detached(self):
+        import time
+        t = time.time()
+        r = subprocess.run(["bash", self.HOOK], env=self.env, capture_output=True, timeout=10)
+        self.assertEqual(r.returncode, 0)
+        self.assertLess(time.time() - t, 1.5)          # the session never waits on the sweep
+        for _ in range(50):
+            if os.path.exists(self.marker):
+                break
+            time.sleep(0.1)
+        self.assertTrue(os.path.exists(self.marker))
+
+    def test_does_nothing_on_a_day_it_already_ran(self):
+        import time
+        os.makedirs(os.path.join(self.d, "state"))
+        with open(os.path.join(self.d, "state", "last-run"), "w") as fh:
+            fh.write(time.strftime("%Y-%m-%d") + "\n")
+        subprocess.run(["bash", self.HOOK], env=self.env, timeout=10)
+        time.sleep(2.5)
+        self.assertFalse(os.path.exists(self.marker))
+
+    def test_absent_distillery_is_a_no_op(self):
+        env = dict(self.env, DISTILLERY_HOME=os.path.join(self.d, "nope"))
+        self.assertEqual(subprocess.run(["bash", self.HOOK], env=env, timeout=10).returncode, 0)
+
 if __name__ == "__main__":
     unittest.main()

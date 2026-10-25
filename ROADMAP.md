@@ -51,6 +51,10 @@ INTEGRATIONS policy.
   pool. Phases D0–D4 in its ROADMAP. Seams: consumes LIBRARY schema + sweep
   primitive (Track A); autonomous P3 down-propagation consumes its distilled
   pool (gates implemented there, spec canonical here — per distillery-001).
+  *Daily sweep wired 2026-10-25 (Decision 101; distillery decision 23):* the
+  writer lock, `bin/daily` in its own worktree, one PR a week, started by
+  `kit/hooks/distillery-daily-async.sh` at session start. D3, the analyst, is
+  the next build and the part that makes it a learning loop.
 - **Track C — dispatch (`~/Documents/Claude/dispatch/`): progress publishing.**
   Deterministic collector → FACTS → styled digest → fenced AI narration →
   human-gated publish. Phases E0–E4 in its ROADMAP. Seams: consumes the
