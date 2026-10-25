@@ -237,6 +237,31 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+102. **The distillery is private: its public stream had published private
+    repos' lessons since 2026-08-12** (2026-10-25, human ruling via poll, then
+    the human's own `gh repo edit`; distillery decision 24). Found while
+    opening the first daily sweep's PR (Decision 101). The distillery repo
+    was PUBLIC, and the stream on its `main` carried the text of lessons from
+    about 25 private repos and 9 records from local-only resume-workshop,
+    whose D-005 keeps client PII off every remote. A pattern scan of those 9
+    found no contact data: all 25 phone-shaped matches were ISO dates. A scan
+    cannot prove an absence, and the names and lesson text were public either
+    way. **Nothing from the 2026-10-25 sweep was pushed before the flip**: the
+    sweep holds its push for a week, and the integrator checked visibility
+    before opening the backlog PR. That check was not in the design. Designing
+    the publish path without asking where it published was the integrator's
+    miss, caught one step before it shipped. **Built:** the distillery's
+    `daily.publish` now holds unless GitHub confirms PRIVATE, and an
+    unreadable visibility counts as public (its PR #7). What was public for
+    ten weeks may have been seen or cached; nothing recalls it.
+    **The wider question, raised and not acted on** (queue item
+    `private-names`): the leak gate looks for home paths, and nothing checks
+    whether a public repo publishes a private repo's CONTENT. Counting
+    private-repo NAMES in public repos found 510 mentions of 21 names in this
+    repo's own files, against its charter line "Nothing here names private
+    repos". Public horde names its private FX modules 2,699 times. Whether a
+    name is sensitive, or only content is, is the human's call.
+    ruled-by: human (poll 2026-10-25)
 101. **The distillery sweeps itself daily: started by a session-start hook,
     written in its own worktree, delivered as one PR a week** (2026-10-25,
     human rulings via poll: "Session-start hook", "One PR a week", "Me, now,

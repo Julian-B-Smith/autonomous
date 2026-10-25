@@ -63,6 +63,16 @@
     "o4"
    ],
    "lands_in": "DECISIONS.md (K3 gate; Structural Caution §5.4)"
+  },
+  {
+   "id": "private-names",
+   "question": "Is a private repo's NAME sensitive in a public repo, or only its content? This repo names 21 private repos 510 times, against its charter; public horde names its private FX modules 2,699 times.",
+   "raised": "2026-10-25",
+   "recommendation": "Names are not sensitive and content is: amend the charter line to say so, and add a fleet check that flags private-repo CONTENT (lesson text, briefs, designs) in a public repo, the class of leak the distillery had.",
+   "blocks": [
+    "vsm-d"
+   ],
+   "lands_in": "DECISIONS.md, then the charter line in CLAUDE.md"
   }
  ]
 }

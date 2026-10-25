@@ -7,7 +7,7 @@
  "verified": {
   "date": "2026-10-17",
   "roadmap_commit": "2340f5e",
-  "decisions_max": 101
+  "decisions_max": 102
  },
  "targets": [
   "p4"
@@ -26,7 +26,8 @@
   "ROADMAP marks Phase C0 (Consolidation) as `← current phase`, but its gate has no recorded result, and every phase opened since 2026-08-17 (K, O, S, A) runs as a parallel track. The roadmap's stated spine, P0 to P4, has not moved since. Raised as a decision: `c0-spine`.",
   "The landscape audit has been live since 2026-07-10 (a monthly cloud routine), yet ROADMAP files it under Deferred / demoted.",
   "The Kit v2 track's `Shipped so far` paragraph is dated 2026-07-10/11 and lists its next items. Since then, kit versions 2.0.0 to 2.10.0 have shipped under Phase K, and the paragraph has not been updated.",
-  "T2 asks for a declaration form for project-level items waiting on the human. Decision 90 ruled that form: the decision queue, one file per repo. Raised as a decision: `t2-queue`."
+  "T2 asks for a declaration form for project-level items waiting on the human. Decision 90 ruled that form: the decision queue, one file per repo. Raised as a decision: `t2-queue`.",
+  "This repo's charter says nothing here names private repos, but its tracked files name 21 of them 510 times (counted 2026-10-25). Raised as a decision: `private-names`."
  ],
  "tracks": [
   "Build sequence (rung 3)",

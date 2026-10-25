@@ -35,6 +35,11 @@ might be worth patenting, public code forecloses the strongest options.
   *Suggested license at eventual release:* source-available/non-commercial
   (e.g. PolyForm Noncommercial) or all-rights-reserved until a commercial
   decision — NOT permissive, or you hand competitors the product.
+  *Data, not code, decides (Decision 102, 2026-10-25):* **distillery** is
+  infrastructure, but its stream holds lessons from private repos, so it is
+  PRIVATE. Its daily sweep refuses to publish unless the repo is private. If
+  the code is wanted as a showcase, split it into its own public repo; never
+  publish the stream.
   *Created public, ruled private for now (Decision 88, 2026-10-08):*
   **Bulwark** (formerly Dynamite) and **Scape**, horde's dynamics and reverb
   libraries, created public with no license. The human ruled "temporarily",
