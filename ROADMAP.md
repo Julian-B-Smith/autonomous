@@ -193,6 +193,33 @@ not for cross-track sequencing):
   mirrors the Stop hook (`fast` only). Consumes autonomous and, from M1,
   FOUNDATIONS; consumed by horde as an FX-rack module (notice
   `scape-notice-spinup` in their tree). Registered per brief `scape-001`.
+- **Echo** (`~/Documents/Claude/synthetic-worlds/Echo/`; PUBLIC,
+  github.com/Julian-B-Smith/Echo, by the human's choice, kept public by
+  Decision 104) is horde's standard delay: free or synced time with left and
+  right offsets, stereo, ping-pong and mid/side routing, feedback with
+  filters at the input, in the loop and at the output, repitch by two laws,
+  tempo following and line modulation. It was spun out of horde like Scape,
+  Bulwark and Sluice. It is a header-only C++20 core behind a local shim in
+  FOUNDATIONS' FX-operator shape, plus a browser listening twin that is
+  never a parity target. No plugin of its own. Spun up 2026-10-19 via
+  /spinup on kit 2.10.0 (survey by poll), with leak, private-name, legal,
+  manifest and intake-pin gates. Rung 2; CI runs `fast` on Linux/GCC with
+  ASan and UBSan. Consumes autonomous and, from M3, FOUNDATIONS; consumed by
+  horde as an FX-rack module (notice `echo-notice-spinup` in their tree).
+  Registered per brief `echo-001`; `registry.json` sees it by the
+  immediate-children rule.
+- **Arp** (`~/Documents/Claude/synthetic-worlds/Arp/`; PUBLIC,
+  github.com/Julian-B-Smith/Arp, by the human's choice, kept public by
+  Decision 104) is horde's note-generation home: the simple arpeggiator for
+  horde 1.0, then step sequencing and generative MIDI after 1.0. It was spun
+  out of horde like Echo. It is a pure C++ note processor plus a browser
+  listening twin that is never a parity target. No plugin of its own. Spun
+  up 2026-10-21 via /spinup on kit 2.10.0 (survey by poll), with leak,
+  private-name, manifest and intake-pin gates. Rung 2; CI mirrors the Stop
+  hook (`fast` only). Consumes autonomous and, from M3, FOUNDATIONS (note
+  vocabulary); consumed by horde ahead of its engine (notice
+  `arp-notice-spinup` in their tree). Registered per brief `arp-001`;
+  `registry.json` sees it by the immediate-children rule.
 - **opportunity-scanner** (`~/Documents/Claude/opportunity-scanner/`,
   no remote yet — local-only) — marketplace-surface scanner: a Markdown+YAML
   registry/signals/trials corpus as the durable product, with disposable

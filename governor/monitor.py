@@ -228,7 +228,7 @@ def render_exchanges(projects, today):
     """
     overdue, ours, untracked = [], [], []
     for p in projects:
-        for th in ball_scan.scan_repo(p["path"], p["name"], today):
+        for th in ball_scan.scan_repo(p["path"], ball_scan.correspondent_names(p["path"]), today):
             if th["days_overdue"]:
                 overdue.append((th["days_overdue"], p["name"], th))
             elif th["ours"]:

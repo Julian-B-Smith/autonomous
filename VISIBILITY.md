@@ -46,6 +46,9 @@ might be worth patenting, public code forecloses the strongest options.
   so this is a hold, not a final call. Pick the license when they go public.
   *Kept PUBLIC deliberately (resume showcase, human decision 2026-07-13):*
   **Tonality**, **Audiology**.
+  *Kept PUBLIC deliberately (human's choice at spin-up, Decision 104,
+  2026-10-27):* **Echo** and **Arp**, horde's delay and note-generation
+  libraries. Recommended license: PolyForm Noncommercial, as for Tonality.
 
 - **Client-confidential → PRIVATE (already correct).**
   harness-grader (leather-harness client designs — verified PRIVATE 2026-07-13,
