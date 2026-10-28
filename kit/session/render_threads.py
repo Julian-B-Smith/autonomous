@@ -40,7 +40,8 @@ def gather():
         if not os.path.isdir(os.path.join(p["path"], "integrations")):
             continue
         try:
-            for t in ball_scan.scan_repo(p["path"], ball_scan.correspondent_names(p["path"]), today):
+            for t in ball_scan.scan_repo(p["path"], ball_scan.correspondent_names(p["path"]), today,
+                                         peers=paths):
                 t = dict(t, repo=p["name"])
                 rows.append(t)
             for a in ball_scan.responses_awaiting(ball_scan.correspondent_names(p["path"]), paths, today):

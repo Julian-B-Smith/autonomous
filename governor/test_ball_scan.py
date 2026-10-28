@@ -380,6 +380,76 @@ class TestCorrespondentNames(unittest.TestCase):
         self.assertEqual(ball_scan.correspondent_names(self.sluice), ["sluice"])
 
 
+class TestCounterpartReplies(unittest.TestCase):
+    """A split channel, 2026-10-28. horde files its briefs to Shriek into
+    Maw's `integrations/hypersaw/` (`ball: Shriek`); Shriek answers in horde's
+    `integrations/maw/` with `in-reply-to:` the brief. A scan of Maw's tree
+    alone reported the engine-rebuild brief as owed for eleven days after it
+    was answered. `peers` follows the reply edge into the counterpart's slot."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.maw = os.path.join(self.tmp, "Maw")
+        self.horde = os.path.join(self.tmp, "horde")
+        for d, n in ((self.maw, "Shriek"), (self.horde, "HYPERSAW")):
+            os.makedirs(d)
+            with open(os.path.join(d, "project.manifest.json"), "w") as fh:
+                fh.write('{"name": "%s"}' % n)
+        _fm(os.path.join(self.maw, "integrations", "hypersaw"), "brief-title-mark.md",
+            id="hypersaw-brief-title-mark", ball="Shriek", status="filed", seq=26,
+            filed="2026-08-05")
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _reply(self, ball="none", filed="2026-08-06", to="hypersaw-brief-title-mark", slot="maw"):
+        _fm(os.path.join(self.horde, "integrations", slot), "response-title-mark.md",
+            id="maw-response-title-mark", in_reply_to=to, ball=ball,
+            status="responded", seq=27, filed=filed)
+
+    def _owed(self, peers=True):
+        names = ball_scan.correspondent_names(self.maw)
+        rows = ball_scan.scan_repo(self.maw, names, TODAY,
+                                   peers=[self.maw, self.horde] if peers else None)
+        return [r["id"] for r in rows if r["ours"]]
+
+    def test_our_reply_in_the_senders_slot_discharges_the_brief(self):
+        self._reply()
+        self.assertEqual(self._owed(), [])
+
+    def test_a_reply_that_hands_the_ball_back_discharges_it_too(self):
+        self._reply(ball="horde")
+        self.assertEqual(self._owed(), [])
+
+    def test_a_reply_by_filename_counts(self):
+        self._reply(to="brief-title-mark.md")
+        self.assertEqual(self._owed(), [])
+
+    def test_without_peers_the_scan_is_unchanged(self):
+        """Red-by-design: the failure as it happened, kept so a caller that
+        drops `peers` shows up here."""
+        self._reply()
+        self.assertEqual(self._owed(peers=False), ["hypersaw-brief-title-mark"])
+
+    def test_control_no_reply_is_still_owed(self):
+        self.assertEqual(self._owed(), ["hypersaw-brief-title-mark"])
+
+    def test_control_a_reply_that_keeps_the_ball_is_still_owed(self):
+        self._reply(ball="Shriek")
+        self.assertEqual(self._owed(), ["hypersaw-brief-title-mark"])
+
+    def test_control_a_reply_older_than_a_refiled_brief_is_still_owed(self):
+        _fm(os.path.join(self.maw, "integrations", "hypersaw"), "brief-title-mark-2.md",
+            id="hypersaw-brief-title-mark", ball="Shriek", status="refiled",
+            refreshed="2026-08-07")
+        self._reply(filed="2026-08-06")
+        self.assertEqual(self._owed(), ["hypersaw-brief-title-mark"])
+
+    def test_control_a_reply_in_a_slot_not_ours_does_not_count(self):
+        self._reply(slot="sluice")
+        self.assertEqual(self._owed(), ["hypersaw-brief-title-mark"])
+
+
 class TestFrontmatterLies(unittest.TestCase):
     """A sweep fixes instances; a gate fixes the class. The manual sweep that
     closed this bug caught 21 of 23 — and one miss was HYPERSAW's own brief, on

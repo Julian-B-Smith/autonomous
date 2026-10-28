@@ -237,6 +237,24 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+106. **A ball held by us is discharged by our reply in the counterpart's slot**
+    (2026-10-28, the human: "yes, draft the hook fix in autonomous", from
+    Shriek's session). Some channels are split across two directories, against
+    Decision 105: horde files briefs into the receiver's tree (Maw's, Scape's,
+    Sluice's `integrations/hypersaw/`), and the receiver answers in horde's
+    slot with `in-reply-to:` the brief. `scan_repo` read one tree, so every such
+    brief read as owed forever: Shriek's session brief showed horde's
+    engine-rebuild brief as `ball on us` for eleven days after the answer.
+    **Built:** `scan_repo(..., peers=)` follows reply edges into the peer's slot
+    for us; a reply no older than the ball-holding file, whose `ball:` is not
+    us again, discharges it. The session brief, monitor and threads board pass
+    the roster. Measured on the roster the day it was built: ball-on-us 36 → 21,
+    15 discharges, each checked against the reply that discharged it. 8 tests
+    (a red-by-design case without `peers` and four controls); governor floor
+    92 → 107. **Not decided here:** whether horde should stop filing openers in
+    receivers' trees (Decision 105 says it should). The scan now tolerates the
+    split; it does not adopt it.
+    ruled-by: human (2026-10-28, to draft; the PR is the ratification)
 105. **A mailbox is keyed by correspondent name, and the provider's slot
     carries traffic both ways** (2026-10-27, the human by poll, answering
     horde brief hypersaw-018). Sluice's seq-47 notice opened a thread with

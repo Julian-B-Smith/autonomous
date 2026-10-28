@@ -227,8 +227,10 @@ def render_exchanges(projects, today):
     exists to fix. One list, sorted worst-first, is the whole point.
     """
     overdue, ours, untracked = [], [], []
+    peers = [p["path"] for p in projects]
     for p in projects:
-        for th in ball_scan.scan_repo(p["path"], ball_scan.correspondent_names(p["path"]), today):
+        for th in ball_scan.scan_repo(p["path"], ball_scan.correspondent_names(p["path"]), today,
+                                      peers=peers):
             if th["days_overdue"]:
                 overdue.append((th["days_overdue"], p["name"], th))
             elif th["ours"]:
