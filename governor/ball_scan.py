@@ -269,11 +269,54 @@ def _ball_token(ball):
     return re.split(r"[\s(,;:—-]", ball.strip(), 1)[0].strip().lower()
 
 
-def scan_repo(path, repo_name, today=None):
+def _counterpart_replies(path, dirname, repo_name, peers):
+    """What OUR side has answered from the counterpart's tree: {ref: newest
+    date}, every id or filename that a file in the peer's slot for us
+    (`<peer>/integrations/<one of our names>/`) replies to, where the peer
+    is the repo that `integrations/<dirname>/` here is addressed from.
+
+    Why it is needed: Decision 105 keeps an exchange in ONE slot, the
+    provider's, but a peer that files its openers into our tree anyway splits
+    the channel. Its brief sits here with `ball: <us>`, our answer sits in its
+    slot with `in-reply-to: <that brief>`, and a scan of our tree alone reports
+    the answered brief as owed forever: Shriek's session brief flagged horde's
+    engine-rebuild audit for eleven days after Shriek had answered it there
+    (2026-10-17 to 2026-10-28). Following the edge into the other slot is a
+    read, which writes-stay-home permits; it does not adopt the split.
+
+    A reply whose `ball:` names us again is not counted: we answered and kept
+    the ball, so it is still ours."""
+    me = _names(repo_name)
+    found = {}
+    for peer in peers or []:
+        if os.path.realpath(peer) == os.path.realpath(path):
+            continue
+        if dirname.lower() not in correspondent_names(peer):
+            continue
+        box = os.path.join(peer, "integrations")
+        if not os.path.isdir(box):
+            continue
+        for d in os.listdir(box):
+            if d.lower() not in me:
+                continue
+            for f in glob.glob(os.path.join(box, d, "*.md")):
+                p = _parse(f)
+                if not p or _ball_token(p["ball"]) in me:
+                    continue
+                for ref in p["replies_to"]:
+                    found[ref] = max(found.get(ref, ""), p["date"])
+    return found
+
+
+def scan_repo(path, repo_name, today=None, peers=None):
     """Open exchange threads in one repo's mailbox.
 
     Returns a list of dicts: id, dir, ball, ours, status, respond_by,
     days_overdue (None when not past due), untracked (mailbox file not in git).
+
+    `peers` (roster paths, optional) lets a ball held by us be discharged by
+    our reply in the counterpart's slot (see _counterpart_replies). Without it
+    the scan reads this tree only, as before.
     """
     today = today or datetime.date.today()
     files = []
@@ -293,7 +336,7 @@ def scan_repo(path, repo_name, today=None):
         root = min(members, key=lambda m: (depth[m["path"]], m["date"] or "9999", m["path"]))
         threads[root["id"]] = members
 
-    out = []
+    out, far = [], {}                    # far: mailbox dir -> _counterpart_replies
     for tid, members in sorted(threads.items()):
         # Closure is MONOTONIC and beats date-ordering: if any member declares a
         # terminal status the thread is done. Trusting "latest file wins" here
@@ -328,12 +371,23 @@ def scan_repo(path, repo_name, today=None):
                    if q in by_path and q != latest["path"]]
         if answers and all(_ball_token(a["ball"]) in ("", "none", "-") for a in answers):
             continue
+        ours = _ball_is_ours(latest["ball"], repo_name)
+        # The same discharge, when our answer sits in the counterpart's slot.
+        # The reply must be no older than the holder: a peer that re-files
+        # under the same id after our answer has asked again.
+        if ours and peers:
+            d = os.path.basename(os.path.dirname(latest["path"]))
+            if d not in far:
+                far[d] = _counterpart_replies(path, d, repo_name, peers)
+            stem = os.path.basename(latest["path"])[:-3].lower()
+            hit = [far[d][r] for r in (latest["id"].lower(), stem) if r in far[d]]
+            if hit and max(hit) >= latest["date"]:
+                continue
         # The live commitment is the LATEST respond-by in the thread: a refile
         # or a counter-brief resets the clock, and honouring a superseded date
         # would report an obligation nobody currently holds.
         deadlines = [m["respond_by"] for m in members if m["respond_by"]]
         respond_by = max(deadlines) if deadlines else None
-        ours = _ball_is_ours(latest["ball"], repo_name)
 
         # Overdue is computed ONLY when the ball is ours. A `respond-by` binds
         # whoever holds the ball; once we answer and the ball moves, that date is

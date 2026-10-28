@@ -41,7 +41,7 @@ fast() {
   # 1. Sweep primitive + governor monitor unit tests
   gate --min-cases 22 sweep-tests _ut kit/sweep discover -q . \
     || { echo "verify[fast]: sweep tests red" >&2; ok=1; }
-  gate --min-cases 92 governor-tests _ut governor discover -q . \
+  gate --min-cases 107 governor-tests _ut governor discover -q . \
     || { echo "verify[fast]: governor tests red" >&2; ok=1; }
   # kit/gates ships checks that OTHER repos wire into their own verify. If its
   # tests are not discovered here, a broken kit gate propagates outward silently

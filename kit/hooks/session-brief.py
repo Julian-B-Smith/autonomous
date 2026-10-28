@@ -81,9 +81,19 @@ def main():
         except Exception:
             pass
 
-    # 1. What THIS repo owes (its own mailbox).
+    # The roster, read once: section 1 follows our replies into peers' slots,
+    # section 3 reads what peers have answered. Best-effort; never block on it.
     try:
-        mine = ball_scan.scan_repo(root, names, today)
+        import sweep
+        with open(os.path.join(AUT, "registry.json"), encoding="utf-8") as fh:
+            paths = [p["path"] for p in sweep.resolve(json.load(fh))]
+    except Exception:
+        paths = []
+
+    # 1. What THIS repo owes (its own mailbox). `peers` lets an answer we filed
+    #    in the sender's slot discharge its brief here (a split channel).
+    try:
+        mine = ball_scan.scan_repo(root, names, today, peers=paths)
     except Exception:
         mine = []
     overdue = [t for t in mine if t["days_overdue"]]
@@ -122,10 +132,6 @@ def main():
     #    gap (Decision 53): without this a repo cannot tell an answered brief
     #    from an ignored one. Roster read is best-effort — never block on it.
     try:
-        import sweep
-        with open(os.path.join(AUT, "registry.json"), encoding="utf-8") as fh:
-            reg = json.load(fh)
-        paths = [p["path"] for p in sweep.resolve(reg)]
         awaiting = ball_scan.responses_awaiting(names, paths, today)
         if awaiting:
             bits.append("answered elsewhere, unread by us: " + ", ".join(
