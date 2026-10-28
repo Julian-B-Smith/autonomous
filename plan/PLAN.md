@@ -5,7 +5,7 @@
 
 The plan of record for `autonomous`, drawn as a map of its own records. It is the first instance of the plan-map kit module (Decision 97), so it is also a test of the format. Every status cites a decision, a ROADMAP row or a file; an edge the records do not state is marked as the plan's inference.
 
-**Last verified: 2026-10-17**, against ROADMAP.md at `2340f5e` and DECISIONS.md through Decision 102. ROADMAP.md outranks this file.
+**Last verified: 2026-10-17**, against ROADMAP.md at `2340f5e` and DECISIONS.md through Decision 103. ROADMAP.md outranks this file.
 
 The picture: [`plan-map.html`](plan-map.html).
 
@@ -95,7 +95,6 @@ To `p4`: 6 unfinished parts, 3 tied chains:
 - **`clean-branch`** (raised 2026-10-10; blocks `o06`): May a clean, pushed branch that was never verified in its checkout stop without running verify? *Recommendation:* Decide on the observe week's counts of `clean` and `pushed` stop-gate events, as Decision 92 ruled. *Lands in:* DECISIONS.md (Decision 92's follow-up).
 - **`c0-spine`** (raised 2026-10-17; blocks `c0`, `p0`): Is Phase C0 closed, and is P0 to P4 (the organ fleet) still the roadmap's spine? *Recommendation:* Run the dedup sweep; if clean, close C0. Keep P0 to P4 as the long-range rung-3 track, and move the current-phase marker to where the work is (Phase O and A). *Lands in:* DECISIONS.md, then the ROADMAP C0 marker.
 - **`t2-queue`** (raised 2026-10-17; blocks `t2`, `queue`): Is T2 superseded by the decision queue of Decision 90? *Recommendation:* Yes. Mark T2 superseded by `queue`, and have T0 read the queue files rather than invent a field. *Lands in:* DECISIONS.md.
-- **`private-names`** (raised 2026-10-25; blocks `vsm-d`): Is a private repo's NAME sensitive in a public repo, or only its content? This repo names 21 private repos 510 times, against its charter; public horde names its private FX modules 2,699 times. *Recommendation:* Names are not sensitive and content is: amend the charter line to say so, and add a fleet check that flags private-repo CONTENT (lesson text, briefs, designs) in a public repo, the class of leak the distillery had. *Lands in:* DECISIONS.md, then the charter line in CLAUDE.md.
 
 ## Inconsistencies found
 

@@ -237,6 +237,19 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+103. **A private repo's name is not sensitive; its content is** (2026-10-27,
+    the human, answering queue item `private-names`: "I think only content
+    needs to be sensitive. Names are subject to change, and they really don't
+    mean anything to anybody. I will probably tighten this up in the future
+    but it isn't imperative now"). The charter line that said this repo names
+    no private repos is amended to match practice: 510 mentions of 21 names
+    stand. What stays forbidden in a public repo is a private repo's CONTENT,
+    the class of leak the distillery had (Decision 102). **The fleet check for
+    private content in public repos is deferred,** at the human's word: not
+    imperative now, and the human may tighten the rule later. The
+    distillery's own guard (it will not publish unless private) covers the
+    one known source.
+    ruled-by: human (chat 2026-10-27)
 102. **The distillery is private: its public stream had published private
     repos' lessons since 2026-08-12** (2026-10-25, human ruling via poll, then
     the human's own `gh repo edit`; distillery decision 24). Found while
