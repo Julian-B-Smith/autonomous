@@ -20,6 +20,7 @@ thread's state is taken from its most recent member.
 
 import datetime
 import glob
+import json
 import os
 import re
 
@@ -203,6 +204,38 @@ def _parse(path):
     }
 
 
+def _names(repo_name):
+    """The set of lower-cased names a repo answers to. Accepts one name (a
+    folder basename or a `group/Name` path) or an iterable of them, so a repo
+    whose folder and correspondent name differ is matched under both."""
+    if isinstance(repo_name, str):
+        repo_name = [repo_name]
+    return {n.lower().split("/")[-1] for n in repo_name if n}
+
+
+def correspondent_names(root):
+    """Every name siblings may use to address the repo at `root`: its folder
+    basename and, when it differs, its manifest `name`.
+
+    The folder alone is not enough. horde's folder was renamed from HYPERSAW
+    on 2026-10-04 while its correspondent name stayed `HYPERSAW` (siblings
+    write to `integrations/hypersaw/`, `ball: HYPERSAW`). A scan keyed on the
+    folder then read `integrations/horde/`, which nobody writes to, and Sluice's
+    seq-47 notice carrying a human ruling sat unseen for three days (brief
+    hypersaw-018). The manifest alone is not enough either: Maw's says
+    `Shriek` while every sibling writes to `integrations/maw/`. So both, and
+    an extra name that matches nothing costs nothing."""
+    names = [os.path.basename(os.path.abspath(root))]
+    try:
+        with open(os.path.join(root, "project.manifest.json"), encoding="utf-8") as fh:
+            n = json.load(fh).get("name")
+        if isinstance(n, str) and n.strip():
+            names.append(n.strip())
+    except (OSError, ValueError, AttributeError):
+        pass
+    return sorted(_names(names))
+
+
 def _ball_is_ours(ball, repo_name):
     """True when the ball sits on the repo that OWNS this mailbox.
 
@@ -210,12 +243,13 @@ def _ball_is_ours(ball, repo_name):
     exchanges also name the repo directly (Audiology's template writes
     `ball: audiology`). Unrecognized values are treated as NOT ours and
     reported verbatim — under-claiming is safe, silently absorbing another
-    project's obligation is not.
+    project's obligation is not. `repo_name` may be a list (see
+    correspondent_names).
     """
     token = _ball_token(ball)
     if not token or token in ("none", "-"):
         return False
-    return token == "provider" or token == repo_name.lower().split("/")[-1]
+    return token == "provider" or token in _names(repo_name)
 
 
 def _ball_token(ball):
@@ -360,26 +394,30 @@ def responses_awaiting(repo_name, roster_paths, today=None):
     repo has already said to us.
     """
     today = today or datetime.date.today()
-    me = repo_name.lower().split("/")[-1]
+    # Every name we answer to (correspondent_names): a sibling addresses us by
+    # correspondent name, which can differ from our folder.
+    me = _names(repo_name)
     out = []
     for path in roster_paths:
         base = os.path.basename(path.rstrip("/")).lower()
-        if base == me:
+        if base in me:
             continue                      # our own mailbox is scan_repo's job
         box = os.path.join(path, "integrations")
         if not os.path.isdir(box):
             continue
         for d in os.listdir(box):
-            if d.lower() != me:
+            if d.lower() not in me:
                 continue                  # only channels addressed to US
             for th in scan_repo(path, me, today):
                 # scan_repo evaluated ownership from the OTHER repo's point of
                 # view; re-evaluate from ours. Their `ball: consumer` is our
-                # ball when we are the consumer in that channel.
-                if th["dir"].lower() != me:
+                # ball when we are the consumer in that channel. A notice that
+                # OPENS a thread (`in-reply-to: none`) is reported the same
+                # way: this reads every file in our slot, not only replies.
+                if th["dir"].lower() != d.lower():
                     continue
                 token = _ball_token(th["ball"])
-                ours = token in ("consumer", me)
+                ours = token == "consumer" or token in me
                 if ours:
                     out.append({**th, "in_repo": os.path.basename(path), "ours": True})
     return out

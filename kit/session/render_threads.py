@@ -40,10 +40,10 @@ def gather():
         if not os.path.isdir(os.path.join(p["path"], "integrations")):
             continue
         try:
-            for t in ball_scan.scan_repo(p["path"], p["name"], today):
+            for t in ball_scan.scan_repo(p["path"], ball_scan.correspondent_names(p["path"]), today):
                 t = dict(t, repo=p["name"])
                 rows.append(t)
-            for a in ball_scan.responses_awaiting(p["name"], paths, today):
+            for a in ball_scan.responses_awaiting(ball_scan.correspondent_names(p["path"]), paths, today):
                 awaiting.append(dict(a, repo=p["name"]))
         except Exception:
             continue                    # one broken mailbox never blanks the page

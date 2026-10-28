@@ -68,6 +68,16 @@ tree. Across git remotes this is a PR touching only `integrations/<consumer>/`;
 same-machine, a direct write to that path. Exchange files are the one
 artifact designed to cross the boundary.
 
+*One slot, both directions.* That slot carries the whole exchange: the
+consumer's briefs and ratifications, and the provider's responses and notices,
+including a notice that opens a thread (`in-reply-to: none`). Nothing moves to
+the other repo's tree when the provider speaks first. `<my name>` is the
+**correspondent** name siblings write to, which can differ from the folder:
+horde's folder is `horde`, and it answers to `HYPERSAW`. A repo whose folder
+differs declares that name as `name` in `project.manifest.json`, and the scans
+read both (hypersaw-018: a ruling sat unseen for three days because the scan
+looked under the folder name).
+
 ### The ball: every exchange step has exactly one accountable side
 Exchange files carry frontmatter: `id`, `status`, `ball`, `respond-by`,
 `cites`, `seq`. The exchange is a state machine — at no state do both (or
@@ -179,7 +189,7 @@ lives:
 | Question | Answer |
 |---|---|
 | Who owes ME something? | `integrations/*/` in MY repo — `ball_scan.scan_repo` |
-| Did anyone ANSWER my brief? | `<their repo>/integrations/<my name>/` — `ball_scan.responses_awaiting`. **A response lands in the PROVIDER's tree, so a consumer that only reads its own mailbox cannot tell an answered brief from an ignored one.** |
+| Did anyone ANSWER my brief, or open a thread with me? | `<their repo>/integrations/<my name>/` — `ball_scan.responses_awaiting`, which reports every file there whose ball is on me, whatever its `in-reply-to`. **A response, and a provider's notice, land in the PROVIDER's tree, so a consumer that only reads its own mailbox cannot tell an answered brief from an ignored one, and never sees a notice at all.** |
 | Should I act on repo X's exchange with repo Y? | **No.** |
 
 The second row is the one that bites. distillery filed a brief on 2026-08-12

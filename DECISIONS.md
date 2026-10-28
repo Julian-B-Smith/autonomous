@@ -237,6 +237,35 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+105. **A mailbox is keyed by correspondent name, and the provider's slot
+    carries traffic both ways** (2026-10-27, the human by poll, answering
+    horde brief hypersaw-018). Sluice's seq-47 notice opened a thread with
+    `ball: HYPERSAW` in Sluice's own `integrations/hypersaw/` and went unseen
+    by horde for three days. horde proposed moving thread-openers to the
+    receiver's tree, and widening the scan beyond replies. The scan already
+    read openers. The miss was the name: the session brief looked the repo up
+    by folder (`horde`, renamed 2026-10-04), and siblings write to its
+    correspondent name (`HYPERSAW`). Measured the same day: horde's brief saw
+    3 of its 13 owed items in its own mailbox and none of the 5 in siblings'
+    trees. **Built:** `ball_scan.correspondent_names` (folder plus manifest
+    `name`), used by the session brief, the monitor and the threads board,
+    with the seq-47 shape as a fixture and a `ball: none` control.
+    **Doctrine:** INTEGRATIONS §3 says in one paragraph that the provider's
+    slot carries the whole exchange, openers included, and that `<my name>`
+    is the correspondent name. **Declined:** openers in the receiver's tree.
+    It would split one channel across two directories, and the scan fix
+    alone closes the gap.
+    ruled-by: human (poll 2026-10-27)
+104. **Arp and Echo are registered and stay PUBLIC; autonomous recommends
+    PolyForm Noncommercial for both** (2026-10-27, the human by poll,
+    answering briefs arp-001 and echo-001). Both are horde libraries created
+    public by the human's choice (Echo 2026-10-19, Arp 2026-10-21), after
+    Decision 88 ruled their siblings Scape and Bulwark private for now. The
+    later choice reads as deliberate, so it stands. They join Tonality and
+    Audiology as kept-public music devices in VISIBILITY.md. The license is
+    each repo's to adopt; the recommendation follows "public → license it"
+    and matches the public showcase.
+    ruled-by: human (poll 2026-10-27)
 103. **A private repo's name is not sensitive; its content is** (2026-10-27,
     the human, answering queue item `private-names`: "I think only content
     needs to be sensitive. Names are subject to change, and they really don't

@@ -314,6 +314,72 @@ class TestResponsesAwaiting(unittest.TestCase):
         self.assertEqual(ball_scan.responses_awaiting("distillery", self._paths(), TODAY), [])
 
 
+class TestCorrespondentNames(unittest.TestCase):
+    """Brief hypersaw-018. horde's folder is `horde`; siblings address it as
+    HYPERSAW. Sluice's seq-47 notice (`in-reply-to: none`, `ball: HYPERSAW`,
+    in Sluice's `integrations/hypersaw/`) carried a human ruling and went
+    unseen for three days, because the session brief looked the repo up by
+    folder name. The scan itself already read openers as well as replies."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.horde = os.path.join(self.tmp, "horde")
+        self.sluice = os.path.join(self.tmp, "Sluice")
+        os.makedirs(self.horde)
+        with open(os.path.join(self.horde, "project.manifest.json"), "w") as fh:
+            fh.write('{"name": "HYPERSAW"}')
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _notice(self, ball):
+        _fm(os.path.join(self.sluice, "integrations", "hypersaw"), "notice-xy-and-presets.md",
+            id="sluice-notice-xy-and-presets", in_reply_to="none", ball=ball,
+            status="filed", seq=47, filed="2026-08-05")
+
+    def _awaiting(self, names):
+        return [a["id"] for a in ball_scan.responses_awaiting(names, [self.horde, self.sluice], TODAY)]
+
+    def test_names_are_the_folder_and_the_manifest_name(self):
+        self.assertEqual(ball_scan.correspondent_names(self.horde), ["horde", "hypersaw"])
+
+    def test_a_thread_opening_notice_in_the_senders_tree_is_reported(self):
+        self._notice("HYPERSAW")
+        self.assertEqual(self._awaiting(ball_scan.correspondent_names(self.horde)),
+                         ["sluice-notice-xy-and-presets"])
+
+    def test_the_folder_name_alone_misses_it(self):
+        """The failure as it happened: keep this red-by-design case so a
+        later 'simplification' back to the folder name shows up here."""
+        self._notice("HYPERSAW")
+        self.assertEqual(self._awaiting("horde"), [])
+
+    def test_control_ball_none_is_not_reported(self):
+        self._notice("none")
+        self.assertEqual(self._awaiting(ball_scan.correspondent_names(self.horde)), [])
+
+    def test_own_mailbox_ball_under_the_correspondent_name_is_ours(self):
+        _fm(os.path.join(self.horde, "integrations", "sluice"), "brief.md",
+            id="s-1", ball="HYPERSAW", status="filed", filed="2026-08-01")
+        (row,) = ball_scan.scan_repo(self.horde, ball_scan.correspondent_names(self.horde), TODAY)
+        self.assertTrue(row["ours"])
+
+    def test_a_manifest_name_nobody_uses_costs_nothing(self):
+        """Maw's manifest says Shriek; siblings write to integrations/maw/."""
+        maw = os.path.join(self.tmp, "Maw")
+        os.makedirs(maw)
+        with open(os.path.join(maw, "project.manifest.json"), "w") as fh:
+            fh.write('{"name": "Shriek"}')
+        _fm(os.path.join(self.sluice, "integrations", "maw"), "response.md",
+            id="m-1", ball="consumer", status="responded", responded="2026-08-02")
+        got = ball_scan.responses_awaiting(ball_scan.correspondent_names(maw), [maw, self.sluice], TODAY)
+        self.assertEqual([a["id"] for a in got], ["m-1"])
+
+    def test_no_manifest_falls_back_to_the_folder(self):
+        os.makedirs(self.sluice, exist_ok=True)
+        self.assertEqual(ball_scan.correspondent_names(self.sluice), ["sluice"])
+
+
 class TestFrontmatterLies(unittest.TestCase):
     """A sweep fixes instances; a gate fixes the class. The manual sweep that
     closed this bug caught 21 of 23 — and one miss was HYPERSAW's own brief, on

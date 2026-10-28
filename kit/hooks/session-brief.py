@@ -53,6 +53,13 @@ def main():
         import ball_scan
     except Exception:
         out(None)
+    # The mailbox is keyed by correspondent name, which can differ from the
+    # folder (horde answers to HYPERSAW; brief hypersaw-018). `name` stays the
+    # folder: it only labels this brief's output.
+    try:
+        names = ball_scan.correspondent_names(root)
+    except Exception:
+        names = [name]
 
     today = datetime.date.today()
     bits = []
@@ -76,7 +83,7 @@ def main():
 
     # 1. What THIS repo owes (its own mailbox).
     try:
-        mine = ball_scan.scan_repo(root, name, today)
+        mine = ball_scan.scan_repo(root, names, today)
     except Exception:
         mine = []
     overdue = [t for t in mine if t["days_overdue"]]
@@ -119,7 +126,7 @@ def main():
         with open(os.path.join(AUT, "registry.json"), encoding="utf-8") as fh:
             reg = json.load(fh)
         paths = [p["path"] for p in sweep.resolve(reg)]
-        awaiting = ball_scan.responses_awaiting(name, paths, today)
+        awaiting = ball_scan.responses_awaiting(names, paths, today)
         if awaiting:
             bits.append("answered elsewhere, unread by us: " + ", ".join(
                 f"{a['id']} in {a['in_repo']}" for a in awaiting))
