@@ -220,6 +220,19 @@ not for cross-track sequencing):
   vocabulary); consumed by horde ahead of its engine (notice
   `arp-notice-spinup` in their tree). Registered per brief `arp-001`;
   `registry.json` sees it by the immediate-children rule.
+- **Weir** (`~/Documents/Claude/synthetic-worlds/Weir/`; PRIVATE,
+  github.com/Julian-B-Smith/weir, by the human's choice, Weir D-001, which
+  matches the private-by-default rule) is horde's filter library: framework-
+  free C++ filter DSP, every type behind one interface, run as a per-voice
+  stereo instance. It starts from horde's filter lab and its C++
+  transcription, but the C++ leads: the lab is a starting point, not a
+  parity target. No plugin of its own. Spun up 2026-10-28 via /spinup on kit
+  2.10.0 (survey by poll, manifest ratified by poll, Weir D-002), with the
+  day-zero manifest gate and its planted faults. Rung 1. Consumes
+  autonomous; consumed by horde for the engine's per-voice filter slot and
+  the FX filter module (notice `weir-notice-spinup` in their tree).
+  Registered per brief `weir-001`; `registry.json` sees it by the
+  immediate-children rule.
 - **opportunity-scanner** (`~/Documents/Claude/opportunity-scanner/`,
   no remote yet — local-only) — marketplace-surface scanner: a Markdown+YAML
   registry/signals/trials corpus as the durable product, with disposable
