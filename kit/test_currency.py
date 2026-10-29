@@ -406,3 +406,36 @@ class TestForeignPlantIsInvisible(unittest.TestCase):
         self.assertIn(self.plant, r.stderr + r.stdout)
         self.assertNotEqual(r.returncode, 0)
 
+
+
+class TestNoProbe(unittest.TestCase):
+    """Decision 107: the session-start sweep sets KIT_CURRENCY_NO_PROBE and
+    must never run a repo's ./verify. The probe ran culture's whole verify
+    (trace and property suites) on every session open, and orphaned it."""
+
+    def setUp(self):
+        self.repo = tempfile.mkdtemp()
+        self.ran = os.path.join(self.repo, "ran")
+        _touch(self.repo, "verify", f'#!/bin/sh\ntouch "{self.ran}"\n', exe=True)
+        self.env = {k: os.environ.get(k) for k in ("KIT_CURRENCY_NO_PROBE", "KIT_CURRENCY_NESTED")}
+        os.environ.pop("KIT_CURRENCY_NESTED", None)
+        currency._GATE_CACHE.clear()
+
+    def tearDown(self):
+        for k, v in self.env.items():
+            os.environ.pop(k, None)
+            if v is not None:
+                os.environ[k] = v
+        shutil.rmtree(self.repo, ignore_errors=True)
+
+    def test_no_probe_runs_nothing_and_proves_nothing(self):
+        os.environ["KIT_CURRENCY_NO_PROBE"] = "1"
+        self.assertFalse(any(currency._gate_report(self.repo).values()))
+        self.assertFalse(currency._gate_fires(self.repo, ["x"]))
+        self.assertFalse(os.path.exists(self.ran))
+        self.assertEqual([f for f in os.listdir(self.repo) if f.startswith(".kit-currency-plant")], [])
+
+    def test_control_without_it_the_probe_runs(self):
+        os.environ.pop("KIT_CURRENCY_NO_PROBE", None)
+        currency._gate_report(self.repo)
+        self.assertTrue(os.path.exists(self.ran))

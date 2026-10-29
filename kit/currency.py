@@ -290,7 +290,13 @@ def _gate_report(repo):
     # what writes files into a foreign working tree.
     if _vendored_current(repo):
         return {"posix": True, "windows": True, "dash": True, "plant_invisible": True}
-    if os.environ.get("KIT_CURRENCY_NESTED"):
+    # KIT_CURRENCY_NO_PROBE: the session-start fleet sweep sets it (Decision
+    # 107). A probe runs the target's whole ./verify twice, and culture's runs
+    # its trace and property suites at full CPU; the sweep's 120s cap killed
+    # only the checklist, so those verifies ran on as orphans, one set per
+    # session opened. Not probing reads as NOT proven, the conservative
+    # state: a stale repo stays BEHIND until synced or probed by hand.
+    if os.environ.get("KIT_CURRENCY_NESTED") or os.environ.get("KIT_CURRENCY_NO_PROBE"):
         return {"posix": False, "windows": False, "dash": False, "plant_invisible": False}
     v = os.path.join(repo, "verify")
     if not (os.path.isfile(v) and os.access(v, os.X_OK)):
@@ -367,8 +373,8 @@ def _gate_fires(repo, plant_lines):
     # NOT-fired, which makes the outer check fail loud rather than loop silent —
     # and verify's own self-check reads currency's --json, which the outer call
     # still produces correctly because it is not nested.
-    if os.environ.get("KIT_CURRENCY_NESTED"):
-        return False
+    if os.environ.get("KIT_CURRENCY_NESTED") or os.environ.get("KIT_CURRENCY_NO_PROBE"):
+        return False                     # see _gate_report: no probe, not proven
     v = os.path.join(repo, "verify")
     if not (os.path.isfile(v) and os.access(v, os.X_OK)):
         return False
