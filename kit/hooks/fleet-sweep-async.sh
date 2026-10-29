@@ -25,6 +25,13 @@ REPO="${AUTONOMOUS_HOME:-$HOME/Documents/Claude/autonomous}"
 [ -f "$REPO/governor/monitor.py" ] || exit 0
 command -v python3 >/dev/null 2>&1 || exit 0
 
+# KIT_CURRENCY_NO_PROBE: this sweep never runs a repo's ./verify (Decision
+# 107). Currency's behavioural probe does, for any repo whose vendored kit is
+# stale, and it ran on every session open in every repo: culture's verify
+# pinned the CPU with orphaned trace runs. Hashes only here; a stale repo reads
+# BEHIND (not proven) until it syncs, and a full probe is a manual run.
+export KIT_CURRENCY_NO_PROBE=1
+
 # --out is written atomically enough for our purposes: a reader that catches a
 # partial file sees fewer findings, never wrong ones, and the next run fixes it.
 python3 "$REPO/governor/monitor.py" \

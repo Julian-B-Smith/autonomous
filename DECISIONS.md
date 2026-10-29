@@ -237,6 +237,28 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+107. **The session-start fleet sweep never runs a repo's `./verify`**
+    (2026-10-29, the human by poll, after asking to stop `culture_trace`
+    starting with culture's sessions). The global `fleet-sweep-async` hook
+    runs `currency.py` on every roster repo at every session open. For a repo
+    whose vendored kit is stale (culture's is 2.6.5) currency proves the leak
+    gate by running the repo's whole `./verify` twice, and culture's verify
+    runs its trace and property suites at full CPU. The monitor capped the
+    checklist at 120s and killed only its direct child, so those verifies
+    ran on as orphans, one set per session opened, each leaving a plant file
+    in culture's tree while it ran. **Built:** `KIT_CURRENCY_NO_PROBE`, set by
+    the hook. Currency then compares hashes only, and an unproven gate reads
+    NOT fired, the conservative state: a stale repo reads BEHIND in STATUS
+    until it syncs (the weekly batch) or someone probes it by hand. The fleet
+    checklist now takes about 5s. Test: no verify runs and no plant is
+    written, with a control that the probe still runs without the variable.
+    **The integrator's miss, the same day:** while diagnosing this it ran
+    currency on culture by hand, started one more probe, and stopped it
+    mid-run. That left culture's `.harness/last-verify.json` reading red
+    (exit 1, the planted gate firing) with no way to restore the record the
+    probe had snapshotted. culture's next session will be asked to run its
+    verify, which writes a true record. The plant file was removed.
+    ruled-by: human (poll 2026-10-29)
 106. **A ball held by us is discharged by our reply in the counterpart's slot**
     (2026-10-28, the human: "yes, draft the hook fix in autonomous", from
     Shriek's session). Some channels are split across two directories, against
