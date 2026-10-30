@@ -245,6 +245,19 @@ not for cross-track sequencing):
   FOUNDATIONS (the module ABI); consumed by horde as two FX-rack modules
   (its spin-up notice in their tree). Registered per brief `kiln-001`;
   `registry.json` sees it by the immediate-children rule.
+- **Mangle** (`~/Documents/Claude/synthetic-worlds/Mangle/`; PRIVATE,
+  github.com/Julian-B-Smith/Mangle, by the human's choice, Mangle D-001,
+  which matches the private-by-default rule) is one hosted FX module for
+  horde: seven crush modes (six that starve one representation of the
+  signal and rebuild it naively, plus a classic bit and rate crusher) in one
+  framework-free C++ library, built to horde's rack-slot contract like
+  Bulwark and Kiln. No plugin of its own. Spun up 2026-10-30 via /spinup on
+  kit 2.10.0 (survey by poll, manifest ratified by poll, Mangle D-003), at
+  the human's request (horde ADR-331), with the day-zero manifest gate and
+  its planted faults. Rung 1. Consumes autonomous and FOUNDATIONS (the
+  module ABI, and an FFT); consumed by horde as one FX-rack module (its
+  spin-up notice in their tree). Registered per brief `mangle-001`;
+  `registry.json` sees it by the immediate-children rule.
 - **opportunity-scanner** (`~/Documents/Claude/opportunity-scanner/`,
   no remote yet — local-only) — marketplace-surface scanner: a Markdown+YAML
   registry/signals/trials corpus as the durable product, with disposable
