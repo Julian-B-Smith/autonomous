@@ -233,6 +233,18 @@ not for cross-track sequencing):
   the FX filter module (notice `weir-notice-spinup` in their tree).
   Registered per brief `weir-001`; `registry.json` sees it by the
   immediate-children rule.
+- **Kiln** (`~/Documents/Claude/synthetic-worlds/Kiln/`; PRIVATE,
+  github.com/Julian-B-Smith/kiln, by the human's choice, Kiln D-001, which
+  matches the private-by-default rule) is horde's EQ and drive: two hosted
+  FX modules, a parametric EQ and a simplified drive, in one framework-free
+  C++ library, each built to horde's rack-slot contract the way Bulwark is.
+  No plugin of its own. Spun up 2026-10-29 via /spinup on kit 2.10.0
+  (survey by poll, manifest ratified by poll, Kiln D-002), after the human's
+  ruling "EQ + Drive, one new repo" (horde ADR-313), with the day-zero
+  manifest gate and its planted faults. Rung 1. Consumes autonomous and
+  FOUNDATIONS (the module ABI); consumed by horde as two FX-rack modules
+  (its spin-up notice in their tree). Registered per brief `kiln-001`;
+  `registry.json` sees it by the immediate-children rule.
 - **opportunity-scanner** (`~/Documents/Claude/opportunity-scanner/`,
   no remote yet — local-only) — marketplace-surface scanner: a Markdown+YAML
   registry/signals/trials corpus as the durable product, with disposable
