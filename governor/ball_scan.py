@@ -163,6 +163,12 @@ def _state(status):
     return m.group(0) if m else ""
 
 
+def _seq(fm):
+    """A file's `seq:` as an int, or None when absent or not a number."""
+    m = re.match(r"\d+", _field(fm, "seq") or "")
+    return int(m.group(0)) if m else None
+
+
 def _parse(path):
     """Frontmatter of one exchange file, or None if it isn't one."""
     try:
@@ -187,6 +193,8 @@ def _parse(path):
         "replies_to": _refs(fm, "in-reply-to") + _refs(fm, "answers"),
         "answered_by": _refs(fm, "answered_by"),
         "respond_by": _field(fm, "respond-by"),
+        "seq": _seq(fm),
+        "thread": (_field(fm, "thread") or "").lower(),
         # Sort key: the newest date the file claims. Files with no date at all
         # sort oldest, so a dated answer always outranks an undated opener.
         "date": max(dates) if dates else "",
@@ -270,8 +278,8 @@ def _ball_token(ball):
 
 
 def _counterpart_replies(path, dirname, repo_name, peers):
-    """What OUR side has answered from the counterpart's tree: {ref: newest
-    date}, every id or filename that a file in the peer's slot for us
+    """What OUR side has answered from the counterpart's tree: {ref: [reply]},
+    every id or filename that a file in the peer's slot for us
     (`<peer>/integrations/<one of our names>/`) replies to, where the peer
     is the repo that `integrations/<dirname>/` here is addressed from.
 
@@ -304,8 +312,29 @@ def _counterpart_replies(path, dirname, repo_name, peers):
                 if not p or _ball_token(p["ball"]) in me:
                     continue
                 for ref in p["replies_to"]:
-                    found[ref] = max(found.get(ref, ""), p["date"])
+                    found.setdefault(ref, []).append(p)
     return found
+
+
+def _follows(reply, holder):
+    """Is `reply` later than the ball-holding file it names?
+
+    `seq:` decides when both files carry one in the same thread, because
+    INTEGRATIONS says readers prefer it: per-thread, strictly increasing, and
+    written for exactly this, since dates are hand-written. Bulwark's
+    macro-curve brief says `filed: 2026-10-05`, seq 4; horde's reply says
+    `filed: 2026-10-04`, seq 6. git has the brief first by 81 minutes, so the
+    wrong date was the brief's, and comparing dates flagged it OVERDUE in every
+    horde session (brief hypersaw-019).
+
+    Equal seqs say nothing, so dates decide, as they do with a seq missing or
+    across threads, where the numbers are not comparable. Roster, 2026-11-01:
+    26 replies, 25 strictly later by seq, one tie, no inversions."""
+    if (reply["seq"] is not None and holder["seq"] is not None
+            and reply["seq"] != holder["seq"]
+            and reply["thread"] and reply["thread"] == holder["thread"]):
+        return reply["seq"] > holder["seq"]
+    return reply["date"] >= holder["date"]
 
 
 def scan_repo(path, repo_name, today=None, peers=None):
@@ -373,15 +402,15 @@ def scan_repo(path, repo_name, today=None, peers=None):
             continue
         ours = _ball_is_ours(latest["ball"], repo_name)
         # The same discharge, when our answer sits in the counterpart's slot.
-        # The reply must be no older than the holder: a peer that re-files
-        # under the same id after our answer has asked again.
+        # The reply must follow the holder: a peer that re-files under the
+        # same id after our answer has asked again.
         if ours and peers:
             d = os.path.basename(os.path.dirname(latest["path"]))
             if d not in far:
                 far[d] = _counterpart_replies(path, d, repo_name, peers)
             stem = os.path.basename(latest["path"])[:-3].lower()
-            hit = [far[d][r] for r in (latest["id"].lower(), stem) if r in far[d]]
-            if hit and max(hit) >= latest["date"]:
+            hit = [q for r in (latest["id"].lower(), stem) for q in far[d].get(r, [])]
+            if any(_follows(q, latest) for q in hit):
                 continue
         # The live commitment is the LATEST respond-by in the thread: a refile
         # or a counter-brief resets the clock, and honouring a superseded date

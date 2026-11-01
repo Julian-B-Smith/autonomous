@@ -450,6 +450,82 @@ class TestCounterpartReplies(unittest.TestCase):
         self.assertEqual(self._owed(), ["hypersaw-brief-title-mark"])
 
 
+class TestDischargeOrder(unittest.TestCase):
+    """Brief hypersaw-019. Bulwark's macro-curve brief says `filed: 2026-10-05`,
+    seq 4, and horde's reply says `filed: 2026-10-04`, seq 6. git has the brief
+    first, so its date was wrong, and every horde session read it as OVERDUE.
+    INTEGRATIONS says readers prefer `seq:` and fall back to dates."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.horde = os.path.join(self.tmp, "horde")
+        self.bulwark = os.path.join(self.tmp, "Bulwark")
+        os.makedirs(self.bulwark)
+        os.makedirs(self.horde)
+        with open(os.path.join(self.horde, "project.manifest.json"), "w") as fh:
+            fh.write('{"name": "HYPERSAW"}')
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _brief(self, seq=4, filed="2026-10-05", thread="dynamics"):
+        fields = dict(id="bulwark-brief-macro-curve", ball="HYPERSAW", status="filed", filed=filed)
+        if seq is not None:
+            fields["seq"] = seq
+        if thread:
+            fields["thread"] = thread
+        _fm(os.path.join(self.horde, "integrations", "bulwark"), "brief-macro-curve.md", **fields)
+
+    def _reply(self, seq=6, filed="2026-10-04", thread="dynamics"):
+        fields = dict(id="hypersaw-response-macro-curve", in_reply_to="bulwark-brief-macro-curve",
+                      ball="none", status="filed", filed=filed)
+        if seq is not None:
+            fields["seq"] = seq
+        if thread:
+            fields["thread"] = thread
+        _fm(os.path.join(self.bulwark, "integrations", "hypersaw"), "response-macro-curve.md", **fields)
+
+    def _owed(self):
+        names = ball_scan.correspondent_names(self.horde)
+        rows = ball_scan.scan_repo(self.horde, names, TODAY, peers=[self.horde, self.bulwark])
+        return [r["id"] for r in rows if r["ours"]]
+
+    def test_a_later_seq_discharges_a_reply_dated_before_its_brief(self):
+        self._brief()
+        self._reply()
+        self.assertEqual(self._owed(), [])
+
+    def test_control_a_refile_with_a_later_seq_is_asked_again_whatever_its_date(self):
+        self._brief(seq=7, filed="2026-10-03")
+        self._reply(seq=6, filed="2026-10-04")
+        self.assertEqual(self._owed(), ["bulwark-brief-macro-curve"])
+
+    def test_equal_seqs_fall_back_to_dates(self):
+        self._brief(seq=1, filed="2026-10-02")
+        self._reply(seq=1, filed="2026-10-03")
+        self.assertEqual(self._owed(), [])
+
+    def test_control_equal_seqs_with_an_older_reply_are_still_owed(self):
+        self._brief(seq=1, filed="2026-10-05")
+        self._reply(seq=1, filed="2026-10-04")
+        self.assertEqual(self._owed(), ["bulwark-brief-macro-curve"])
+
+    def test_control_a_missing_seq_falls_back_to_dates(self):
+        self._brief(seq=None)
+        self._reply()
+        self.assertEqual(self._owed(), ["bulwark-brief-macro-curve"])
+
+    def test_control_seqs_in_different_threads_are_not_compared(self):
+        self._brief()
+        self._reply(thread="another")
+        self.assertEqual(self._owed(), ["bulwark-brief-macro-curve"])
+
+    def test_control_a_missing_thread_is_not_the_same_thread(self):
+        self._brief(thread=None)
+        self._reply(thread=None)
+        self.assertEqual(self._owed(), ["bulwark-brief-macro-curve"])
+
+
 class TestFrontmatterLies(unittest.TestCase):
     """A sweep fixes instances; a gate fixes the class. The manual sweep that
     closed this bug caught 21 of 23 — and one miss was HYPERSAW's own brief, on

@@ -237,6 +237,28 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+108. **The counterpart discharge prefers `seq:` over dates** (2026-11-01, the
+    integrator, answering horde brief hypersaw-019; the PR is the human's
+    gate). Decision 106's guard compared dates, against INTEGRATIONS' rule that
+    readers prefer `seq:`. Bulwark's macro-curve brief says `filed: 2026-10-05`,
+    seq 4, and horde's reply says `filed: 2026-10-04`, seq 6, so every horde
+    session read the answered brief as OVERDUE. git has the brief first by 81
+    minutes: the brief's date was the wrong one. **Built:** `_follows`. A
+    differing `seq:` in the same thread decides; a tie, a missing `seq:` or
+    different threads fall back to dates. **Chosen over** horde's other option
+    (only `refreshed:` counts as asking again): 2 exchange files in the fleet
+    carry `refreshed:` and 352 carry `seq:`, and ignoring `filed:` would
+    silently discharge a brief re-filed without that field, the direction
+    that loses work. **Measured on the roster:** 26 replies, 25 later by seq,
+    one tie, no inversions; ball-on-us 30 to 29, overdue 6 to 5, the one change
+    being this brief. 7 tests (5 of them controls); governor floor 107 to 114.
+    **Limit:** a re-file that changes its date and keeps its old `seq:` now
+    reads as discharged. That breaks INTEGRATIONS' rule that the next artifact
+    takes the next integer, and none exists on the roster. **Left alone:**
+    `scan_repo` also picks the ball-holding file by date. It should prefer
+    `seq:` too, but date and `seq:` agree on all 33 open threads with several
+    claimants, so nothing is wrong today.
+    ruled-by: integrator (2026-11-01; the rule is INTEGRATIONS', ratified 2026-09-02)
 107. **The session-start fleet sweep never runs a repo's `./verify`**
     (2026-10-29, the human by poll, after asking to stop `culture_trace`
     starting with culture's sessions). The global `fleet-sweep-async` hook
