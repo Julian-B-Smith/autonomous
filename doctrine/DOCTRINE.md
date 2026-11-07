@@ -2,15 +2,17 @@
 
 > Canonical home of the cross-project doctrine. The global `~/.claude/CLAUDE.md`
 > imports this file; do not duplicate its content elsewhere — propose changes
-> here (they are then versioned and reviewable). Machine-local facts (e.g.
-> build quirks of one machine) stay in the global file, not here.
+> here, where they are versioned and reviewable. Machine-local facts stay in
+> the global file.
 
-## Visual-first review
-When presenting completed work, a PR, or any review request, lead with a visual
-presentation — a self-contained HTML report, Artifact, screenshot set, or live
-demo — sufficient to evaluate the change WITHOUT reading code. Code diving is
-the fallback, not the default. Include: what changed, evidence it works (test
-output, renders, before/after), and any open questions.
+## Visual-first (hands-on early, judged by sight)
+Build the interface alongside the architecture, never after: each backend
+milestone lands with something the human opens with one command and uses. A
+plan deferring the interface needs the human's explicit yes. Until the real
+seam exists, the interface runs on a stand-in labelled on screen, deciding
+nothing, deleted when the real seam lands. Present work and reviews as a visual
+(report, Artifact, screenshots, demo) judgeable WITHOUT reading code: what
+changed, evidence it works, open questions.
 
 ## Project structuring (survey first; right-size the architecture)
 When asked to create, start, or scaffold a project (any phrasing), do not
@@ -26,19 +28,18 @@ quality outranks head-count (research/2026-07-10-multiagent-systems-survey.md).
 
 ## Harness by default
 "The harness determines performance more than the model." For any new or
-adopted repo, apply the harness kit (canonical: `kit/` in the autonomous repo):
+adopted repo, apply the harness kit (canonical: `autonomous/kit/`):
 - Layered CLAUDE.md: lean root (pointers + gotchas only), subdir files for local conventions
 - Hooks for determinism (format/lint via PostToolUse, not instructions), CODEMAP.md, .claudeignore
 - Decision logs (DECISIONS.md, append-only) and phase-gated roadmaps (ROADMAP.md outranks other docs)
 - Delete stale constraints as aggressively as you add new ones
 
 ## Knowledge loop
-The knowledge loop (CLAUDE.md/INDEX.md/LIBRARY.md self-improving loop —
-canonical: `loops/knowledge-loop/`) installs per-project durable lessons with
-an anti-poisoning write gate. Offer it when a project becomes long-lived or
-accumulates hard-won lessons. The cross-project audit loop (canonical:
-`loops/audit-loop/`) harvests and promotes lessons
-up a tree of projects.
+The knowledge loop (`loops/knowledge-loop/`: self-improving CLAUDE.md/INDEX.md/
+LIBRARY.md) installs per-project durable lessons behind an anti-poisoning write
+gate; offer it when a project becomes long-lived or accumulates hard-won
+lessons. The audit loop (`loops/audit-loop/`) promotes lessons up a tree of
+projects.
 
 ## AI/deterministic boundary
 AI may interpret language, propose, and judge; AI may NOT be in the path of
@@ -110,9 +111,9 @@ Every guard proven to fire on a plant; method and domain packs: `kit/security/` 
 
 ## Never commit machine identity
 No machine-absolute paths (`/Users/<you>/…`, `/home/<you>/…`), usernames, or
-local directory layout in tracked files — docs, configs, and code alike. They
-bake your identity into the repo and into any public remote, and they are not
-portable to a clone or a second machine, so they are wrong twice over. Use a
+local directory layout in any tracked file. They bake your identity into the
+repo and into any public remote, and they are not portable to a clone or a
+second machine, so they are wrong twice over. Use a
 `~/`-relative path, a repo-relative path, or an env var with an
 `expanduser`'d default. Machine-local config that *can't* be made portable
 (an absolute interpreter path outside the repo) is gitignored, not committed.

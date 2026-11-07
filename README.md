@@ -121,7 +121,8 @@ Layers 4–5 are installed when a project's lifespan and autonomy earn them.
 **Layer 0 — Doctrine** ([doctrine/DOCTRINE.md](doctrine/DOCTRINE.md)).
 The standing rules: AI/deterministic boundary (AI proposes and judges, never
 schedules/validates/measures), oracle discipline (gates never weaken to
-pass), visual-first review, right-sized architecture, the living-README
+pass), visual-first (the interface built alongside the backend, work judged
+by sight), right-sized architecture, the living-README
 clarity standard, reduce-never-invent. Machines' global `~/.claude/CLAUDE.md`
 files import these — install per [doctrine/INSTALL-GLOBAL.md](doctrine/INSTALL-GLOBAL.md).
 The file has a hard size budget enforced by `./verify`, because it loads into
