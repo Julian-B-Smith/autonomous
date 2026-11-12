@@ -685,3 +685,69 @@ unreachable. Entries are search-snippet-sourced unless marked (primary).
 - arXiv:2607.05744, Unicode TAG concealment in MCP — https://arxiv.org/pdf/2607.05744
 - CSA, China agent regulation — https://labs.cloudsecurityalliance.org/research/csa-research-note-china-ai-agent-regulation-enforcement-2026/
 - Obsidian Security, agent regulations 2026 — https://www.obsidiansecurity.com/academy/ai-agent-regulations-2026
+
+## 2026-11-10 — Landscape audit (monthly, fifth run)
+
+Report: [proposals/2026-11-10.proposal.md](proposals/2026-11-10.proposal.md).
+Six fan-out agents scoped to "what changed since 2026-10-10." arxiv.org,
+alphaxiv.org, cursor.com, techcrunch.com, thehackernews.com, owasp.org,
+adversa.ai and letsdatascience.com failed DNS. Entries are search-snippet-sourced
+unless marked (primary).
+
+**Multi-agent coordination:**
+- GitHub Octoverse 2026 coverage (aggregators, figures conflict) — https://aicybr.com/blog/github-octoverse-2026-agent-pull-requests-code-review-governance
+- https://fourweekmba.com/ai-microsofts-github-agent-prs-merge-at-90-as-credits-double/
+- GitHub stacked PRs / gh stack — https://agentpedia.codes/blog/github-stacked-pull-requests-gh-stack-agent-guide.md
+- DeployBot (agent merge queue, community) — https://awesome.ecosyste.ms/projects/github.com%2FForward-Future%2FDeployBot
+- Mergify, merge queues and AI agents — https://mergify.com/blog/merge-queues-and-ai-coding-agents
+- Shared-branch lanes vs worktrees (2026-11-06) — https://zimmergren.net/agentic-ai-engineering-04-lanes-without-conflict
+- GitKraken orchestration roundup (2026-11-03) — https://www.gitkraken.com/blog/7-best-multi-repo-ai-agent-orchestration-tools-2026
+- Weekly dev digest, Oct 10–16 (not opened) — https://www.everydev.ai/p/news-weekly-ai-dev-news-digest-october-10-october-16-2026
+- Re-consulted: Bernstein ten-agents postmortem — https://bernstein.readthedocs.io/en/latest/blog/ten-agents-one-release/
+- Re-consulted: agent PR merge-conflict study — https://codex.danielvaughan.com/2026/07/28/agent-pr-merge-conflicts-concurrent-coding-agents-codex-cli-worktree-isolation-coordination-defence/
+- arXiv:2609.25396, 2603.21489 (CAID) — titles/snippets only
+- Subagent model-force claim (unverified) — https://claudelog.com/faqs/what-is-subagent-model-force-in-claude-code/
+- https://agentpatterns.ai/tools/claude/agent-teams/ (unverified)
+
+**Agent memory & knowledge loops:**
+- Claude Code memory docs (primary) — https://code.claude.com/docs/en/memory
+- OWASP Agent Memory Guard (snippet; fetch blocked) — https://owasp.org/www-project-agent-memory-guard/
+- arXiv:2606.04329, 2606.22030, 2607.05029 (FARMA), 2601.05504, 2605.02812 — snippets only
+- Auto Dream claims (unverified) — https://www.implicator.ai/anthropic-adds-auto-dream-to-claude-code-fixing-memory-decay-between-sessions , https://finisky.github.io/en/claude-code-auto-dream , https://claudefa.st/blog/guide/mechanics/auto-dream
+- Managed Agents "dreaming" — https://siliconangle.com/2026/05/06/anthropic-letting-claude-agents-dream-dont-sleep-job/ , https://9to5mac.com/2026/05/07/anthropic-updates-claude-managed-agents-with-three-new-features/
+- Practitioner memory-poisoning guidance — https://tianpan.co/blog/2026/04/10/agent-memory-poisoning-persistent-compromise , https://www.akto.io/blog/memory-poisoning-ai-agents
+
+**Governance, halting, agentic safety:**
+- OpenAI agents disabling own monitors (2026-10-21) — https://www.aljazeera.com/economy/2026/10/21/openai-says-its-agents-turned-off-own-safeguards , https://www.abc.net.au/news/2026-10-22/openai-agents-disable-safety-monitors/107294908 , https://techxplore.com/news/2026-10-openai-ai-agents-disabled-safety.html , https://thehackernews.com/2026/10/openais-gpt-6-agent-removed-safety.html (fetch blocked) , https://www.washingtonpost.com/wp-intelligence/ai-tech-brief/2026/10/21/ai-tech-brief-agents-tamper-with-their-monitors/
+- Anthropic cuts internal evals off from live internet (2026-10-09) — https://techcrunch.com/2026/10/09/anthropic-cant-reliably-control-its-ai-agents-its-cutting-off-its-internal-evals-from-the-live-internet-instead/
+- METR independent-assessment proposal — https://www.edtechinnovationhub.com/news/metr-calls-for-ai-developers-to-open-internal-safety-evidence-to-outside-scrutiny
+- AISI/Anthropic sabotage evals (April 2026, background) — https://www.resultsense.com/news/2026-04-28-aisi-sabotage-evaluations-claude/
+- Incident-response / kill-switch practitioner posts (low authority) — https://www.anaconda.com/blog/ai-agent-incident-response , https://whiteveilindustries.com/insights/ai-agent-incident-response-kill-switches , https://www.agentpmt.com/articles/agent-incident-runbook-freeze-scopes-postmortem-guardrails , https://anomity.ai/blog/ai-agent-incident-response-playbook/ , https://alpeshnakrani.com/books/agents-that-actually-work/incidents-kill-switches-rollback/
+- arXiv:2606.26057, 2608.27238 — titles only
+
+**Verification & CI-as-arbiter:**
+- Anthropic Code Review GA (2026-10-15) — https://claude.com/blog/code-review-is-now-generally-available
+- Re-consulted: Cursor reward-hacking audit (fetch blocked) — https://cursor.com/blog/reward-hacking-coding-benchmarks
+- OpenAI, why SWE-bench Verified is no longer evaluated — https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/
+- SpecStory test-tampering — https://specstory.com/learning/verification/test-tampering
+- Mutation testing for agent code — https://www.awesome-testing.com/2026/08/mutation-testing-for-agent-written-code , https://dev.to/datacpp_8185/mutation-testing-as-a-merge-gate-for-agent-written-tests-5gie
+- Cross-product AI review write-up — https://codex.danielvaughan.com/2026/08/25/ai-to-ai-code-reviews-cross-product-bias-248641-github-prs-codex-cli-guardian-review-pipeline/
+- arXiv:2605.21384 (SpecBench), 2606.07379, 2606.26300, 2607.23002, 2601.08998, 2608.21311, 2605.02273, 2609.08149 — snippets only
+
+**Context engineering & harness design:**
+- Claude Code CHANGELOG (primary, first ~100k chars; 2.1.311–2.1.322) — https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md
+- Claude Code releases (primary) — https://github.com/anthropics/claude-code/releases
+- Anthropic engineering index (primary) — https://www.anthropic.com/engineering
+- Anthropic, components of agent memory (2026-11-06) — https://www.anthropic.com/research/components-of-agent-memory
+- Anthropic, redesigning source control (2026-10-13) — https://www.anthropic.com/research/redesigning-source-control
+- Khatri, context-file ablation (ACL REALM 2026) — https://aclanthology.org/2026.realm-1.5/
+- arXiv:2602.11988, 2607.27250, 2609.01660 — snippets only
+
+**Open scope (models, incidents, regulation):**
+- Anthropic news page (primary; Fable/Mythos 5.2, Haiku 5.5, Agent Skills donation) — https://www.anthropic.com/news
+- Adversa coding-agent security roundup (fetch blocked) — https://adversa.ai/blog/top-ai-coding-agent-security-resources-november-2026/
+- CSA research notes — https://labs.cloudsecurityalliance.org/research/csa-research-note-claude-code-github-action-prompt-injection/ , https://labs.cloudsecurityalliance.org/research/csa-research-note-agentjacking-mcp-sentry-injection-20260612/ , https://labs.cloudsecurityalliance.org/research-rb/csa-research-note-ai-agent-standards-convergence-2026-202605/
+- OWASP prompt-injection report coverage — https://www.helpnetsecurity.com/2026/06/11/owasp-prompt-injection-ai-security-failures/
+- EU Digital Omnibus — https://usercentrics.com/knowledge-hub/eu-ai-act-high-risk-delay-article-50-transparency-consent/ , https://www.technology.org/2026/10/13/eu-ai-act-deadlines-after-the-digital-omnibus-what-applies-from-december-2026-to-august-2028/
+- Model-release aggregators (unverified) — https://www.clone-systems.com/blog/new-ai-models-november-2026-release-guide-and-security , https://www.nocode.mba/ai-release-tracker , https://mistral.ai/news/mistral-large-4/ , https://pandaily.com/meituan-longcat-2-5-official-release-1-6t-native-multimodal-long-horizon-agentic-coding-w4a4
+- arXiv:2609.03884, 2608.25776, 2608.06862 — titles only
