@@ -237,6 +237,40 @@ history; supersede with a new numbered entry.
     commit message that says the tip was rewritten; it was not, and this entry
     is the correction of record. Peers told the same thing have been corrected
     directly.
+109. **The hands-on interface is built alongside the architecture, never
+    after it: "Visual-first review" becomes "Visual-first"** (2026-11-07,
+    proposed from Prima Materia's governor session, its decision D-039; the
+    PR is the human's gate). The human told that governor the interface
+    matters as much as the functionality underneath, because they cannot be
+    of efficient use until they can get their hands on it, and that they give
+    every project agent the same instruction. In Prima Materia it moved the UI
+    workstream from "after the runtime runs a real loop" to now, each backend
+    milestone paired with a UI milestone opened by one command. Asked whether
+    it should bind the fleet, the human chose to propose it here. **The
+    tenet:** build the interface alongside the architecture; every backend
+    milestone lands with something the human opens with one command and uses;
+    a plan that defers the interface needs the human's explicit yes; before
+    the real seam exists the interface runs on a stand-in that is labelled on
+    screen, decides nothing, and is deleted when the real seam lands. The
+    last clause keeps the AI/deterministic boundary and the honesty rules
+    (guaranteed vs measured, staleness visible) intact: a stand-in that
+    decided, or passed for real, would break both. **Merged into "Visual-first
+    review", not a new section:** the two share one premise, that the human
+    judges and steers through what they can see and use, not through code.
+    The old tenet covered the end of a beat (how work is shown); this adds
+    the build order (that there is something to show). A separate section
+    would restate that premise, and the budget rule (Decision 28) prefers a
+    merge. **Paid for:** DOCTRINE sat at 8,963 of 9,000 bytes; the tenet grew
+    from 399 to 551. Recovered by wording only, no rule changed: the header's
+    examples, the knowledge-loop and harness pointers, a redundant clause in
+    "Never commit machine identity", and the old tenet's own restatements
+    ("code diving is the fallback" is what WITHOUT reading code already
+    says). Now 8,973. One loss, accepted: "self-contained" no longer
+    qualifies the HTML report. Rejected: a one-line pointer to a file read on
+    demand (Decision 85's form). That suits a method; this is a standing
+    rule every plan must meet, and a pointer nobody opens would not stop a
+    roadmap that sequences the UI last.
+    ruled-by: human (2026-11-07, "propose it"; the PR is the ratification)
 108. **The counterpart discharge prefers `seq:` over dates** (2026-11-01, the
     integrator, answering horde brief hypersaw-019; the PR is the human's
     gate). Decision 106's guard compared dates, against INTEGRATIONS' rule that
